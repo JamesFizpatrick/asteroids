@@ -1,4 +1,3 @@
-using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -6,170 +5,22 @@ namespace Asteroids.Game
 {
     public class Ship : MonoBehaviour
     {
-        #region Fields
-    
-        private const float MoveSpeed = 1f;
-        private const float RotationSpeed = 5f;
-        private const float MaxInertia = 1f;
-        private const float InertiaIncreaseSpeed = 0.01f;
-        private const float InertiaDecreaseSpeed = 0.01f;
-        
-        private float currentInertia;
-        private float currentRotationAngle;
+        private ShipMovementController shipMovementController;
+        private ShipVisualAppearanceController shipVisualAppearanceController;
+        private ShipWeaponController shipWeaponController;
 
-        private Vector3 currentMoveDirection;
         
-        private InputManager.RotationType currentRotationType = InputManager.RotationType.None;
-        private InputManager.MovementType currentMoveType = InputManager.MovementType.None;
-        
-        #endregion
-    
-    
-        
-        #region Unity lifecycle
-
-        private void OnEnable()
+        public void Awake()
         {
-            ManagersHub.GetManager<InputManager>().OnStartMoving += InputManager_OnStartMoving;
-            ManagersHub.GetManager<InputManager>().OnStopMoving += InputManager_OnStopMoving;
-            
-            ManagersHub.GetManager<InputManager>().OnStartRotating += InputManager_OnStartRotating;
-            ManagersHub.GetManager<InputManager>().OnStopRotating += InputManager_OnStopRotating;
-        }
-
-        
-        private void OnDisable()
-        {
-            ManagersHub.GetManager<InputManager>().OnStartMoving -= InputManager_OnStartMoving;
-            ManagersHub.GetManager<InputManager>().OnStopMoving -= InputManager_OnStopMoving;
-            
-            ManagersHub.GetManager<InputManager>().OnStartRotating -= InputManager_OnStartRotating;
-            ManagersHub.GetManager<InputManager>().OnStopRotating -= InputManager_OnStopRotating;
-        }
-        
-        #endregion
-
-
-        
-        #region Unity lifecycle
-
-        private void Awake() => currentMoveDirection = Vector3.up * MoveSpeed;
-
-
-        private void FixedUpdate()
-        {
-            ProcessInertia();
-
-            Vector3 translateAmount = currentMoveDirection * currentInertia;
-            if (translateAmount != Vector3.zero)
-            {
-                transform.Translate(translateAmount);
-            }
-
-            if (currentRotationType != InputManager.RotationType.None)
-            {
-                transform.Rotate(-Vector3.back, currentRotationAngle);
-            }
-        }
-        
-        #endregion
-
-        
-        
-        #region Private methods
-
-        private void StartRotating(InputManager.RotationType rotationType)
-        {
-            switch (rotationType)
-            {
-                case InputManager.RotationType.Clockwise:
-                    currentRotationAngle = -RotationSpeed;
-                    break;
-                case InputManager.RotationType.CounterClockwise:
-                    currentRotationAngle = RotationSpeed;
-                    break;
-                case InputManager.RotationType.None:
-                    currentRotationAngle = 0f;
-                    break;
-            }
-            
-            currentRotationType = rotationType;
+            InitControllers();
         }
 
 
-        private void StopRotating() => currentRotationType = InputManager.RotationType.None;
-
-
-        private void StartMoving(InputManager.MovementType movementType) => currentMoveType = movementType;
-
-
-        private void StopMoving() => currentMoveType = InputManager.MovementType.None;
-        
-        
-        private void ProcessInertia()
+        private void InitControllers()
         {
-            if (currentMoveType == InputManager.MovementType.Forward)
-            {
-                if (currentInertia < MaxInertia)
-                {
-                    currentInertia += InertiaIncreaseSpeed * 2;
-                }
-            }
-            else if (currentMoveType == InputManager.MovementType.Backward)
-            {
-                if (currentInertia > -MaxInertia)
-                {
-                    currentInertia -= InertiaIncreaseSpeed * 2;
-                }
-            }
-            else
-            {
-                if (currentInertia == 0f)
-                {
-                    return;
-                }
-                
-                if (currentInertia > 0f)
-                {
-                    currentInertia -= InertiaDecreaseSpeed;
-                }
-                else
-                {
-                    currentInertia += InertiaDecreaseSpeed;
-                }
-            }
+            shipMovementController = GetComponent<ShipMovementController>();
+            shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
+            shipWeaponController = GetComponent<ShipWeaponController>();
         }
-        
-        #endregion
-    
-    
-        
-        #region Event handlers
-
-        private void InputManager_OnStartMoving(InputManager.MovementType movementType) => StartMoving(movementType);
-
-
-        private void InputManager_OnStopMoving(InputManager.MovementType movementType)
-        {
-            if (currentMoveType == movementType)
-            {
-                StopMoving();
-            }
-        }
-        
-        
-        private void InputManager_OnStartRotating(InputManager.RotationType rotationType) => 
-            StartRotating(rotationType);
-
-
-        private void InputManager_OnStopRotating(InputManager.RotationType rotationType)
-        {
-            if (currentRotationType == rotationType)
-            {
-                StopRotating();
-            }
-        }
-        
-        #endregion
     }
 }

@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6702901094181759612}
   - component: {fileID: 2824160147041114634}
+  - component: {fileID: 7019289572229883833}
+  - component: {fileID: 6005106950652141909}
+  - component: {fileID: 3037682268857239934}
   m_Layer: 0
   m_Name: SpaceShips_red
   m_TagString: Untagged
@@ -42,6 +45,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f1298fa84ac344ceb42471b0f503abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7019289572229883833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5327376310277591735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a49c3bb6f16ca4c1c81c540ce86e1ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6005106950652141909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5327376310277591735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2776f9838a1064291b9a0d9ac577af2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 8689076137187477611}
+--- !u!114 &3037682268857239934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5327376310277591735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2f39724e68924b57a46b61d3a9227f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6366373964200199552
