@@ -19,8 +19,8 @@ namespace Asteroids.Game
 
         private Vector3 currentMoveDirection;
         
-        private InputManager.RotationType currentRotationType = InputManager.RotationType.None;
-        private InputManager.MovementType currentMoveType = InputManager.MovementType.None;
+        private InputRotationType currentRotationType = InputRotationType.None;
+        private InputMovementType currentMoveType = InputMovementType.None;
 
         private InputManager inputManager;
         
@@ -67,7 +67,7 @@ namespace Asteroids.Game
                 transform.Translate(translateAmount);
             }
 
-            if (currentRotationType != InputManager.RotationType.None)
+            if (currentRotationType != InputRotationType.None)
             {
                 transform.Rotate(-Vector3.back, currentRotationAngle);
             }
@@ -79,17 +79,17 @@ namespace Asteroids.Game
         
         #region Private methods
 
-        private void StartRotating(InputManager.RotationType rotationType)
+        private void StartRotating(InputRotationType rotationType)
         {
             switch (rotationType)
             {
-                case InputManager.RotationType.Clockwise:
+                case InputRotationType.Clockwise:
                     currentRotationAngle = -RotationSpeed;
                     break;
-                case InputManager.RotationType.CounterClockwise:
+                case InputRotationType.CounterClockwise:
                     currentRotationAngle = RotationSpeed;
                     break;
-                case InputManager.RotationType.None:
+                case InputRotationType.None:
                     currentRotationAngle = 0f;
                     break;
             }
@@ -98,25 +98,25 @@ namespace Asteroids.Game
         }
 
 
-        private void StopRotating() => currentRotationType = InputManager.RotationType.None;
+        private void StopRotating() => currentRotationType = InputRotationType.None;
 
 
-        private void StartMoving(InputManager.MovementType movementType) => currentMoveType = movementType;
+        private void StartMoving(InputMovementType movementType) => currentMoveType = movementType;
 
 
-        private void StopMoving() => currentMoveType = InputManager.MovementType.None;
+        private void StopMoving() => currentMoveType = InputMovementType.None;
         
         
         private void ProcessInertia()
         {
-            if (currentMoveType == InputManager.MovementType.Forward)
+            if (currentMoveType == InputMovementType.Forward)
             {
                 if (currentInertia < MaxInertia)
                 {
                     currentInertia += InertiaIncreaseSpeed * 2;
                 }
             }
-            else if (currentMoveType == InputManager.MovementType.Backward)
+            else if (currentMoveType == InputMovementType.Backward)
             {
                 if (currentInertia > -MaxInertia)
                 {
@@ -147,10 +147,10 @@ namespace Asteroids.Game
         
         #region Event handlers
 
-        private void InputManager_OnStartMoving(InputManager.MovementType movementType) => StartMoving(movementType);
+        private void InputManager_OnStartMoving(InputMovementType movementType) => StartMoving(movementType);
 
 
-        private void InputManager_OnStopMoving(InputManager.MovementType movementType)
+        private void InputManager_OnStopMoving(InputMovementType movementType)
         {
             if (currentMoveType == movementType)
             {
@@ -159,11 +159,10 @@ namespace Asteroids.Game
         }
         
         
-        private void InputManager_OnStartRotating(InputManager.RotationType rotationType) => 
-            StartRotating(rotationType);
+        private void InputManager_OnStartRotating(InputRotationType rotationType) => StartRotating(rotationType);
 
 
-        private void InputManager_OnStopRotating(InputManager.RotationType rotationType)
+        private void InputManager_OnStopRotating(InputRotationType rotationType)
         {
             if (currentRotationType == rotationType)
             {

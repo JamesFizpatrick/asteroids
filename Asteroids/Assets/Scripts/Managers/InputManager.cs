@@ -6,33 +6,12 @@ namespace Asteroids.Managers
 {
     public class InputManager : MonoBehaviour, IManager
     {
-        #region Nested types
-
-        public enum RotationType
-        {
-            None              = 0,
-            Clockwise         = 1,
-            CounterClockwise  = 2
-        }
-
-
-        public enum MovementType
-        {
-            None     = 0,
-            Forward  = 1,
-            Backward = 2,
-        }
-
-        #endregion
-
-
-        
         #region Fields
 
-        public Action<RotationType> OnStartRotating;
-        public Action<RotationType> OnStopRotating;
-        public Action<MovementType> OnStartMoving;
-        public Action<MovementType> OnStopMoving;
+        public Action<InputRotationType> OnStartRotating;
+        public Action<InputRotationType> OnStopRotating;
+        public Action<InputMovementType> OnStartMoving;
+        public Action<InputMovementType> OnStopMoving;
         public Action OnStartFiring;
         public Action OnStopFiring;
 
@@ -70,19 +49,19 @@ namespace Asteroids.Managers
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                OnStartMoving?.Invoke(MovementType.Forward);
+                OnStartMoving?.Invoke(InputMovementType.Forward);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
-                OnStartRotating?.Invoke(RotationType.CounterClockwise);
+                OnStartRotating?.Invoke(InputRotationType.CounterClockwise);
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                OnStartMoving?.Invoke(MovementType.Backward);
+                OnStartMoving?.Invoke(InputMovementType.Backward);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                OnStartRotating?.Invoke(RotationType.Clockwise);
+                OnStartRotating?.Invoke(InputRotationType.Clockwise);
             }
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -92,19 +71,19 @@ namespace Asteroids.Managers
             
             if (Input.GetKeyUp(KeyCode.W))
             {
-                OnStopMoving?.Invoke(MovementType.Forward);
+                OnStopMoving?.Invoke(InputMovementType.Forward);
             }
             if (Input.GetKeyUp(KeyCode.A))
             {
-                OnStopRotating?.Invoke(RotationType.CounterClockwise);
+                OnStopRotating?.Invoke(InputRotationType.CounterClockwise);
             }
             if (Input.GetKeyUp(KeyCode.S))
             {
-                OnStopMoving?.Invoke(MovementType.Backward);
+                OnStopMoving?.Invoke(InputMovementType.Backward);
             }
             if (Input.GetKeyUp(KeyCode.D))
             {
-                OnStopRotating?.Invoke(RotationType.Clockwise);
+                OnStopRotating?.Invoke(InputRotationType.Clockwise);
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
