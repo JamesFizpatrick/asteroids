@@ -19,9 +19,11 @@ namespace Asteroids.Managers
         public static void Initialize()
         {
             //TODO: move initialization somewhere else to be able to freely modify the managers list 
-            managersDictionary.Add(typeof(GameManager), GameManager.Instance);
             managersDictionary.Add(typeof(InputManager), InputManager.Instance);
-        
+            managersDictionary.Add(typeof(DataManager), DataManager.Instance);
+            managersDictionary.Add(typeof(GameManager), GameManager.Instance);
+            managersDictionary.Add(typeof(BoundsManager), BoundsManager.Instance);
+
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {
                 pair.Value.Initialize();

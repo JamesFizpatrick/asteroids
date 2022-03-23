@@ -174,4 +174,3 @@ namespace Asteroids.Game
         #endregion
     }
 }
-

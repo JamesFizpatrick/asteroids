@@ -1,4 +1,3 @@
-using Asteroids.Game;
 using UnityEngine;
 
 
@@ -58,8 +57,8 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            Object shipPrefab = Resources.Load("Prefabs/SpaceShips/SpaceShips_red");
-            GameObject shipGO = Instantiate(shipPrefab) as GameObject;
+            GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
+            Instantiate(shipPrefab);
         }
 
         #endregion

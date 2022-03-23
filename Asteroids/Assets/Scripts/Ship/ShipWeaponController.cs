@@ -9,20 +9,30 @@ namespace Asteroids.Game
 {
     public class ShipWeaponController : MonoBehaviour
     {
+        #region Fields
+
         private const int MaxBulletsAmount = 10;
         
         private InputManager inputManager;
+        private DataManager dataManager;
         
         private GameObject bulletPrefab;
         private List<WeaponsBase> bulletsPool = new List<WeaponsBase>();
 
         private Coroutine attackCoroutine;
-        
-        
+
+        #endregion
+
+
+
+        #region Unity lifecycle
+
         private void Awake()
         {
             inputManager = ManagersHub.GetManager<InputManager>();
-            bulletPrefab = Resources.Load("Prefabs/Weapons/Weapons_bullet_1") as GameObject;
+            dataManager = ManagersHub.GetManager<DataManager>();
+            
+            bulletPrefab = dataManager.PlayerPreset.Weapon;
         }
         
 
@@ -42,13 +52,23 @@ namespace Asteroids.Game
 
         private void OnDestroy()
         {
+            if (attackCoroutine != null)
+            {
+                StopCoroutine(attackCoroutine);
+            }
+            
             foreach (WeaponsBase bullet in bulletsPool)
             {
                 Destroy(bullet.gameObject);
             }
         }
 
+        #endregion
 
+
+
+        #region Private methods
+        
         private IEnumerator ProcessFire()
         {
             while (true)
@@ -62,7 +82,7 @@ namespace Asteroids.Game
                 }
                 else
                 {
-                    bullet = bulletsPool.FirstOrDefault(bullet => bullet.gameObject.activeSelf == false);
+                    bullet = bulletsPool.FirstOrDefault(b => b.gameObject.activeSelf == false);
                 }
 
                 if (bullet == null)
@@ -95,5 +115,7 @@ namespace Asteroids.Game
                 StopCoroutine(attackCoroutine);
             }
         }
+        
+        #endregion
     }
 }
