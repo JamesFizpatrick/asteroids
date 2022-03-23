@@ -8,78 +8,168 @@ namespace Asteroids.Game
     {
         #region Fields
     
-        private const float InertiaDeg = 0.01f;
+        private const float MoveSpeed = 1f;
+        private const float RotationSpeed = 5f;
+        private const float MaxInertia = 1f;
+        private const float InertiaIncreaseSpeed = 0.01f;
+        private const float InertiaDecreaseSpeed = 0.01f;
         
-        private float inertia;
-        private Vector3 directionVector;
-        private bool canMove;
-    
+        private float currentInertia;
+        private float currentRotationAngle;
+
+        private Vector3 currentMoveDirection;
+        
+        private InputManager.RotationType currentRotationType = InputManager.RotationType.None;
+        private InputManager.MovementType currentMoveType = InputManager.MovementType.None;
+        
         #endregion
     
     
         
         #region Unity lifecycle
-    
-        private void OnEnable() =>
-            ManagersHub.GetManager<InputManager>().OnStartDirection += InputManager_OnInputFired;
-    
-    
-        private void OnDisable() =>
-            ManagersHub.GetManager<InputManager>().OnStartDirection -= InputManager_OnInputFired;
-        
-        
-        private void Update()
+
+        private void OnEnable()
         {
-            if (!canMove)
+            ManagersHub.GetManager<InputManager>().OnStartMoving += InputManager_OnStartMoving;
+            ManagersHub.GetManager<InputManager>().OnStopMoving += InputManager_OnStopMoving;
+            
+            ManagersHub.GetManager<InputManager>().OnStartRotating += InputManager_OnStartRotating;
+            ManagersHub.GetManager<InputManager>().OnStopRotating += InputManager_OnStopRotating;
+        }
+
+        
+        private void OnDisable()
+        {
+            ManagersHub.GetManager<InputManager>().OnStartMoving -= InputManager_OnStartMoving;
+            ManagersHub.GetManager<InputManager>().OnStopMoving -= InputManager_OnStopMoving;
+            
+            ManagersHub.GetManager<InputManager>().OnStartRotating -= InputManager_OnStartRotating;
+            ManagersHub.GetManager<InputManager>().OnStopRotating -= InputManager_OnStopRotating;
+        }
+        
+        #endregion
+
+
+        
+        #region Unity lifecycle
+
+        private void Awake() => currentMoveDirection = Vector3.up * MoveSpeed;
+
+
+        private void FixedUpdate()
+        {
+            ProcessInertia();
+
+            Vector3 translateAmount = currentMoveDirection * currentInertia;
+            if (translateAmount != Vector3.zero)
             {
-                return;
+                transform.Translate(translateAmount);
+            }
+
+            if (currentRotationType != InputManager.RotationType.None)
+            {
+                transform.Rotate(-Vector3.back, currentRotationAngle);
+            }
+        }
+        
+        #endregion
+
+        
+        
+        #region Private methods
+
+        private void StartRotating(InputManager.RotationType rotationType)
+        {
+            switch (rotationType)
+            {
+                case InputManager.RotationType.Clockwise:
+                    currentRotationAngle = -RotationSpeed;
+                    break;
+                case InputManager.RotationType.CounterClockwise:
+                    currentRotationAngle = RotationSpeed;
+                    break;
+                case InputManager.RotationType.None:
+                    currentRotationAngle = 0f;
+                    break;
             }
             
-            // TEMP LOGIC, DOTWEEN IS NEEDED
-            transform.Translate(directionVector * inertia);
-    
-            if (inertia > 0f)
+            currentRotationType = rotationType;
+        }
+
+
+        private void StopRotating() => currentRotationType = InputManager.RotationType.None;
+
+
+        private void StartMoving(InputManager.MovementType movementType) => currentMoveType = movementType;
+
+
+        private void StopMoving() => currentMoveType = InputManager.MovementType.None;
+        
+        
+        private void ProcessInertia()
+        {
+            if (currentMoveType == InputManager.MovementType.Forward)
             {
-                inertia -= InertiaDeg;
-                Debug.LogError("Inertia: " + inertia);
+                if (currentInertia < MaxInertia)
+                {
+                    currentInertia += InertiaIncreaseSpeed * 2;
+                }
+            }
+            else if (currentMoveType == InputManager.MovementType.Backward)
+            {
+                if (currentInertia > -MaxInertia)
+                {
+                    currentInertia -= InertiaIncreaseSpeed * 2;
+                }
             }
             else
             {
-                canMove = false;
+                if (currentInertia == 0f)
+                {
+                    return;
+                }
+                
+                if (currentInertia > 0f)
+                {
+                    currentInertia -= InertiaDecreaseSpeed;
+                }
+                else
+                {
+                    currentInertia += InertiaDecreaseSpeed;
+                }
             }
         }
         
         #endregion
     
     
-    
+        
         #region Event handlers
-    
-        private void InputManager_OnInputFired(InputManager.Direction direction)
+
+        private void InputManager_OnStartMoving(InputManager.MovementType movementType) => StartMoving(movementType);
+
+
+        private void InputManager_OnStopMoving(InputManager.MovementType movementType)
         {
-            canMove = true;
-            inertia = 0.1f;
-            
-            switch (direction)
+            if (currentMoveType == movementType)
             {
-                case InputManager.Direction.Down:
-                    directionVector = Vector3.down;
-                    break;
-                case InputManager.Direction.Up:
-                    directionVector = Vector3.up;
-                    break;
-                case InputManager.Direction.Left:
-                    directionVector = Vector3.left;
-                    break;
-                case InputManager.Direction.Right:
-                    directionVector = Vector3.right;
-                    break;
-                case InputManager.Direction.None:
-                    canMove = false;
-                    return;
+                StopMoving();
             }
         }
-    
+        
+        
+        private void InputManager_OnStartRotating(InputManager.RotationType rotationType) => 
+            StartRotating(rotationType);
+
+
+        private void InputManager_OnStopRotating(InputManager.RotationType rotationType)
+        {
+            if (currentRotationType == rotationType)
+            {
+                StopRotating();
+            }
+        }
+        
         #endregion
     }
 }

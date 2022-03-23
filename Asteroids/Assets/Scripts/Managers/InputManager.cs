@@ -8,13 +8,19 @@ namespace Asteroids.Managers
     {
         #region Nested types
 
-        public enum Direction
+        public enum RotationType
         {
-            None  = 0,
-            Up    = 1,
-            Left  = 2,
-            Down  = 3,
-            Right = 4
+            None              = 0,
+            Clockwise         = 1,
+            CounterClockwise  = 2
+        }
+
+
+        public enum MovementType
+        {
+            None     = 0,
+            Forward  = 1,
+            Backward = 2,
         }
 
         #endregion
@@ -23,8 +29,13 @@ namespace Asteroids.Managers
         
         #region Fields
 
-        public Action<Direction> OnStartDirection;
-        public Action<Direction> OnStopDirection;
+        public Action<RotationType> OnStartRotating;
+        public Action<RotationType> OnStopRotating;
+        public Action<MovementType> OnStartMoving;
+        public Action<MovementType> OnStopMoving;
+        public Action OnStartFiring;
+        public Action OnStopFiring;
+
 
         private static InputManager instance;
 
@@ -59,37 +70,45 @@ namespace Asteroids.Managers
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                OnStartDirection?.Invoke(Direction.Up);
+                OnStartMoving?.Invoke(MovementType.Forward);
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
-                OnStartDirection?.Invoke(Direction.Left);
+                OnStartRotating?.Invoke(RotationType.CounterClockwise);
             }
             if (Input.GetKeyDown(KeyCode.S))
             {
-                OnStartDirection?.Invoke(Direction.Down);
+                OnStartMoving?.Invoke(MovementType.Backward);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
-                OnStartDirection?.Invoke(Direction.Right);
+                OnStartRotating?.Invoke(RotationType.Clockwise);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                OnStartFiring?.Invoke();
             }
             
             
             if (Input.GetKeyUp(KeyCode.W))
             {
-                OnStopDirection?.Invoke(Direction.Up);
+                OnStopMoving?.Invoke(MovementType.Forward);
             }
             if (Input.GetKeyUp(KeyCode.A))
             {
-                OnStopDirection?.Invoke(Direction.Left);
+                OnStopRotating?.Invoke(RotationType.CounterClockwise);
             }
             if (Input.GetKeyUp(KeyCode.S))
             {
-                OnStopDirection?.Invoke(Direction.Down);
+                OnStopMoving?.Invoke(MovementType.Backward);
             }
             if (Input.GetKeyUp(KeyCode.D))
             {
-                OnStopDirection?.Invoke(Direction.Right);
+                OnStopRotating?.Invoke(RotationType.Clockwise);
+            }
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                OnStopFiring?.Invoke();
             }
         }
 
@@ -101,7 +120,7 @@ namespace Asteroids.Managers
 
         public void Initialize() { }
 
-        public void Unload() => Destroy(instance.gameObject);
+        public void Unload() { }
 
         #endregion
     }

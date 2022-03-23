@@ -58,9 +58,8 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            GameObject ship = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            ship.name = "Ship";
-            ship.AddComponent<Ship>();
+            Object shipPrefab = Resources.Load("Prefabs/SpaceShips/SpaceShips_red");
+            GameObject shipGO = Instantiate(shipPrefab) as GameObject;
         }
 
         #endregion
