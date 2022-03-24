@@ -10,6 +10,7 @@ namespace Asteroids.Data
 
         [SerializeField] private GameObject ship;
         [SerializeField] private GameObject weapon;
+        [SerializeField] private Asteroid[] asteroids;
 
         #endregion
 
@@ -19,6 +20,7 @@ namespace Asteroids.Data
 
         public GameObject Ship => ship;
         public GameObject Weapon => weapon;
+        public Asteroid[] Asteroids => asteroids;
 
         #endregion
     }

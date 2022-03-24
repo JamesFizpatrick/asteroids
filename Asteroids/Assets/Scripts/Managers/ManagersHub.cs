@@ -23,6 +23,7 @@ namespace Asteroids.Managers
             managersDictionary.Add(typeof(DataManager), DataManager.Instance);
             managersDictionary.Add(typeof(GameManager), GameManager.Instance);
             managersDictionary.Add(typeof(BoundsManager), BoundsManager.Instance);
+            managersDictionary.Add(typeof(AsteroidsManager), AsteroidsManager.Instance);
 
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {

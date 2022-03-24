@@ -9,6 +9,8 @@ namespace Asteroids.Managers
 
         private static GameManager instance;
 
+        private GameObject playerShip;
+        
         #endregion
 
 
@@ -44,6 +46,10 @@ namespace Asteroids.Managers
 
         #region Public methods
 
+        public Vector3 GetPlayerShipLocalPosition() =>
+            playerShip != null ? playerShip.transform.localPosition : Vector3.zero;
+
+        
         public void Initialize() { }
 
         
@@ -58,7 +64,9 @@ namespace Asteroids.Managers
         private void StartGame()
         {
             GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
-            Instantiate(shipPrefab);
+            playerShip = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform);
+            
+            ManagersHub.GetManager<AsteroidsManager>().SpawnAsteroid(Asteroid.AsteroidType.Large);
         }
 
         #endregion

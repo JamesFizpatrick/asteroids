@@ -77,7 +77,7 @@ namespace Asteroids.Game
                 
                 if (bulletsPool.Count < MaxBulletsAmount)
                 {
-                    bullet = Instantiate(bulletPrefab, transform).GetComponent<WeaponsBase>();
+                    bullet = Instantiate(bulletPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<WeaponsBase>();
                     bulletsPool.Add(bullet);
                 }
                 else
@@ -92,7 +92,7 @@ namespace Asteroids.Game
                 }
                 else
                 {
-                    bullet.transform.parent = null;
+                    // bullet.transform.parent = GameSceneReferences.MainCanvas.transform;
                     bullet.transform.SetPositionAndRotation(transform.position, transform.rotation);
                     bullet.gameObject.SetActive(true);
             

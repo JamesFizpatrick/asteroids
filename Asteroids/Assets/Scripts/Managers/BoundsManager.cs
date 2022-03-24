@@ -51,7 +51,7 @@ namespace Asteroids.Managers
         }
         
         
-        private void OnTriggerExit(Collider entity)
+        private void OnTriggerExit2D(Collider2D entity)
         {
             if (entity.gameObject.layer == weaponLayer)
             {
@@ -67,17 +67,18 @@ namespace Asteroids.Managers
 
         public void Initialize()
         {
-            Camera mainCamera = Camera.main;
+            transform.parent = GameSceneReferences.MainCanvas.transform;
+            gameObject.AddComponent<RectTransform>();
             
-            transform.SetPositionAndRotation(mainCamera.transform.position, mainCamera.transform.rotation);
-            
-            boundCollider = gameObject.AddComponent<BoxCollider>();
-            boundCollider.size = new Vector3(340f, 200f, mainCamera.farClipPlane);
-            boundCollider.isTrigger = true;
-            
-            Vector3 center = boundCollider.center;
-            center.z += mainCamera.farClipPlane / 2f;
-            boundCollider.center = center;
+            BoxCollider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
+            boxCollider.isTrigger = true;
+
+            Vector2 size = GameSceneReferences.MainCanvas.pixelRect.max;
+            boxCollider.size = size;
+            boxCollider.offset = size / 2f;
+                    
+            Rigidbody2D rigidBody = gameObject.AddComponent<Rigidbody2D>();
+            rigidBody.bodyType = RigidbodyType2D.Kinematic;
         }
 
         
