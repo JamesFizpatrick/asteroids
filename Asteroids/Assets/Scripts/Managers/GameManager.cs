@@ -1,3 +1,5 @@
+using Asteroids.Asteroids;
+using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -66,7 +68,8 @@ namespace Asteroids.Managers
             GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
             playerShip = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform);
             
-            ManagersHub.GetManager<AsteroidsManager>().SpawnAsteroid(Asteroid.AsteroidType.Large);
+            ManagersHub.GetManager<AsteroidsManager>()
+                .SpawnAsteroids(4, GetPlayerShipLocalPosition(), 100f);
         }
 
         #endregion

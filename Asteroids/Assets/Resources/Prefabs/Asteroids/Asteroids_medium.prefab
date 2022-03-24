@@ -201,7 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b732b06b36b4756b8fe3a9de8741e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  asteroidType: 2
+  asteroidType: 3
   noMineralsImage: {fileID: 1756657587044163473}
   mineralsImage: {fileID: 5422203053978963246}
 --- !u!61 &1568969501014353285

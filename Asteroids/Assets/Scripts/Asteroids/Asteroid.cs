@@ -3,95 +3,94 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class Asteroid : MonoBehaviour
+namespace Asteroids.Asteroids
 {
-    #region Nested types
-
-    public enum AsteroidType
+    public class Asteroid : MonoBehaviour
     {
-        None    = 0,
-        Small   = 1,
-        Medium  = 2,
-        Large   = 3,
-        Huge    = 4
-    }
+        #region Fields
 
-    #endregion
+        public Action<Asteroid> Destroyed;
+        
+        private const float RotationSpeed = 0.7f;
+        private const float MoveSpeed = 1f;
 
+        [SerializeField] private AsteroidType asteroidType;
+        [SerializeField] private Image noMineralsImage;
+        [SerializeField] private Image mineralsImage;
 
-
-    #region Fields
-    
-    private const float RotationSpeed = 0.7f;
-    private const float MoveSpeed = 0.5f;
-
-    [SerializeField] private AsteroidType asteroidType;
-    [SerializeField] private Image noMineralsImage;
-    [SerializeField] private Image mineralsImage;
-
-    private int weaponLayerMask;
-    
-    #endregion
+        private int weaponLayerMask;
+        private Vector3 currentDirection;
+        
+        #endregion
 
 
 
-    #region Properties
+        #region Properties
 
-    public AsteroidType Type => asteroidType;
+        public AsteroidType Type => asteroidType;
+        
+        public Vector3 CurrentDirection => currentDirection;
+        
+        #endregion
 
-    #endregion
 
+        
+        #region Unity lifecycle
 
-    
-    #region Unity lifecycle
-
-    private void Awake()
-    {
-        weaponLayerMask = LayerMask.NameToLayer("Weapon");
-        if (noMineralsImage && mineralsImage)
+        private void Awake()
         {
+            weaponLayerMask = LayerMask.NameToLayer("Weapon");
             SelectMineralsTexture();
         }
-    }
 
 
-    private void FixedUpdate()
-    {
-        transform.Translate(Vector3.up * MoveSpeed);
-        
-        noMineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
-        mineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
-    }
-
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        ProcessOnTriggerEnter(other);
-    }
-
-    #endregion
-
-
-
-    #region Private methods
-
-    private void SelectMineralsTexture()
-    {
-        System.Random random = new System.Random();
-        int decision = random.Next(0, 2);
-            
-        noMineralsImage.gameObject.SetActive(decision == 0);
-        mineralsImage.gameObject.SetActive(decision != 0);
-    }
-
-
-    private void ProcessOnTriggerEnter(Collider2D inputCollider)
-    {
-        if (inputCollider.gameObject.layer == weaponLayerMask)
+        private void FixedUpdate()
         {
-            gameObject.SetActive(false);
+            transform.Translate(currentDirection * MoveSpeed);
+
+            noMineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
+            mineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
         }
+
+
+        private void OnTriggerEnter2D(Collider2D other) => ProcessOnTriggerEnter(other);
+
+        #endregion
+
+
+        
+        #region Public methods
+
+        public void OverrideDirection(Vector3 newDirection)
+        {
+            currentDirection = newDirection;
+        }
+
+        #endregion
+
+        
+
+        #region Private methods
+
+        private void SelectMineralsTexture()
+        {
+            System.Random random = new System.Random();
+            int decision = random.Next(0, 2);
+                
+            noMineralsImage.gameObject.SetActive(decision == 0);
+            mineralsImage.gameObject.SetActive(decision != 0);
+        }
+
+
+        private void ProcessOnTriggerEnter(Collider2D inputCollider)
+        {
+            if (inputCollider.gameObject.layer == weaponLayerMask)
+            {
+                Destroyed?.Invoke(this);
+                gameObject.SetActive(false);
+            }
+        }
+        
+        #endregion
     }
-    
-    #endregion
 }
