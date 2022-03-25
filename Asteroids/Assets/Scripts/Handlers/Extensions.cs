@@ -38,7 +38,7 @@ namespace Asteroids.Handlers
             IEnumerable<int> range = Enumerable.Range(min, baseElementsCount)
                 .Where(i => i < excludeMin || i > excludeMax);
             
-            int index = random.Next(0, finalElementsCount);
+            int index = random.Next(0, finalElementsCount - 1);
             return range.ElementAt(index);
         }
         

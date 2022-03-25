@@ -1,7 +1,6 @@
 using System.Collections;
 using Asteroids.Game;
 using Asteroids.Handlers;
-using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -11,7 +10,7 @@ namespace Asteroids.UFO
     {
         #region Fields
 
-        private GameManager gameManager;
+        private Ship ship;
         private System.Random random;
 
         #endregion
@@ -22,7 +21,6 @@ namespace Asteroids.UFO
 
         protected override void Awake()
         {
-            gameManager = ManagersHub.GetManager<GameManager>();
             currentWeaponType = WeaponType.Enemy;
             random = new System.Random();
             base.Awake();
@@ -40,6 +38,12 @@ namespace Asteroids.UFO
 
         #region Public methods
 
+        public void Initialize(Ship ship)
+        {
+            this.ship = ship;
+        }
+        
+        
         public void StartFire()
         {
             StartCoroutine(Shoot());
@@ -55,7 +59,7 @@ namespace Asteroids.UFO
         {
             while (true)
             {
-                Vector3 direction = gameManager.GetPlayerShipLocalPosition() - transform.localPosition;
+                Vector3 direction = ship.transform.localPosition - transform.localPosition;
 
                 (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(5f);
                 Vector3 newDirection = Vector3.Lerp(leftVector, rightVector, random.GetRandomFloat(0f, 1f));

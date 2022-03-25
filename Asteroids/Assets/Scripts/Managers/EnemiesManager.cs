@@ -1,6 +1,7 @@
 using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
+using Random = System.Random;
 
 
 namespace Asteroids.Managers
@@ -9,6 +10,9 @@ namespace Asteroids.Managers
     {
         #region Fields
 
+        public UFO.UFO Enemy { get; private set; }
+
+        private const int UFOSpawnDistance = 10;
         private static EnemiesManager instance;
         
         #endregion
@@ -43,12 +47,40 @@ namespace Asteroids.Managers
         public void Unload() { }
 
 
-        public void SpawnEnemy(Vector3 position, Ship ship)
+        public void SpawnEnemy(Ship ship)
         {
             GameObject ufoPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Enemy;
             GameObject ufo = Instantiate(ufoPrefab, GameSceneReferences.MainCanvas.transform);
-            ufo.transform.localPosition = position;
-            ufo.GetComponent<UFO.UFO>().Initialze(ship);
+
+            Random random = new Random();
+            
+            int maxX = Screen.width / 2;
+            int minX = -Screen.width / 2;
+            int maxY = Screen.height / 2;
+            int minY = -Screen.height / 2;
+
+            int x;
+            int y;
+            
+            int divider = random.Next(0, 2);
+
+            if (divider == 0)
+            {
+                x = random.GetRandomExclude(minX - UFOSpawnDistance, maxX + UFOSpawnDistance,
+                    minX, maxX);
+                y = random.Next(minY, maxY);
+            }
+            else
+            {
+                x = random.Next(minX, maxX);
+                y = random.GetRandomExclude(minY - UFOSpawnDistance, maxY + UFOSpawnDistance,
+                    minY, maxY);
+            }
+            
+            ufo.transform.localPosition = new Vector3(x, y);
+            
+            Enemy = ufo.GetComponent<UFO.UFO>();
+            Enemy.Initialze(ship);
         }
         
         #endregion

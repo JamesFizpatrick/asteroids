@@ -1,5 +1,3 @@
-using Asteroids.Game;
-using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -10,8 +8,6 @@ namespace Asteroids.Managers
         #region Fields
 
         private static GameManager instance;
-
-        private Ship playerShip;
         
         #endregion
 
@@ -47,10 +43,6 @@ namespace Asteroids.Managers
 
 
         #region Public methods
-
-        public Vector3 GetPlayerShipLocalPosition() =>
-            playerShip != null ? playerShip.transform.localPosition : Vector3.zero;
-
         
         public void Initialize() { }
 
@@ -65,14 +57,13 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
-            playerShip = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<Ship>();
+            PlayerShipsManager playerShipsManager = ManagersHub.GetManager<PlayerShipsManager>();
+            playerShipsManager.SpawnPlayer();
             
             ManagersHub.GetManager<AsteroidsManager>()
-                .SpawnAsteroids(4, GetPlayerShipLocalPosition(), 100f);
+                .SpawnAsteroids(4, playerShipsManager.Player.transform.localPosition, 100f);
 
-            Vector3 tempUFOPosition = new Vector3(300f, 300f);
-            ManagersHub.GetManager<EnemiesManager>().SpawnEnemy(tempUFOPosition, playerShip);
+            ManagersHub.GetManager<EnemiesManager>().SpawnEnemy(playerShipsManager.Player);
         }
 
         #endregion

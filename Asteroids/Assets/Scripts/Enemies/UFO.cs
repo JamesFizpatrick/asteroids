@@ -39,6 +39,8 @@ namespace Asteroids.UFO
         public void Initialze(Ship ship)
         {
             moveController.Initialize(ship);
+            weaponController.Initialize(ship);
+            
             weaponController.StartFire();
         }
 
