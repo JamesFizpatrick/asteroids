@@ -59,15 +59,15 @@ public class AsteroidsManager : MonoBehaviour, IManager
 
         for (int i = 0; i < quantity; i++)
         {
-            directionX = random.GetRandomFloat(-1f, 1f);
-            directionY = random.GetRandomFloat(-1f, 1f);
-            direction = new Vector3(directionX, directionY);
-            
             positionX =
                 random.GetRandomExclude(-Screen.width / 2, Screen.width / 2, minX, maxX);
             positionY =
                 random.GetRandomExclude(-Screen.height / 2, Screen.height / 2, minY, maxY);
             position = new Vector3(positionX, positionY);
+
+            directionX = positionX > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
+            directionY = positionY > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
+            direction = new Vector3(directionX, directionY);
             
             Asteroid asteroid = SpawnAsteroid(AsteroidType.Huge, position);
             asteroid.OverrideDirection(direction);

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 
@@ -7,6 +8,8 @@ namespace Asteroids.Game
     {
         #region Fields
 
+        public Action<Vector3> OnPositionChanged;
+        
         private ShipMovementController shipMovementController;
         private ShipVisualAppearanceController shipVisualAppearanceController;
         private ShipWeaponController shipWeaponController;
@@ -17,7 +20,17 @@ namespace Asteroids.Game
 
         #region Unity lifecycle
 
-        public void Awake() => InitControllers();
+        public void Awake()
+        {
+            InitControllers();
+            shipMovementController.OnPositionChanged += ShipMovementController_OnPositionChanged;
+        }
+
+
+        public void OnDestroy()
+        {
+            shipMovementController.OnPositionChanged -= ShipMovementController_OnPositionChanged;
+        }
 
         #endregion
 
@@ -30,6 +43,17 @@ namespace Asteroids.Game
             shipMovementController = GetComponent<ShipMovementController>();
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
             shipWeaponController = GetComponent<ShipWeaponController>();
+        }
+
+        #endregion
+
+
+        
+        #region Event handlers
+
+        private void ShipMovementController_OnPositionChanged(Vector3 position)
+        {
+            OnPositionChanged?.Invoke(position);
         }
 
         #endregion

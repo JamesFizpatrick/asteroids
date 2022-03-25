@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Managers;
 using UnityEngine;
 
@@ -7,8 +8,10 @@ namespace Asteroids.Game
     public class ShipMovementController : MonoBehaviour
     {
         #region Fields
-    
-        private const float MoveSpeed = 1f;
+
+        public Action<Vector3> OnPositionChanged;
+        
+        private const float MoveSpeed = 3f;
         private const float RotationSpeed = 5f;
         private const float MaxInertia = 1f;
         private const float InertiaIncreaseSpeed = 0.01f;
@@ -65,6 +68,7 @@ namespace Asteroids.Game
             if (translateAmount != Vector3.zero)
             {
                 transform.Translate(translateAmount);
+                OnPositionChanged?.Invoke(transform.localPosition);
             }
 
             if (currentRotationType != InputRotationType.None)

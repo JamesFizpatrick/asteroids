@@ -1,4 +1,5 @@
 using Asteroids.Asteroids;
+using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace Asteroids.Managers
 
         private static GameManager instance;
 
-        private GameObject playerShip;
+        private Ship playerShip;
         
         #endregion
 
@@ -66,10 +67,13 @@ namespace Asteroids.Managers
         private void StartGame()
         {
             GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
-            playerShip = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform);
+            playerShip = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<Ship>();
             
             ManagersHub.GetManager<AsteroidsManager>()
                 .SpawnAsteroids(4, GetPlayerShipLocalPosition(), 100f);
+
+            Vector3 tempUFOPosition = new Vector3(100f, 100f);
+            ManagersHub.GetManager<EnemiesManager>().SpawnEnemy(tempUFOPosition, playerShip);
         }
 
         #endregion

@@ -11,11 +11,11 @@ TagManager:
   - 
   - Water
   - UI
-  - Weapon
+  - PlayerProjectiles
+  - EnemyProjectiles
   - Ship
   - Asteroid
   - Enemy
-  - 
   - 
   - 
   - 

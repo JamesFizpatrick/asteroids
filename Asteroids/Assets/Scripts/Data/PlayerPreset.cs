@@ -10,7 +10,9 @@ namespace Asteroids.Data
         #region Fields
 
         [SerializeField] private GameObject ship;
-        [SerializeField] private GameObject weapon;
+        [SerializeField] private GameObject playerProjectiles;
+        [SerializeField] private GameObject enemyProjectiles;
+        [SerializeField] private GameObject enemy;
         [SerializeField] private Asteroid[] asteroids;
 
         #endregion
@@ -20,7 +22,17 @@ namespace Asteroids.Data
         #region Properties
 
         public GameObject Ship => ship;
-        public GameObject Weapon => weapon;
+        
+        
+        public GameObject PlayerProjectiles => playerProjectiles;
+        
+        
+        public GameObject EnemyProjectiles => enemyProjectiles;
+
+        
+        public GameObject Enemy => enemy;
+        
+        
         public Asteroid[] Asteroids => asteroids;
 
         #endregion

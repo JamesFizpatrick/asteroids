@@ -1,54 +1,45 @@
-using System;
 using UnityEngine;
 
 
-public class WeaponsBase : MonoBehaviour
+namespace Asteroids.Game
 {
-    #region Fields
-
-    [SerializeField] private float speed;
-    [SerializeField] private float fireCooldown;
-
-    private int asteroidLayer;
-    
-    #endregion
-
-
-    
-    #region Properties
-
-    public float FireCooldown => fireCooldown;
-
-    #endregion
-
-
-    
-    #region Unity lifecycle
-
-    private void Awake() => asteroidLayer = LayerMask.NameToLayer("Asteroid");
-    
-    
-    private void FixedUpdate() => transform.Translate(Vector3.up * speed);
-
-
-    private void OnTriggerEnter2D(Collider2D col)
+    public class WeaponsBase : MonoBehaviour
     {
-        ProcessOnTriggerEnter(col);
-    }
-    
-    #endregion
+        #region Fields
+
+        [SerializeField] private float speed;
+        [SerializeField] private float fireCooldown;
+        
+        #endregion
 
 
     
-    #region Private metohds
+        #region Properties
 
-    private void ProcessOnTriggerEnter(Collider2D col)
-    {
-        if (col.gameObject.layer == asteroidLayer)
+        public float FireCooldown => fireCooldown;
+
+        #endregion
+
+
+    
+        #region Unity lifecycle
+        
+        private void FixedUpdate() => transform.Translate(Vector3.up * speed);
+
+
+        private void OnTriggerEnter2D(Collider2D col)
         {
-            gameObject.SetActive(false);
+            ProcessOnTriggerEnter(col);
         }
-    }
+    
+        #endregion
 
-    #endregion
+
+    
+        #region Protected metohds
+
+        protected virtual void ProcessOnTriggerEnter(Collider2D col) {}
+
+        #endregion
+    }
 }

@@ -11,7 +11,8 @@ namespace Asteroids.Managers
         private static BoundsManager instance;
         private BoxCollider boundCollider;
 
-        private int weaponLayer;
+        private int playerProjectilesLayer;
+        private int enemyProjectilesLayer;
         private int shipLayer;
         private int asteroidLayer;
         private int enemyLayer;
@@ -45,7 +46,8 @@ namespace Asteroids.Managers
 
         private void Awake()
         {
-            weaponLayer = LayerMask.NameToLayer("Weapon");
+            playerProjectilesLayer = LayerMask.NameToLayer("PlayerProjectiles");
+            playerProjectilesLayer = LayerMask.NameToLayer("EnemyProjectiles");
             shipLayer = LayerMask.NameToLayer("Ship");
             asteroidLayer = LayerMask.NameToLayer("Asteroid");
             enemyLayer = LayerMask.NameToLayer("Enemy");
@@ -54,7 +56,8 @@ namespace Asteroids.Managers
         
         private void OnTriggerExit2D(Collider2D entity)
         {
-            if (entity.gameObject.layer == weaponLayer)
+            if (entity.gameObject.layer == playerProjectilesLayer ||
+                entity.gameObject.layer == enemyProjectilesLayer)
             {
                 entity.gameObject.SetActive(false);
             }

@@ -39,7 +39,7 @@ namespace Asteroids.Asteroids
 
         private void Awake()
         {
-            weaponLayerMask = LayerMask.NameToLayer("Weapon");
+            weaponLayerMask = LayerMask.NameToLayer("PlayerProjectiles");
             SelectMineralsTexture();
         }
 
