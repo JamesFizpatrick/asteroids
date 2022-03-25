@@ -1,4 +1,3 @@
-using Asteroids.Asteroids;
 using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;

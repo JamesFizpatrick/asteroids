@@ -13,6 +13,8 @@ namespace Asteroids.Game
     {
         #region Fields
 
+        protected float FireCooldown = 0.0f;
+
         protected WeaponType currentWeaponType = WeaponType.None;
 
         private const int MaxBulletsAmount = 10;
@@ -45,6 +47,8 @@ namespace Asteroids.Game
                 case WeaponType.None:
                     throw new Exception($"Weapon type was no inited for {GetType()}");
             }
+
+            FireCooldown = bulletPrefab.GetComponent<WeaponsBase>().FireCooldown;
         }
 
         
@@ -81,6 +85,23 @@ namespace Asteroids.Game
             }
         }
 
+
+        protected void FireSingleShot(Vector3 direction)
+        {
+            WeaponsBase bullet = FireShot();
+
+            if (bullet == null)
+            {
+                Debug.LogError("Cannot spawn bullets!");
+            }
+            else
+            {
+                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, direction);
+                bullet.transform.SetPositionAndRotation(transform.position, rotation);
+                bullet.gameObject.SetActive(true);
+            }
+        }
+        
         #endregion
 
 
@@ -91,18 +112,7 @@ namespace Asteroids.Game
         {
             while (true)
             {
-                WeaponsBase bullet;
-                
-                if (bulletsPool.Count < MaxBulletsAmount)
-                {
-                    bullet =
-                        Instantiate(bulletPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<WeaponsBase>();
-                    bulletsPool.Add(bullet);
-                }
-                else
-                {
-                    bullet = bulletsPool.FirstOrDefault(b => b.gameObject.activeSelf == false);
-                }
+                WeaponsBase bullet = FireShot();
 
                 if (bullet == null)
                 {
@@ -119,6 +129,25 @@ namespace Asteroids.Game
             }
         }
 
+
+        private WeaponsBase FireShot()
+        {
+            WeaponsBase bullet;
+
+            if (bulletsPool.Count < MaxBulletsAmount)
+            {
+                bullet =
+                    Instantiate(bulletPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<WeaponsBase>();
+                bulletsPool.Add(bullet);
+            }
+            else
+            {
+                bullet = bulletsPool.FirstOrDefault(b => b.gameObject.activeSelf == false);
+            }
+
+            return bullet;
+        }
+        
         #endregion
     }
 }

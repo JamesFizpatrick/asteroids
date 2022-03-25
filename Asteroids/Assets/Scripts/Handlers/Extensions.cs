@@ -41,5 +41,27 @@ namespace Asteroids.Handlers
             int index = random.Next(0, finalElementsCount);
             return range.ElementAt(index);
         }
+        
+        
+        public static (Vector3 leftVector, Vector3 rightVector) GetBreakVectors(this Vector3 origin, float angleInDegrees)
+        {
+            float gradToRadianConst = Mathf.PI / 180f;
+            float leftAngle = angleInDegrees * gradToRadianConst;
+            float rightAngle = -angleInDegrees * gradToRadianConst;
+
+            return (origin.RotateVectorByAngle(leftAngle), origin.RotateVectorByAngle(rightAngle));
+        }
+
+
+        public static Vector3 RotateVectorByAngle(this Vector3 origin, float angleInRadians)
+        {
+            float originX = origin.x;
+            float originY = origin.y;
+        
+            float newX = Mathf.Cos(angleInRadians) * originX - Mathf.Sin(angleInRadians) * originY;
+            float newY = Mathf.Sin(angleInRadians) * originX + Mathf.Cos(angleInRadians) * originY;
+
+            return new Vector3(newX, newY, 0f);
+        }
     }
 }

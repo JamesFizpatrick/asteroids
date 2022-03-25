@@ -163,7 +163,7 @@ public class AsteroidsManager : MonoBehaviour, IManager
             Asteroid leftAsteroid = CreateChildAsteroid(nextType, parentLocalPosition);
             Asteroid rightAsteroid = CreateChildAsteroid(nextType, parentLocalPosition);
             
-            (Vector3 leftVector, Vector3 rightVector) = GetBreakVectors(direction, 30f);
+            (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(30f);
             
             leftAsteroid.OverrideDirection(leftVector);
             rightAsteroid.OverrideDirection(rightVector);
@@ -178,28 +178,6 @@ public class AsteroidsManager : MonoBehaviour, IManager
 
         return asteroid;
     }
-
-        
-    private (Vector3 leftVector, Vector3 rightVector) GetBreakVectors(Vector3 origin, float angleInDegrees)
-    {
-        float gradToRadianConst = Mathf.PI / 180f;
-        float leftAngle = angleInDegrees * gradToRadianConst;
-        float rightAngle = -angleInDegrees * gradToRadianConst;
-
-        return (RotateVectorByAngle(leftAngle, origin), RotateVectorByAngle(rightAngle, origin));
-    }
-
-
-    private Vector3 RotateVectorByAngle(float angleInRadians, Vector3 origin)
-    {
-        float originX = origin.x;
-        float originY = origin.y;
-        
-        float newX = Mathf.Cos(angleInRadians) * originX - Mathf.Sin(angleInRadians) * originY;
-        float newY = Mathf.Sin(angleInRadians) * originX + Mathf.Cos(angleInRadians) * originY;
-
-        return new Vector3(newX, newY, 0f);
-    }
-
+    
     #endregion
 }
