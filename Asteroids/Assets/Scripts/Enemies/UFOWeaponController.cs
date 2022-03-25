@@ -10,7 +10,7 @@ namespace Asteroids.UFO
     {
         #region Fields
 
-        private Ship ship;
+        private Player _player;
         private System.Random random;
 
         #endregion
@@ -38,9 +38,9 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialize(Ship ship)
+        public void Initialize(Player player)
         {
-            this.ship = ship;
+            this._player = player;
         }
         
         
@@ -59,7 +59,7 @@ namespace Asteroids.UFO
         {
             while (true)
             {
-                Vector3 direction = ship.transform.localPosition - transform.localPosition;
+                Vector3 direction = _player.transform.localPosition - transform.localPosition;
 
                 (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(5f);
                 Vector3 newDirection = Vector3.Lerp(leftVector, rightVector, random.GetRandomFloat(0f, 1f));

@@ -28,8 +28,16 @@ namespace Asteroids.Game
         private InputManager inputManager;
         
         #endregion
+
+
+        
+        #region Properties
+
+        public Vector3 MoveDirection => currentMoveDirection;
+
+        #endregion
     
-    
+        
         
         #region Unity lifecycle
         

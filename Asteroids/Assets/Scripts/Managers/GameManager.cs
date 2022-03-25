@@ -8,6 +8,10 @@ namespace Asteroids.Managers
         #region Fields
 
         private static GameManager instance;
+
+        private PlayerShipsManager playerShipsManager;
+        private EnemiesManager enemiesManager;
+        private AsteroidsManager asteroidsManager;
         
         #endregion
 
@@ -57,15 +61,36 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            PlayerShipsManager playerShipsManager = ManagersHub.GetManager<PlayerShipsManager>();
-            playerShipsManager.SpawnPlayer();
-            
-            ManagersHub.GetManager<AsteroidsManager>()
-                .SpawnAsteroids(4, playerShipsManager.Player.transform.localPosition, 100f);
+            playerShipsManager = ManagersHub.GetManager<PlayerShipsManager>();
+            asteroidsManager = ManagersHub.GetManager<AsteroidsManager>();
+            enemiesManager = ManagersHub.GetManager<EnemiesManager>();
 
-            ManagersHub.GetManager<EnemiesManager>().SpawnEnemy(playerShipsManager.Player);
+            playerShipsManager.SpawnPlayer();
+            playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
+            
+            asteroidsManager.SpawnAsteroids(4, playerShipsManager.Player.transform.localPosition, 100f);
+            asteroidsManager.OnHalfDestroyed += AsteroidsManager_OnHalfDestroyed;
+            
+            enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
         }
 
+        #endregion
+
+
+        
+        #region Event handlers
+
+        private void PlayerShipsManager_OnPlayerKilled() { }
+
+
+        private void AsteroidsManager_OnHalfDestroyed()
+        {
+            enemiesManager.SpawnEnemy(playerShipsManager.Player);
+        }
+
+
+        private void EnemiesManager_OnEnemyKilled() { }
+        
         #endregion
     }
 }

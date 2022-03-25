@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Asteroids.Asteroids;
@@ -10,9 +11,14 @@ using Random = System.Random;
 public class AsteroidsManager : MonoBehaviour, IManager
 {
     #region Fields
+
+    public Action OnHalfDestroyed; 
     
     private static AsteroidsManager instance;
     private Dictionary<AsteroidType, List<GameObject>> asteroidsPool = new Dictionary<AsteroidType, List<GameObject>>();
+
+    private int startQuantity = 0;
+    private int destroyedCount = 0;
     
     #endregion
 
@@ -43,6 +49,8 @@ public class AsteroidsManager : MonoBehaviour, IManager
     
     public void SpawnAsteroids(int quantity, Vector3 playerPosition, float safeRadius)
     {
+        startQuantity = quantity;
+        
         Random random = new Random();
 
         float directionX;
@@ -154,6 +162,16 @@ public class AsteroidsManager : MonoBehaviour, IManager
 
     private void Asteroid_Destroyed(Asteroid asteroid)
     {
+        if (asteroid.Type == AsteroidType.Huge)
+        {
+            destroyedCount++;
+
+            if (destroyedCount > startQuantity / 2)
+            {
+                OnHalfDestroyed?.Invoke();
+            }
+        }
+        
         Vector3 direction = asteroid.CurrentDirection;
         AsteroidType nextType = asteroid.Type.Next();
         Vector3 parentLocalPosition = asteroid.transform.localPosition;

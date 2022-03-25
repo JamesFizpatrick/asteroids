@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Game;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace Asteroids.UFO
     {
         #region Fields
 
+        public Action Killed;
+        
         private UFOMoveController moveController;
         private UFOWeaponController weaponController;
 
@@ -36,10 +39,10 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialze(Ship ship)
+        public void Initialze(Player player)
         {
-            moveController.Initialize(ship);
-            weaponController.Initialize(ship);
+            moveController.Initialize(player);
+            weaponController.Initialize(player);
             
             weaponController.StartFire();
         }
@@ -54,6 +57,7 @@ namespace Asteroids.UFO
         {
             if (col.gameObject.layer == weaponLayerMask)
             {
+                Killed?.Invoke();
                 gameObject.SetActive(false);
             }
         }

@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
@@ -9,7 +10,8 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Ship Player { get; private set; }
+        public Action OnPlayerKilled;
+        public Player Player { get; private set; }
 
         private static PlayerShipsManager instance;
         
@@ -42,15 +44,30 @@ namespace Asteroids.Managers
 
         public void Initialize() { }
 
-        
-        public void Unload() { }
+
+        public void Unload()
+        {
+            if (Player)
+            {
+                Player.Killed -= Player_Killed;
+            }
+        }
 
 
         public void SpawnPlayer()
         {
             GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
-            Player = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<Ship>();
+            Player = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<Player>();
+            Player.Killed += Player_Killed;
         }
+
+        #endregion
+
+
+        
+        #region Event handlers
+
+        private void Player_Killed() => OnPlayerKilled?.Invoke();
 
         #endregion
     }

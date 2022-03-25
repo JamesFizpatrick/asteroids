@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
@@ -10,8 +11,9 @@ namespace Asteroids.Managers
     {
         #region Fields
 
+        public Action OnEnemyKilled;
+        
         public UFO.UFO Enemy { get; private set; }
-
         private const int UFOSpawnDistance = 10;
         private static EnemiesManager instance;
         
@@ -44,10 +46,16 @@ namespace Asteroids.Managers
 
         public void Initialize() { }
 
-        public void Unload() { }
+        public void Unload()
+        {
+            if (Enemy)
+            {
+                Enemy.Killed += Enemy_Killed;
+            }
+        }
 
 
-        public void SpawnEnemy(Ship ship)
+        public void SpawnEnemy(Player player)
         {
             GameObject ufoPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Enemy;
             GameObject ufo = Instantiate(ufoPrefab, GameSceneReferences.MainCanvas.transform);
@@ -80,9 +88,18 @@ namespace Asteroids.Managers
             ufo.transform.localPosition = new Vector3(x, y);
             
             Enemy = ufo.GetComponent<UFO.UFO>();
-            Enemy.Initialze(ship);
+            Enemy.Initialze(player);
+            Enemy.Killed += Enemy_Killed;
         }
         
+        #endregion
+
+        
+
+        #region Event handlers
+
+        private void Enemy_Killed() => OnEnemyKilled?.Invoke();
+
         #endregion
     }
 }

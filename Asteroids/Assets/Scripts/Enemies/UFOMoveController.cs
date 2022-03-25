@@ -11,7 +11,7 @@ namespace Asteroids.UFO
         private const float Speed = 1.0f;
         private Vector3 currentDirection;
 
-        private Ship playerShip;
+        private Player _playerPlayer;
         
         #endregion
 
@@ -27,9 +27,9 @@ namespace Asteroids.UFO
 
         private void OnDestroy()
         {
-            if (playerShip)
+            if (_playerPlayer)
             {
-                playerShip.OnPositionChanged -= PlayerShip_OnPositionChanged;
+                _playerPlayer.OnPositionChanged -= PlayerShip_OnPositionChanged;
             }
         }
 
@@ -39,11 +39,11 @@ namespace Asteroids.UFO
         
         #region Public methods
 
-        public void Initialize(Ship ship)
+        public void Initialize(Player player)
         {
-            playerShip = ship;
-            ship.OnPositionChanged += PlayerShip_OnPositionChanged;
-            currentDirection = (playerShip.transform.localPosition - gameObject.transform.localPosition).normalized;
+            _playerPlayer = player;
+            player.OnPositionChanged += PlayerShip_OnPositionChanged;
+            currentDirection = (_playerPlayer.transform.localPosition - gameObject.transform.localPosition).normalized;
         }
 
         #endregion

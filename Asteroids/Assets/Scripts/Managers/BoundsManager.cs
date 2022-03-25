@@ -1,3 +1,4 @@
+using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
 
@@ -56,10 +57,15 @@ namespace Asteroids.Managers
         
         private void OnTriggerExit2D(Collider2D entity)
         {
-            if (entity.gameObject.layer == playerProjectilesLayer ||
-                entity.gameObject.layer == enemyProjectilesLayer)
+            int layer = entity.gameObject.layer;
+            
+            if (layer == playerProjectilesLayer || layer == enemyProjectilesLayer)
             {
                 entity.gameObject.SetActive(false);
+            }
+            else if (layer == PlayerLayer || layer == asteroidLayer || layer == enemyLayer)
+            {
+                TeleportEntity(entity.gameObject);
             }
         }
 
@@ -87,6 +93,41 @@ namespace Asteroids.Managers
 
         
         public void Unload() { }
+
+        #endregion
+
+
+        
+        #region Private methods
+
+        private void TeleportEntity(GameObject entity)
+        {
+            Vector3 localPosition = entity.transform.localPosition;
+
+            float maxX = Screen.width / 2f;
+            float maxY = Screen.height / 2f;
+            float minX = -Screen.width / 2f;
+            float minY = -Screen.height / 2f;
+                
+            if (localPosition.x > maxX)
+            {
+                localPosition.x = minX;
+            }
+            else if (localPosition.x < minX)
+            {
+                localPosition.x = maxX;
+            }
+            else if (localPosition.y > maxY)
+            {
+                localPosition.y = minY;
+            }
+            else if (localPosition.y < minY)
+            {
+                localPosition.y = maxY;
+            }
+
+            entity.gameObject.transform.localPosition = localPosition;
+        }
 
         #endregion
     }
