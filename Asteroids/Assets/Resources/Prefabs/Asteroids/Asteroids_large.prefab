@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4843148786994300891}
   - component: {fileID: 2726963176595360248}
   - component: {fileID: 7092186573843903005}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: w_minerals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 5243960030108744970}
   - component: {fileID: 6571954101304846495}
   - component: {fileID: 3545437002599358626}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: wo_minerals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 1778327847597295729}
   - component: {fileID: 3076338761641162365}
   - component: {fileID: 4365416979806755510}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Asteroids_large
   m_TagString: Untagged
   m_Icon: {fileID: 0}

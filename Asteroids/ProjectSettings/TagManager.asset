@@ -13,7 +13,7 @@ TagManager:
   - UI
   - PlayerProjectiles
   - EnemyProjectiles
-  - Ship
+  - Player
   - Asteroid
   - Enemy
   - 

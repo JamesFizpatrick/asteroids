@@ -13,19 +13,17 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        protected float FireCooldown = 0.0f;
-
-        protected WeaponType currentWeaponType = WeaponType.None;
-
         private const int MaxBulletsAmount = 10;
+
+        protected float FireCooldown = 0.0f;
+        protected WeaponType currentWeaponType = WeaponType.None;
         
         private GameObject bulletPrefab;
-        private List<WeaponsBase> bulletsPool = new List<WeaponsBase>();
-
         private DataManager dataManager;
-
         private Coroutine attackCoroutine;
         
+        private List<WeaponsBase> bulletsPool = new List<WeaponsBase>();
+
         #endregion
 
 

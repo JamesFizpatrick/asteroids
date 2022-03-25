@@ -15,7 +15,7 @@ namespace Asteroids.Game
         
         #region Unity lifecycle
 
-        private void Awake() => playerLayer = LayerMask.NameToLayer("Ship");
+        private void Awake() => playerLayer = LayerMask.NameToLayer("Player");
 
         #endregion
 

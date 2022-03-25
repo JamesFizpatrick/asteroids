@@ -13,7 +13,7 @@ namespace Asteroids.Managers
 
         private int playerProjectilesLayer;
         private int enemyProjectilesLayer;
-        private int shipLayer;
+        private int PlayerLayer;
         private int asteroidLayer;
         private int enemyLayer;
         
@@ -48,7 +48,7 @@ namespace Asteroids.Managers
         {
             playerProjectilesLayer = LayerMask.NameToLayer("PlayerProjectiles");
             playerProjectilesLayer = LayerMask.NameToLayer("EnemyProjectiles");
-            shipLayer = LayerMask.NameToLayer("Ship");
+            PlayerLayer = LayerMask.NameToLayer("Player");
             asteroidLayer = LayerMask.NameToLayer("Asteroid");
             enemyLayer = LayerMask.NameToLayer("Enemy");
         }

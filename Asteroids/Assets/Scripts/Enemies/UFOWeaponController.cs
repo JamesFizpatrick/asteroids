@@ -9,10 +9,17 @@ namespace Asteroids.UFO
 {
     public class UFOWeaponController : UnitWeaponController
     {
-        private GameManager gameManager;
+        #region Fields
 
+        private GameManager gameManager;
         private System.Random random;
+
+        #endregion
+
+
         
+        #region Unity lifecycle
+
         protected override void Awake()
         {
             gameManager = ManagersHub.GetManager<GameManager>();
@@ -22,17 +29,27 @@ namespace Asteroids.UFO
         }
 
         
-        private void OnEnable()
-        {
-            StartCoroutine(Shoot());
-        }
-
-
         private void OnDisable()
         {
             StopFire();
         }
+        
+        #endregion
 
+
+
+        #region Public methods
+
+        public void StartFire()
+        {
+            StartCoroutine(Shoot());
+        }
+
+        #endregion
+
+
+
+        #region Private methods
 
         private IEnumerator Shoot()
         {
@@ -48,5 +65,7 @@ namespace Asteroids.UFO
                 yield return new WaitForSeconds(FireCooldown);
             }
         }
+
+        #endregion
     }
 }

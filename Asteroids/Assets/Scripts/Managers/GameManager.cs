@@ -71,7 +71,7 @@ namespace Asteroids.Managers
             ManagersHub.GetManager<AsteroidsManager>()
                 .SpawnAsteroids(4, GetPlayerShipLocalPosition(), 100f);
 
-            Vector3 tempUFOPosition = new Vector3(100f, 100f);
+            Vector3 tempUFOPosition = new Vector3(300f, 300f);
             ManagersHub.GetManager<EnemiesManager>().SpawnEnemy(tempUFOPosition, playerShip);
         }
 

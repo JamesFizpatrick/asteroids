@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6672556675799212530}
   - component: {fileID: 1980999933426691780}
   - component: {fileID: 182312689201309247}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 8175570867554040803}
   - component: {fileID: 5829468191842642580}
   - component: {fileID: -7835788860310672910}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Base_UFO
   m_TagString: Untagged
   m_Icon: {fileID: 0}

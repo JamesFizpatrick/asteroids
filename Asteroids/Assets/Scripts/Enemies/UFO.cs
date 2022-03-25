@@ -39,6 +39,7 @@ namespace Asteroids.UFO
         public void Initialze(Ship ship)
         {
             moveController.Initialize(ship);
+            weaponController.StartFire();
         }
 
         #endregion
