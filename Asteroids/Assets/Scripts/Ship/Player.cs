@@ -1,4 +1,6 @@
 using System;
+using Asteroids.Handlers;
+using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -27,9 +29,9 @@ namespace Asteroids.Game
 
         public void Awake()
         {
-            enemyProjectilesLayer = LayerMask.NameToLayer("EnemyProjectiles");
-            asteroidsLayer = LayerMask.NameToLayer("Asteroid");
-            enemyLayer = LayerMask.NameToLayer("Enemy");
+            enemyProjectilesLayer = LayerMasksHandler.EnemyProjectiles;
+            asteroidsLayer = LayerMasksHandler.Asteroid;
+            enemyLayer = LayerMasksHandler.Enemy;
 
             InitControllers();
             shipMovementController.OnPositionChanged += ShipMovementController_OnPositionChanged;

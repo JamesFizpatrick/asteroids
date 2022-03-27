@@ -53,6 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   fireCooldown: 0.5
+  soundType: 1
 --- !u!61 &2714999713993396036
 BoxCollider2D:
   m_ObjectHideFlags: 0

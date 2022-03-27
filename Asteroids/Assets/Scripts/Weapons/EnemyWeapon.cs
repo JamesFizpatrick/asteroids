@@ -1,3 +1,4 @@
+using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -15,7 +16,7 @@ namespace Asteroids.Game
         
         #region Unity lifecycle
 
-        private void Awake() => playerLayer = LayerMask.NameToLayer("Player");
+        private void Awake() => playerLayer = LayerMasksHandler.Player;
 
         #endregion
 

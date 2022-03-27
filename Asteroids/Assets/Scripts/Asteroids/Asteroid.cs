@@ -1,4 +1,5 @@
 using System;
+using Asteroids.Handlers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,7 +41,7 @@ namespace Asteroids.Asteroids
 
         private void Awake()
         {
-            weaponLayerMask = LayerMask.NameToLayer("PlayerProjectiles");
+            weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
             SelectMineralsTexture();
         }
 

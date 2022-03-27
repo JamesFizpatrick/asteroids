@@ -1,3 +1,4 @@
+using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -18,8 +19,8 @@ namespace Asteroids.Game
 
         private void Awake()
         {
-            asteroidLayer = LayerMask.NameToLayer("Asteroid");
-            enemyLayer = LayerMask.NameToLayer("Enemy");
+            asteroidLayer = LayerMasksHandler.Asteroid;
+            enemyLayer = LayerMasksHandler.Enemy;
         }
 
         #endregion

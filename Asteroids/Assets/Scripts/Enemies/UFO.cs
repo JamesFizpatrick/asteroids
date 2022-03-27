@@ -1,5 +1,6 @@
 using System;
 using Asteroids.Game;
+using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -24,7 +25,7 @@ namespace Asteroids.UFO
 
         private void Awake()
         {
-            weaponLayerMask = LayerMask.NameToLayer("PlayerProjectiles");
+            weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
 
             moveController = GetComponent<UFOMoveController>();
             weaponController = GetComponent<UFOWeaponController>();

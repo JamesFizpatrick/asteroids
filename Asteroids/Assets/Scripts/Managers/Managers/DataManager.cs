@@ -29,9 +29,14 @@ namespace Asteroids.Managers
         #region Public methods
 
         public PlayerPreset PlayerPreset => GetData<PlayerPreset>("Data/PlayerPreset");
+        
+        
+        public SoundPreset SoundPreset => GetData<SoundPreset>("Data/SoundPreset");
 
+        
         public void Initialize() { }
 
+        
         public void Unload() { }
         
         #endregion

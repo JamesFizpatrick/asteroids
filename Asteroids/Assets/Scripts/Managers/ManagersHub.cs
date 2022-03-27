@@ -26,6 +26,7 @@ namespace Asteroids.Managers
             managersDictionary.Add(typeof(AsteroidsManager), AsteroidsManager.Instance);
             managersDictionary.Add(typeof(PlayerShipsManager), PlayerShipsManager.Instance);
             managersDictionary.Add(typeof(EnemiesManager), EnemiesManager.Instance);
+            managersDictionary.Add(typeof(SoundManager), SoundManager.Instance);
 
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {

@@ -16,6 +16,8 @@ namespace Asteroids.Managers
         public UFO.UFO Enemy { get; private set; }
         private const int UFOSpawnDistance = 10;
         private static EnemiesManager instance;
+
+        private SoundManager soundManager;
         
         #endregion
 
@@ -44,7 +46,10 @@ namespace Asteroids.Managers
 
         #region Public methods
 
-        public void Initialize() { }
+        public void Initialize()
+        {
+            soundManager = ManagersHub.GetManager<SoundManager>();
+        }
 
         public void Unload()
         {
@@ -111,7 +116,11 @@ namespace Asteroids.Managers
 
         #region Event handlers
 
-        private void Enemy_Killed() => OnEnemyKilled?.Invoke();
+        private void Enemy_Killed()
+        {
+            soundManager.PlaySound(SoundType.Explosion);
+            OnEnemyKilled?.Invoke();
+        }
 
         #endregion
     }

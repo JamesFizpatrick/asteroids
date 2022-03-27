@@ -46,11 +46,11 @@ namespace Asteroids.Managers
 
         private void Awake()
         {
-            playerProjectilesLayer = LayerMask.NameToLayer("PlayerProjectiles");
-            enemyProjectilesLayer = LayerMask.NameToLayer("EnemyProjectiles");
-            playerLayer = LayerMask.NameToLayer("Player");
-            asteroidLayer = LayerMask.NameToLayer("Asteroid");
-            enemyLayer = LayerMask.NameToLayer("Enemy");
+            playerProjectilesLayer = LayerMasksHandler.PlayerProjectiles;
+            enemyProjectilesLayer = LayerMasksHandler.EnemyProjectiles;
+            playerLayer = LayerMasksHandler.Player;
+            asteroidLayer = LayerMasksHandler.Asteroid;
+            enemyLayer = LayerMasksHandler.Enemy;
         }
         
         

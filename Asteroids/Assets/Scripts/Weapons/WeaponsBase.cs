@@ -1,3 +1,4 @@
+using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -9,6 +10,7 @@ namespace Asteroids.Game
 
         [SerializeField] private float speed;
         [SerializeField] private float fireCooldown;
+        [SerializeField] private SoundType soundType;
         
         #endregion
 
@@ -18,6 +20,9 @@ namespace Asteroids.Game
 
         public float FireCooldown => fireCooldown;
 
+        
+        public SoundType SoundType => soundType;
+        
         #endregion
 
 

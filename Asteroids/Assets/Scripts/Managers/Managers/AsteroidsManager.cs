@@ -20,6 +20,8 @@ public class AsteroidsManager : MonoBehaviour, IManager
 
     private int startQuantity = 0;
     private int destroyedCount = 0;
+
+    private SoundManager soundManager;
     
     #endregion
 
@@ -107,12 +109,16 @@ public class AsteroidsManager : MonoBehaviour, IManager
                 Destroy(asteroid);
             }
         }
-        
+
+        destroyedCount = 0;
         asteroidsPool.Clear();
     }
-    
-    
-    public void Initialize() { }
+
+
+    public void Initialize()
+    {
+        soundManager = ManagersHub.GetManager<SoundManager>();
+    }
 
     
     public void Unload() { }
@@ -192,6 +198,8 @@ public class AsteroidsManager : MonoBehaviour, IManager
     private void Asteroid_Destroyed(Asteroid asteroid)
     {
         asteroid.Destroyed -= Asteroid_Destroyed;
+        
+        soundManager.PlaySound(SoundType.Explosion);
         
         if (asteroid.Type == AsteroidType.Huge)
         {

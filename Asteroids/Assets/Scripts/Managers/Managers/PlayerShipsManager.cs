@@ -16,7 +16,8 @@ namespace Asteroids.Managers
         private static PlayerShipsManager instance;
 
         private AsteroidsManager asteroidsManager;
-        
+        private SoundManager soundManager;
+
         #endregion
 
 
@@ -44,7 +45,11 @@ namespace Asteroids.Managers
         
         #region Public methods
 
-        public void Initialize() => asteroidsManager = ManagersHub.GetManager<AsteroidsManager>();
+        public void Initialize()
+        {
+            asteroidsManager = ManagersHub.GetManager<AsteroidsManager>();
+            soundManager = ManagersHub.GetManager<SoundManager>();
+        }
 
 
         public void Unload()
@@ -98,7 +103,11 @@ namespace Asteroids.Managers
         
         #region Event handlers
 
-        private void Player_Killed() => OnPlayerKilled?.Invoke();
+        private void Player_Killed()
+        {
+            soundManager.PlaySound(SoundType.Death);
+            OnPlayerKilled?.Invoke();
+        }
 
         #endregion
     }

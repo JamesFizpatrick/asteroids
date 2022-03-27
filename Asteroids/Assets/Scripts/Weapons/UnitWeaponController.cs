@@ -19,9 +19,12 @@ namespace Asteroids.Game
         protected WeaponType currentWeaponType = WeaponType.None;
         
         private GameObject bulletPrefab;
-        private DataManager dataManager;
-        private Coroutine attackCoroutine;
         
+        private DataManager dataManager;
+        private SoundManager soundManager;
+        
+        private Coroutine attackCoroutine;
+
         private List<WeaponsBase> bulletsPool = new List<WeaponsBase>();
 
         #endregion
@@ -33,6 +36,7 @@ namespace Asteroids.Game
         protected virtual void Awake()
         {
             dataManager = ManagersHub.GetManager<DataManager>();
+            soundManager = ManagersHub.GetManager<SoundManager>();
 
             switch (currentWeaponType)
             {
@@ -97,6 +101,8 @@ namespace Asteroids.Game
                 Quaternion rotation = Quaternion.FromToRotation(Vector3.up, direction);
                 bullet.transform.SetPositionAndRotation(transform.position, rotation);
                 bullet.gameObject.SetActive(true);
+                
+                soundManager.PlaySound(bullet.SoundType);
             }
         }
         
@@ -121,7 +127,9 @@ namespace Asteroids.Game
                 {
                     bullet.transform.SetPositionAndRotation(transform.position, transform.rotation);
                     bullet.gameObject.SetActive(true);
-            
+                    
+                    soundManager.PlaySound(bullet.SoundType);
+                    
                     yield return new WaitForSeconds(bullet.FireCooldown);
                 }
             }
