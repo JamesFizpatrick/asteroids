@@ -12,7 +12,8 @@ public class AsteroidsManager : MonoBehaviour, IManager
 {
     #region Fields
 
-    public Action OnHalfDestroyed; 
+    public Action<int> OnInitialAsteroidsDestroyed;
+    public Action OnAllAsteroidsDestroyed;
     
     private static AsteroidsManager instance;
     private Dictionary<AsteroidType, List<GameObject>> asteroidsPool = new Dictionary<AsteroidType, List<GameObject>>();
@@ -82,6 +83,34 @@ public class AsteroidsManager : MonoBehaviour, IManager
         }
     }
 
+
+    public int GetActiveAsteroidsCount()
+    {
+        int count = 0;
+        foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
+        {
+            count += pair.Value.Count(x => x.activeSelf);
+        }
+
+        return count;
+    }
+    
+    
+    public void Reset()
+    {
+        foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
+        {
+            foreach (GameObject asteroid in pair.Value)
+            {
+                Asteroid asteroidComponent = asteroid.GetComponent<Asteroid>();
+                asteroidComponent.Destroyed -= Asteroid_Destroyed;
+                Destroy(asteroid);
+            }
+        }
+        
+        asteroidsPool.Clear();
+    }
+    
     
     public void Initialize() { }
 
@@ -162,13 +191,14 @@ public class AsteroidsManager : MonoBehaviour, IManager
 
     private void Asteroid_Destroyed(Asteroid asteroid)
     {
+        asteroid.Destroyed -= Asteroid_Destroyed;
+        
         if (asteroid.Type == AsteroidType.Huge)
         {
-            destroyedCount++;
-
-            if (destroyedCount > startQuantity / 2)
+            if (destroyedCount != startQuantity)
             {
-                OnHalfDestroyed?.Invoke();
+                destroyedCount++;
+                OnInitialAsteroidsDestroyed?.Invoke(destroyedCount);
             }
         }
         
@@ -185,6 +215,10 @@ public class AsteroidsManager : MonoBehaviour, IManager
             
             leftAsteroid.OverrideDirection(leftVector);
             rightAsteroid.OverrideDirection(rightVector);
+        }
+        else if (GetActiveAsteroidsCount() == 0)
+        {
+            OnAllAsteroidsDestroyed?.Invoke();
         }
     }
 

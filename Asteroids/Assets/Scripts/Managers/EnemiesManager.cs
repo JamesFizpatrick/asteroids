@@ -50,9 +50,12 @@ namespace Asteroids.Managers
         {
             if (Enemy)
             {
-                Enemy.Killed += Enemy_Killed;
+                Enemy.Killed -= Enemy_Killed;
             }
         }
+
+
+        public bool HasActiveEnemy() => Enemy != null && Enemy.gameObject.activeSelf;
 
 
         public void SpawnEnemy(Player player)
@@ -90,6 +93,16 @@ namespace Asteroids.Managers
             Enemy = ufo.GetComponent<UFO.UFO>();
             Enemy.Initialze(player);
             Enemy.Killed += Enemy_Killed;
+        }
+
+
+        public void Reset()
+        {
+            if (Enemy)
+            {
+                Enemy.Killed -= Enemy_Killed;
+                Destroy(Enemy.gameObject);
+            }
         }
         
         #endregion

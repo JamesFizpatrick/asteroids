@@ -12,11 +12,11 @@ namespace Asteroids.Asteroids
         public Action<Asteroid> Destroyed;
         
         private const float RotationSpeed = 0.7f;
-        private const float MoveSpeed = 1f;
 
         [SerializeField] private AsteroidType asteroidType;
         [SerializeField] private Image noMineralsImage;
         [SerializeField] private Image mineralsImage;
+        [SerializeField] private float moveSpeed;
 
         private int weaponLayerMask;
         private Vector3 currentDirection;
@@ -28,6 +28,7 @@ namespace Asteroids.Asteroids
         #region Properties
 
         public AsteroidType Type => asteroidType;
+        
         
         public Vector3 CurrentDirection => currentDirection;
         
@@ -46,7 +47,7 @@ namespace Asteroids.Asteroids
 
         private void FixedUpdate()
         {
-            transform.Translate(currentDirection * MoveSpeed);
+            transform.Translate(currentDirection * moveSpeed);
 
             noMineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
             mineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
@@ -61,10 +62,7 @@ namespace Asteroids.Asteroids
         
         #region Public methods
 
-        public void OverrideDirection(Vector3 newDirection)
-        {
-            currentDirection = newDirection;
-        }
+        public void OverrideDirection(Vector3 newDirection) => currentDirection = newDirection;
 
         #endregion
 
@@ -86,8 +84,8 @@ namespace Asteroids.Asteroids
         {
             if (inputCollider.gameObject.layer == weaponLayerMask)
             {
-                Destroyed?.Invoke(this);
                 gameObject.SetActive(false);
+                Destroyed?.Invoke(this);
             }
         }
         

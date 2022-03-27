@@ -10,10 +10,11 @@ namespace Asteroids.Game
         #region Fields
 
         public Action<Vector3> OnPositionChanged;
+
+        [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private float maxInertia = 1;
+        [SerializeField] private float rotationSpeed = 5f;
         
-        private const float MoveSpeed = 3f;
-        private const float RotationSpeed = 5f;
-        private const float MaxInertia = 1f;
         private const float InertiaIncreaseSpeed = 0.01f;
         private const float InertiaDecreaseSpeed = 0.01f;
         
@@ -64,7 +65,7 @@ namespace Asteroids.Game
         private void Awake()
         {
             inputManager = ManagersHub.GetManager<InputManager>();
-            currentMoveDirection = Vector3.up * MoveSpeed;
+            currentMoveDirection = Vector3.up * moveSpeed;
         }
         
 
@@ -96,10 +97,10 @@ namespace Asteroids.Game
             switch (rotationType)
             {
                 case InputRotationType.Clockwise:
-                    currentRotationAngle = -RotationSpeed;
+                    currentRotationAngle = -rotationSpeed;
                     break;
                 case InputRotationType.CounterClockwise:
-                    currentRotationAngle = RotationSpeed;
+                    currentRotationAngle = rotationSpeed;
                     break;
                 case InputRotationType.None:
                     currentRotationAngle = 0f;
@@ -123,14 +124,14 @@ namespace Asteroids.Game
         {
             if (currentMoveType == InputMovementType.Forward)
             {
-                if (currentInertia < MaxInertia)
+                if (currentInertia < maxInertia)
                 {
                     currentInertia += InertiaIncreaseSpeed * 2;
                 }
             }
             else if (currentMoveType == InputMovementType.Backward)
             {
-                if (currentInertia > -MaxInertia)
+                if (currentInertia > -maxInertia)
                 {
                     currentInertia -= InertiaIncreaseSpeed * 2;
                 }

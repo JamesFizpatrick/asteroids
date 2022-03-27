@@ -204,6 +204,7 @@ MonoBehaviour:
   asteroidType: 2
   noMineralsImage: {fileID: 3545437002599358626}
   mineralsImage: {fileID: 7092186573843903005}
+  moveSpeed: 3
 --- !u!61 &4365416979806755510
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -141,6 +141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a49c3bb6f16ca4c1c81c540ce86e1ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 3
+  maxInertia: 1
+  rotationSpeed: 5
 --- !u!114 &6005106950652141909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2776f9838a1064291b9a0d9ac577af2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
+  image: {fileID: 1703124003496316246}
 --- !u!114 &3037682268857239934
 MonoBehaviour:
   m_ObjectHideFlags: 0

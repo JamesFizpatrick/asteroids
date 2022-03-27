@@ -14,6 +14,8 @@ namespace Asteroids.Managers
         public Player Player { get; private set; }
 
         private static PlayerShipsManager instance;
+
+        private AsteroidsManager asteroidsManager;
         
         #endregion
 
@@ -37,12 +39,12 @@ namespace Asteroids.Managers
         }
 
         #endregion
-
-
+        
+        
         
         #region Public methods
 
-        public void Initialize() { }
+        public void Initialize() => asteroidsManager = ManagersHub.GetManager<AsteroidsManager>();
 
 
         public void Unload()
@@ -61,6 +63,35 @@ namespace Asteroids.Managers
             Player.Killed += Player_Killed;
         }
 
+
+        public void RespawnPlayer(int distanceFromBorders)
+        {
+            if (Player.gameObject.activeSelf)
+            {
+                Player.gameObject.SetActive(false);
+            }
+
+            int minX = -Screen.width / 2 + distanceFromBorders;
+            int maxX = Screen.width / 2 - distanceFromBorders;
+            int minY = -Screen.height / 2 + distanceFromBorders;
+            int maxY = Screen.height / 2 - distanceFromBorders;
+            
+            System.Random random = new System.Random();
+
+            int x = random.Next(minX, maxX);
+            int y = random.Next(minY, maxY);
+
+            Player.transform.localPosition = new Vector3(x, y);
+            Player.gameObject.SetActive(true);
+        }
+
+
+        public void Reset()
+        {
+            Player.Killed -= Player_Killed;
+            Destroy(Player.gameObject);
+        }
+        
         #endregion
 
 

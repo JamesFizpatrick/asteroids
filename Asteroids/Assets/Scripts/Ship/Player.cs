@@ -41,16 +41,16 @@ namespace Asteroids.Game
             int layer = col.gameObject.layer;
             if (layer == enemyProjectilesLayer || layer == asteroidsLayer || layer == enemyLayer)
             {
-                Killed?.Invoke();
-                gameObject.SetActive(false);
+                shipVisualAppearanceController.Blink(() =>
+                {
+                    gameObject.SetActive(false);
+                    Killed?.Invoke();
+                });
             }
         }
 
         
-        public void OnDestroy()
-        {
-            shipMovementController.OnPositionChanged -= ShipMovementController_OnPositionChanged;
-        }
+        public void OnDestroy() => shipMovementController.OnPositionChanged -= ShipMovementController_OnPositionChanged;
 
         #endregion
 
@@ -71,10 +71,7 @@ namespace Asteroids.Game
         
         #region Event handlers
 
-        private void ShipMovementController_OnPositionChanged(Vector3 position)
-        {
-            OnPositionChanged?.Invoke(position);
-        }
+        private void ShipMovementController_OnPositionChanged(Vector3 position) => OnPositionChanged?.Invoke(position);
 
         #endregion
     }

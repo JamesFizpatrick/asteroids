@@ -7,6 +7,10 @@ namespace Asteroids.Managers
     {
         #region Fields
 
+        private const int InitialAsteroidsQuantity = 4;
+        private const int PlayerRespawnDistanceFromBorders = 100;
+        private const float InitialPlayerSafeRadius = 100f;
+        
         private static GameManager instance;
 
         private PlayerShipsManager playerShipsManager;
@@ -52,7 +56,7 @@ namespace Asteroids.Managers
 
         
         public void Unload() { }
-
+        
         #endregion
 
 
@@ -68,28 +72,80 @@ namespace Asteroids.Managers
             playerShipsManager.SpawnPlayer();
             playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
             
-            asteroidsManager.SpawnAsteroids(4, playerShipsManager.Player.transform.localPosition, 100f);
-            asteroidsManager.OnHalfDestroyed += AsteroidsManager_OnHalfDestroyed;
-            
+            asteroidsManager.SpawnAsteroids(InitialAsteroidsQuantity,
+                playerShipsManager.Player.transform.localPosition,
+                InitialPlayerSafeRadius);
+            asteroidsManager.OnInitialAsteroidsDestroyed += AsteroidsManager_InitialAsteroidsDestroyed;
+            asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
+
             enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
         }
 
+
+        private void ResetGame()
+        {
+            playerShipsManager.Reset();
+            playerShipsManager.SpawnPlayer();
+            
+            asteroidsManager.OnInitialAsteroidsDestroyed -= AsteroidsManager_InitialAsteroidsDestroyed;
+            asteroidsManager.OnAllAsteroidsDestroyed -= AsteroidsManager_OnAllAsteroidsDestroyed;
+            
+            asteroidsManager.Reset();
+            asteroidsManager.SpawnAsteroids(InitialAsteroidsQuantity,
+                playerShipsManager.Player.transform.localPosition,
+                InitialPlayerSafeRadius);
+            
+            asteroidsManager.OnInitialAsteroidsDestroyed += AsteroidsManager_InitialAsteroidsDestroyed;
+            asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
+
+            enemiesManager.Reset();
+        }
+        
         #endregion
 
 
         
         #region Event handlers
 
-        private void PlayerShipsManager_OnPlayerKilled() { }
-
-
-        private void AsteroidsManager_OnHalfDestroyed()
+        private void PlayerShipsManager_OnPlayerKilled()
         {
-            enemiesManager.SpawnEnemy(playerShipsManager.Player);
+            if (asteroidsManager.GetActiveAsteroidsCount() == 0 && !enemiesManager.HasActiveEnemy())
+            {
+                ResetGame();
+            }
+            else
+            {
+                playerShipsManager.RespawnPlayer(PlayerRespawnDistanceFromBorders);
+            }
         }
 
 
-        private void EnemiesManager_OnEnemyKilled() { }
+        private void AsteroidsManager_InitialAsteroidsDestroyed(int destroyedQuantity)
+        {
+            if (destroyedQuantity >= InitialAsteroidsQuantity / 2)
+            {
+                enemiesManager.SpawnEnemy(playerShipsManager.Player);
+                asteroidsManager.OnInitialAsteroidsDestroyed -= AsteroidsManager_InitialAsteroidsDestroyed;
+            }
+        }
+
+
+        private void AsteroidsManager_OnAllAsteroidsDestroyed()
+        {
+            if (!enemiesManager.HasActiveEnemy())
+            {
+                ResetGame();
+            }
+        }
+
+
+        private void EnemiesManager_OnEnemyKilled()
+        {
+            if (asteroidsManager.GetActiveAsteroidsCount() == 0)
+            {
+                ResetGame();
+            }
+        }
         
         #endregion
     }

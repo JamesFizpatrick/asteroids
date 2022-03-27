@@ -1,4 +1,3 @@
-using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ namespace Asteroids.Managers
 
         private int playerProjectilesLayer;
         private int enemyProjectilesLayer;
-        private int PlayerLayer;
+        private int playerLayer;
         private int asteroidLayer;
         private int enemyLayer;
         
@@ -48,8 +47,8 @@ namespace Asteroids.Managers
         private void Awake()
         {
             playerProjectilesLayer = LayerMask.NameToLayer("PlayerProjectiles");
-            playerProjectilesLayer = LayerMask.NameToLayer("EnemyProjectiles");
-            PlayerLayer = LayerMask.NameToLayer("Player");
+            enemyProjectilesLayer = LayerMask.NameToLayer("EnemyProjectiles");
+            playerLayer = LayerMask.NameToLayer("Player");
             asteroidLayer = LayerMask.NameToLayer("Asteroid");
             enemyLayer = LayerMask.NameToLayer("Enemy");
         }
@@ -63,7 +62,7 @@ namespace Asteroids.Managers
             {
                 entity.gameObject.SetActive(false);
             }
-            else if (layer == PlayerLayer || layer == asteroidLayer || layer == enemyLayer)
+            else if (layer == playerLayer || layer == asteroidLayer || layer == enemyLayer)
             {
                 TeleportEntity(entity.gameObject);
             }
