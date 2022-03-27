@@ -1,6 +1,5 @@
 using System;
 using Asteroids.Handlers;
-using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -20,6 +19,8 @@ namespace Asteroids.Game
         private int enemyProjectilesLayer;
         private int asteroidsLayer;
         private int enemyLayer;
+
+        private Collider2D collider;
         
         #endregion
 
@@ -35,19 +36,18 @@ namespace Asteroids.Game
 
             InitControllers();
             shipMovementController.OnPositionChanged += ShipMovementController_OnPositionChanged;
+
+            collider = GetComponent<Collider2D>();
         }
-
-
+        
+        
         private void OnTriggerEnter2D(Collider2D col)
         {
             int layer = col.gameObject.layer;
             if (layer == enemyProjectilesLayer || layer == asteroidsLayer || layer == enemyLayer)
             {
-                shipVisualAppearanceController.Blink(() =>
-                {
-                    gameObject.SetActive(false);
-                    Killed?.Invoke();
-                });
+                Killed?.Invoke();
+                EnableIFrames(false);
             }
         }
 
@@ -58,6 +58,34 @@ namespace Asteroids.Game
 
 
 
+        #region Public methods
+
+        public void EnableIFrames(bool canMove)
+        {
+            shipVisualAppearanceController.StartToBlink();
+            collider.enabled = false;
+
+            if (canMove)
+            {
+                shipMovementController.Move();
+            }
+            else
+            {
+                shipMovementController.Stop();
+            }
+        }
+
+
+        public void DisableIFrames()
+        {
+            shipVisualAppearanceController.StopToBlink();
+            collider.enabled = true;
+        }
+
+        #endregion
+
+        
+
         #region Private methods
 
         private void InitControllers()
@@ -66,7 +94,7 @@ namespace Asteroids.Game
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
             shipWeaponController = GetComponent<ShipWeaponController>();
         }
-
+        
         #endregion
 
 

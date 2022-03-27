@@ -27,6 +27,8 @@ namespace Asteroids.Game
         private InputMovementType currentMoveType = InputMovementType.None;
 
         private InputManager inputManager;
+
+        private bool canMove = true;
         
         #endregion
 
@@ -71,6 +73,11 @@ namespace Asteroids.Game
 
         private void FixedUpdate()
         {
+            if (!canMove)
+            {
+                return;
+            }
+            
             ProcessInertia();
 
             Vector3 translateAmount = currentMoveDirection * currentInertia;
@@ -88,6 +95,17 @@ namespace Asteroids.Game
         
         #endregion
 
+
+        
+        #region Public methods
+
+        public void Move() => canMove = true;
+        
+        
+        public void Stop() => canMove = false;
+
+        #endregion
+        
         
         
         #region Private methods

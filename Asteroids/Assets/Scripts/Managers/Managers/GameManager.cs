@@ -115,7 +115,8 @@ namespace Asteroids.Managers
             }
             else
             {
-                playerShipsManager.RespawnPlayer(PlayerRespawnDistanceFromBorders);
+                playerShipsManager.RespawnPlayer(PlayerRespawnDistanceFromBorders, 2f,
+                    1f, 2f);
             }
         }
 

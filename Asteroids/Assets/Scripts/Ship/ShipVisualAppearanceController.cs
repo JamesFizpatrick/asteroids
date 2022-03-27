@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,18 +9,35 @@ namespace Asteroids.Game
     {
         [SerializeField] private Image image;
 
-        public void Blink(Action onComplete)
+        private const float blinkingFrequency = 0.25f;
+        
+        private Coroutine blinkingCoroutine;
+        
+        
+        public void StartToBlink()
         {
-            StartCoroutine(BlinkCoroutine(onComplete));
+            blinkingCoroutine = StartCoroutine(BlinkCoroutine());
+        }
+
+
+        public void StopToBlink()
+        {
+            if (blinkingCoroutine != null)
+            {
+                StopCoroutine(blinkingCoroutine);
+            }
         }
         
-        private IEnumerator BlinkCoroutine(Action onComplete)
+        
+        private IEnumerator BlinkCoroutine()
         {
-            image.gameObject.SetActive(false);
-            yield return new WaitForSeconds(0.5f);
-            image.gameObject.SetActive(true);
-            onComplete?.Invoke();
-            yield return null;
+            while (true)
+            {
+                image.gameObject.SetActive(false);
+                yield return new WaitForSeconds(blinkingFrequency);
+                image.gameObject.SetActive(true);
+                yield return new WaitForSeconds(blinkingFrequency);
+            }
         }
     }
 }

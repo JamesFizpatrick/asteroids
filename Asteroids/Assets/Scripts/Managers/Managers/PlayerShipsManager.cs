@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
@@ -15,7 +16,6 @@ namespace Asteroids.Managers
 
         private static PlayerShipsManager instance;
 
-        private AsteroidsManager asteroidsManager;
         private SoundManager soundManager;
 
         #endregion
@@ -47,7 +47,6 @@ namespace Asteroids.Managers
 
         public void Initialize()
         {
-            asteroidsManager = ManagersHub.GetManager<AsteroidsManager>();
             soundManager = ManagersHub.GetManager<SoundManager>();
         }
 
@@ -69,13 +68,14 @@ namespace Asteroids.Managers
         }
 
 
+        public void RespawnPlayer(int distanceFromBorders, float preDelay, float respawnDelay, float iFramesDelay)
+        {
+            StartCoroutine(RespawnCoroutine(distanceFromBorders, preDelay, respawnDelay, iFramesDelay));
+        }
+        
+        
         public void RespawnPlayer(int distanceFromBorders)
         {
-            if (Player.gameObject.activeSelf)
-            {
-                Player.gameObject.SetActive(false);
-            }
-
             int minX = -Screen.width / 2 + distanceFromBorders;
             int maxX = Screen.width / 2 - distanceFromBorders;
             int minY = -Screen.height / 2 + distanceFromBorders;
@@ -100,6 +100,26 @@ namespace Asteroids.Managers
         #endregion
 
 
+        
+        #region Private methods
+
+        private IEnumerator RespawnCoroutine(int distanceFromBorders, float preDelay,
+            float respawnDelay, float iFramesDelay)
+        {
+            yield return new WaitForSeconds(preDelay);
+            Player.gameObject.SetActive(false);
+            
+            yield return new WaitForSeconds(respawnDelay);
+            RespawnPlayer(distanceFromBorders);
+            Player.EnableIFrames(true);
+
+            yield return new WaitForSeconds(iFramesDelay);
+            Player.DisableIFrames();
+        }
+
+        #endregion
+
+        
         
         #region Event handlers
 
