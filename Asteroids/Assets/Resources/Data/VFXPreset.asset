@@ -9,15 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7305c83d3a6054b559510c758bbe5ac6, type: 3}
-  m_Name: GamePreset
+  m_Script: {fileID: 11500000, guid: db33f2402ce2d4f2991aa12106036334, type: 3}
+  m_Name: VFXPreset
   m_EditorClassIdentifier: 
-  levelPresets:
-  - AsteroidsCount: 1
-    EnemiesCount: 0
-  - AsteroidsCount: 2
-    EnemiesCount: 1
-  - AsteroidsCount: 4
-    EnemiesCount: 1
-  - AsteroidsCount: 6
-    EnemiesCount: 2
+  presets:
+  - Type: 1
+    Prefab: {fileID: 1307603872489459494, guid: 6f5396b161c434f6c9dc8dbe3af97bc8, type: 3}

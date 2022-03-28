@@ -4,6 +4,7 @@ using System.Linq;
 using Asteroids.Asteroids;
 using Asteroids.Handlers;
 using Asteroids.Managers;
+using Asteroids.VFX;
 using UnityEngine;
 using Random = System.Random;
 
@@ -22,6 +23,7 @@ public class AsteroidsManager : MonoBehaviour, IManager
     private int destroyedCount = 0;
 
     private SoundManager soundManager;
+    private VFXManager vfxManager;
     
     #endregion
 
@@ -118,6 +120,7 @@ public class AsteroidsManager : MonoBehaviour, IManager
     public void Initialize()
     {
         soundManager = ManagersHub.GetManager<SoundManager>();
+        vfxManager = ManagersHub.GetManager<VFXManager>();
     }
 
     
@@ -200,6 +203,7 @@ public class AsteroidsManager : MonoBehaviour, IManager
         asteroid.Destroyed -= Asteroid_Destroyed;
         
         soundManager.PlaySound(SoundType.Explosion);
+        vfxManager.SpawnVFX(VFXType.Explosion, asteroid.transform.localPosition);
         
         if (asteroid.Type == AsteroidType.Huge)
         {

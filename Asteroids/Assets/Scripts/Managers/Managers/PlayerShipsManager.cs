@@ -115,7 +115,6 @@ namespace Asteroids.Managers
 
             yield return new WaitForSeconds(iFramesDelay);
             Player.DisableIFrames();
-            
         }
 
         #endregion

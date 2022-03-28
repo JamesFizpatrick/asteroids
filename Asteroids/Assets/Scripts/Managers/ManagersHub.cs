@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 namespace Asteroids.Managers
 {
-    public static class ManagersHub
+    public static class 
+        ManagersHub
     {
         #region Fields
     
@@ -27,6 +28,7 @@ namespace Asteroids.Managers
             managersDictionary.Add(typeof(PlayerShipsManager), PlayerShipsManager.Instance);
             managersDictionary.Add(typeof(EnemiesManager), EnemiesManager.Instance);
             managersDictionary.Add(typeof(SoundManager), SoundManager.Instance);
+            managersDictionary.Add(typeof(VFXManager), VFXManager.Instance);
 
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {

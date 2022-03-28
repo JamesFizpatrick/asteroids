@@ -35,6 +35,9 @@ namespace Asteroids.Managers
 
 
         public GamePreset GamePreset => GetData<GamePreset>("Data/GamePreset");
+        
+        
+        public VFXPreset VFXPreset => GetData<VFXPreset>("Data/VFXPreset");
 
         
         public void Initialize() { }

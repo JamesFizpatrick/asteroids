@@ -1,6 +1,7 @@
 using System;
 using Asteroids.Game;
 using Asteroids.Handlers;
+using Asteroids.VFX;
 using UnityEngine;
 using Random = System.Random;
 
@@ -18,6 +19,7 @@ namespace Asteroids.Managers
         private static EnemiesManager instance;
 
         private SoundManager soundManager;
+        private VFXManager vfxManager;
         
         #endregion
 
@@ -49,6 +51,7 @@ namespace Asteroids.Managers
         public void Initialize()
         {
             soundManager = ManagersHub.GetManager<SoundManager>();
+            vfxManager = ManagersHub.GetManager<VFXManager>();
         }
 
         public void Unload()
@@ -119,6 +122,7 @@ namespace Asteroids.Managers
         private void Enemy_Killed()
         {
             soundManager.PlaySound(SoundType.Explosion);
+            vfxManager.SpawnVFX(VFXType.Explosion, Enemy.transform.localPosition);
             OnEnemyKilled?.Invoke();
         }
 

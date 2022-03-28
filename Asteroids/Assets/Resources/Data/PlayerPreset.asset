@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ea46ef743f9a4c5596e5cb78580bc75, type: 3}
   m_Name: PlayerPreset
   m_EditorClassIdentifier: 
+  playerLivesQuantity: 3
   ship: {fileID: 5327376310277591735, guid: 0ccb300b8b5e5462da6d9716f0a38088, type: 3}
   playerProjectiles: {fileID: 2429244312712891374, guid: b7f3fd64059524360b8ae6c02aa66ffc, type: 3}
   enemyProjectiles: {fileID: 2429244312712891374, guid: 940d43d22f8ba49b588d7ae84a74f27d, type: 3}
