@@ -18,6 +18,8 @@ namespace Asteroids.Managers
 
         private SoundManager soundManager;
 
+        private Coroutine respawnCoroutine;
+
         #endregion
 
 
@@ -57,6 +59,11 @@ namespace Asteroids.Managers
             {
                 Player.Killed -= Player_Killed;
             }
+
+            if (respawnCoroutine != null)
+            {
+                StopCoroutine(respawnCoroutine);
+            }
         }
 
 
@@ -70,6 +77,10 @@ namespace Asteroids.Managers
 
         public void RespawnPlayer(int distanceFromBorders, float preDelay, float respawnDelay, float iFramesDelay)
         {
+            if (respawnCoroutine != null)
+            {
+                StopCoroutine(respawnCoroutine);
+            }
             StartCoroutine(RespawnCoroutine(distanceFromBorders, preDelay, respawnDelay, iFramesDelay));
         }
         
@@ -93,6 +104,11 @@ namespace Asteroids.Managers
 
         public void Reset()
         {
+            if (respawnCoroutine != null)
+            {
+                StopCoroutine(respawnCoroutine);
+            }
+            
             Player.Killed -= Player_Killed;
             Destroy(Player.gameObject);
         }
@@ -106,9 +122,11 @@ namespace Asteroids.Managers
         private IEnumerator RespawnCoroutine(int distanceFromBorders, float preDelay,
             float respawnDelay, float iFramesDelay)
         {
+            Player.EnableIFrames(false);
+
             yield return new WaitForSeconds(preDelay);
             Player.gameObject.SetActive(false);
-            
+
             yield return new WaitForSeconds(respawnDelay);
             RespawnPlayer(distanceFromBorders);
             Player.EnableIFrames(true);

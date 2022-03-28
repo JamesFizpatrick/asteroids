@@ -16,6 +16,7 @@ namespace Asteroids.Game
         
         public void StartToBlink()
         {
+            StopToBlink();
             blinkingCoroutine = StartCoroutine(BlinkCoroutine());
         }
 

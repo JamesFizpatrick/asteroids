@@ -47,7 +47,6 @@ namespace Asteroids.Game
             if (layer == enemyProjectilesLayer || layer == asteroidsLayer || layer == enemyLayer)
             {
                 Killed?.Invoke();
-                EnableIFrames(false);
             }
         }
 

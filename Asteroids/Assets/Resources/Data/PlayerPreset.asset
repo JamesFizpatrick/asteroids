@@ -15,6 +15,7 @@ MonoBehaviour:
   playerLivesQuantity: 3
   ship: {fileID: 5327376310277591735, guid: 0ccb300b8b5e5462da6d9716f0a38088, type: 3}
   playerProjectiles: {fileID: 2429244312712891374, guid: b7f3fd64059524360b8ae6c02aa66ffc, type: 3}
+  playerAltProjectiles: {fileID: 2429244312712891374, guid: 7a5801f690d9940a8be7476f63f8c72c, type: 3}
   enemyProjectiles: {fileID: 2429244312712891374, guid: 940d43d22f8ba49b588d7ae84a74f27d, type: 3}
   enemy: {fileID: 5281908878541741313, guid: d98706708b8f64b4e91bed6faf602c40, type: 3}
   asteroids:
