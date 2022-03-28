@@ -9,6 +9,7 @@ namespace Asteroids.Data
     {
         #region Fields
 
+        [SerializeField] private int playerLivesQuantity;
         [SerializeField] private GameObject ship;
         [SerializeField] private GameObject playerProjectiles;
         [SerializeField] private GameObject enemyProjectiles;
@@ -21,6 +22,9 @@ namespace Asteroids.Data
         
         #region Properties
 
+        public int PlayerLivesQuantity => playerLivesQuantity;
+
+        
         public GameObject Ship => ship;
         
         

@@ -33,6 +33,9 @@ namespace Asteroids.Managers
         
         public SoundPreset SoundPreset => GetData<SoundPreset>("Data/SoundPreset");
 
+
+        public GamePreset GamePreset => GetData<GamePreset>("Data/GamePreset");
+
         
         public void Initialize() { }
 
