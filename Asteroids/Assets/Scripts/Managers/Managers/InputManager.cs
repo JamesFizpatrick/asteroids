@@ -14,6 +14,7 @@ namespace Asteroids.Managers
         public Action<InputMovementType> OnStopMoving;
         public Action OnStartFiring;
         public Action OnStopFiring;
+        public Action OnSwitchWeapon;
 
 
         private static InputManager instance;
@@ -66,6 +67,10 @@ namespace Asteroids.Managers
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 OnStartFiring?.Invoke();
+            }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                OnSwitchWeapon?.Invoke();
             }
             
             

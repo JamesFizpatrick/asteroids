@@ -104,6 +104,15 @@ namespace Asteroids.Game
         
         public void Stop() => canMove = false;
 
+
+        public void Reset()
+        {
+            currentInertia = 0;
+            currentRotationAngle = 0;
+            currentMoveType = InputMovementType.None;
+            currentRotationType = InputRotationType.None;
+        }
+        
         #endregion
         
         

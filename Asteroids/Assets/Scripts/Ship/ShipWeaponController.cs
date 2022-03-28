@@ -28,6 +28,7 @@ namespace Asteroids.Game
         {
             inputManager.OnStartFiring += InputManager_OnStartFiring;
             inputManager.OnStopFiring += InputManager_OnStopFiring;
+            inputManager.OnSwitchWeapon += InputManager_OnSwitchWeapon;
         }
 
         
@@ -35,6 +36,7 @@ namespace Asteroids.Game
         {
             inputManager.OnStartFiring -= InputManager_OnStartFiring;
             inputManager.OnStopFiring -= InputManager_OnStopFiring;
+            inputManager.OnSwitchWeapon -= InputManager_OnSwitchWeapon;
         }
         
         #endregion
@@ -47,6 +49,9 @@ namespace Asteroids.Game
 
 
         private void InputManager_OnStopFiring() => StopFire();
+
+        
+        private void InputManager_OnSwitchWeapon() => SwitchWeaponType();
 
         #endregion
     }

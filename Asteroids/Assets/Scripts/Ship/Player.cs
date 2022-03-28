@@ -72,6 +72,7 @@ namespace Asteroids.Game
             else
             {
                 shipMovementController.Stop();
+                shipMovementController.Reset();
             }
         }
 

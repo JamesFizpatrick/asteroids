@@ -13,12 +13,13 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private const int MaxBulletsAmount = 10;
+        private const int MaxPoolBulletsAmount = 20;
 
         protected float FireCooldown = 0.0f;
         protected WeaponType currentWeaponType = WeaponType.None;
         
-        private GameObject bulletPrefab;
+        private GameObject primeBulletPrefab;
+        private GameObject altBulletPrefab;
         
         private DataManager dataManager;
         private SoundManager soundManager;
@@ -26,6 +27,7 @@ namespace Asteroids.Game
         private Coroutine attackCoroutine;
 
         private List<WeaponsBase> bulletsPool = new List<WeaponsBase>();
+        private List<WeaponsBase> altBulletsPool = new List<WeaponsBase>();
 
         #endregion
 
@@ -41,16 +43,17 @@ namespace Asteroids.Game
             switch (currentWeaponType)
             {
                 case WeaponType.Player:
-                    bulletPrefab = dataManager.PlayerPreset.PlayerProjectiles;
+                    primeBulletPrefab = dataManager.PlayerPreset.PlayerProjectiles;
+                    altBulletPrefab = dataManager.PlayerPreset.PlayerAltProjectiles;
                     break;
                 case WeaponType.Enemy:
-                    bulletPrefab = dataManager.PlayerPreset.EnemyProjectiles;
+                    primeBulletPrefab = dataManager.PlayerPreset.EnemyProjectiles;
                     break;
                 case WeaponType.None:
                     throw new Exception($"Weapon type was no inited for {GetType()}");
             }
 
-            FireCooldown = bulletPrefab.GetComponent<WeaponsBase>().FireCooldown;
+            FireCooldown = primeBulletPrefab.GetComponent<WeaponsBase>().FireCooldown;
         }
 
         
@@ -65,14 +68,20 @@ namespace Asteroids.Game
             {
                 Destroy(bullet.gameObject);
             }
+
+            
+            foreach (WeaponsBase bullet in altBulletsPool)
+            {
+                Destroy(bullet.gameObject);
+            }
         }
         
         #endregion
 
-
         
-        #region Public methods
-
+        
+        #region Protected methods
+        
         protected void StartFire()
         {
             attackCoroutine = StartCoroutine(ProcessFire());
@@ -87,6 +96,15 @@ namespace Asteroids.Game
             }
         }
 
+        
+        protected void SwitchWeaponType()
+        {
+            (primeBulletPrefab, altBulletPrefab) = (altBulletPrefab, primeBulletPrefab);
+            (bulletsPool, altBulletsPool) = (altBulletsPool, bulletsPool);
+            
+            FireCooldown = primeBulletPrefab.GetComponent<WeaponsBase>().FireCooldown;
+        }
+        
 
         protected void FireSingleShot(Vector3 direction)
         {
@@ -140,10 +158,10 @@ namespace Asteroids.Game
         {
             WeaponsBase bullet;
 
-            if (bulletsPool.Count < MaxBulletsAmount)
+            if (bulletsPool.Count < MaxPoolBulletsAmount)
             {
                 bullet =
-                    Instantiate(bulletPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<WeaponsBase>();
+                    Instantiate(primeBulletPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<WeaponsBase>();
                 bulletsPool.Add(bullet);
             }
             else

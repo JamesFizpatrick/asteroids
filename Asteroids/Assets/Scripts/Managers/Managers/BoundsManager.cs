@@ -84,7 +84,7 @@ namespace Asteroids.Managers
 
             Vector2 size = GameSceneReferences.MainCanvas.pixelRect.max;
             Vector2 scale = GameSceneReferences.MainCanvas.GetComponent<RectTransform>().localScale;
-            boxCollider.size = size * scale;
+            boxCollider.size = size * scale + new Vector2(20f, 20f);
             boxCollider.offset = Vector3.zero;
                     
             Rigidbody2D rigidBody = gameObject.AddComponent<Rigidbody2D>();

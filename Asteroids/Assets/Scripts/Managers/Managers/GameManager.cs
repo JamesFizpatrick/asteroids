@@ -147,8 +147,8 @@ namespace Asteroids.Managers
         private void PlayerShipsManager_OnPlayerKilled()
         {
             currentPlayerHealth--;
-
-            if (currentPlayerHealth <= 0)
+            
+            if (currentPlayerHealth < 0)
             {
                 ResetGame();
             }

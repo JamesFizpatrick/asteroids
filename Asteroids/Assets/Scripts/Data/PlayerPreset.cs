@@ -12,6 +12,7 @@ namespace Asteroids.Data
         [SerializeField] private int playerLivesQuantity;
         [SerializeField] private GameObject ship;
         [SerializeField] private GameObject playerProjectiles;
+        [SerializeField] private GameObject playerAltProjectiles;
         [SerializeField] private GameObject enemyProjectiles;
         [SerializeField] private GameObject enemy;
         [SerializeField] private Asteroid[] asteroids;
@@ -29,6 +30,9 @@ namespace Asteroids.Data
         
         
         public GameObject PlayerProjectiles => playerProjectiles;
+        
+        
+        public GameObject PlayerAltProjectiles => playerAltProjectiles;
         
         
         public GameObject EnemyProjectiles => enemyProjectiles;

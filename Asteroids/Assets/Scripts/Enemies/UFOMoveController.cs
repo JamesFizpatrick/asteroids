@@ -8,9 +8,9 @@ namespace Asteroids.UFO
     {
         #region Fields
 
-        private const float Speed = 1.0f;
+        [SerializeField] private float Speed = 0.5f;
+        
         private Vector3 currentDirection;
-
         private Player _playerPlayer;
         
         #endregion
