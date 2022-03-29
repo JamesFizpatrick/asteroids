@@ -51,6 +51,7 @@ namespace Asteroids.Managers
             int minY = (int)(playerPosition.y - safeRadius);
             int maxY = (int)(playerPosition.y + safeRadius);
 
+            // spawn asteroids around the player not crossing safe zone
             for (int i = 0; i < quantity; i++)
             {
                 positionX =
@@ -197,6 +198,7 @@ namespace Asteroids.Managers
                 }
             }
             
+            // Spawn two smaller asteroids
             Vector3 direction = asteroid.CurrentDirection;
             AsteroidType nextType = asteroid.Type.Next();
             Vector3 parentLocalPosition = asteroid.transform.localPosition;

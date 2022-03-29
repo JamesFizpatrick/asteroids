@@ -59,6 +59,7 @@ namespace Asteroids.Managers
 
         public void RespawnPlayer(int distanceFromBorders, float preDelay, float respawnDelay, float iFramesDelay)
         {
+            // Respawn player and give them a coupe of invincibility frames
             if (respawnCoroutine != null)
             {
                 StopCoroutine(respawnCoroutine);

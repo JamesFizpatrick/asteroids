@@ -46,6 +46,8 @@ namespace Asteroids.Managers
             int x;
             int y;
             
+            // spawn enemy behind the screen
+            
             int divider = random.Next(0, 2);
 
             if (divider == 0)

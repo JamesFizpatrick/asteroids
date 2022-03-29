@@ -9,6 +9,9 @@ namespace Asteroids.Handlers
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Get next element
+        /// </summary>
         public static EnumType Next<EnumType>(this EnumType src) where EnumType : struct
         {
             if (!typeof(EnumType).IsEnum)
@@ -21,7 +24,13 @@ namespace Asteroids.Handlers
             return (enumValues.Length==j) ? enumValues[0] : enumValues[j];            
         }
     
-    
+        
+        /// <summary>
+        /// Get random float value between two values
+        /// </summary>
+        /// <param name="min">Min value</param>
+        /// <param name="max">Max value (will not be incluede)</param>
+        /// <returns></returns>
         public static float GetRandomFloat(this Random random, float min, float max)
         {
             double result = random.NextDouble() * (max - min) + min;
@@ -29,6 +38,14 @@ namespace Asteroids.Handlers
         }
         
         
+        /// <summary>
+        /// Get random int between two values excluding a range
+        /// </summary>
+        /// <param name="min">Min value</param>
+        /// <param name="max">Max value</param>
+        /// <param name="excludeMin">Min element of excluded list</param>
+        /// <param name="excludeMax">Max element of excluded list</param>
+        /// <returns></returns>
         public static int GetRandomExclude(this Random random, int min, int max, int excludeMin, int excludeMax)
         {
             int baseElementsCount = Mathf.Abs(max - min);
@@ -43,6 +60,11 @@ namespace Asteroids.Handlers
         }
         
         
+        /// <summary>
+        /// Get two vectors created from initial one and an angle of spread
+        /// </summary>
+        /// <param name="angleInDegrees">Spread angle</param>
+        /// <returns></returns>
         public static (Vector3 leftVector, Vector3 rightVector) GetBreakVectors(this Vector3 origin, float angleInDegrees)
         {
             float gradToRadianConst = Mathf.PI / 180f;
@@ -52,7 +74,12 @@ namespace Asteroids.Handlers
             return (origin.RotateVectorByAngle(leftAngle), origin.RotateVectorByAngle(rightAngle));
         }
 
-
+        
+        /// <summary>
+        /// Rotate vector by an euler angle
+        /// </summary>
+        /// <param name="angleInRadians">Angle in radians</param>
+        /// <returns></returns>
         public static Vector3 RotateVectorByAngle(this Vector3 origin, float angleInRadians)
         {
             float originX = origin.x;
