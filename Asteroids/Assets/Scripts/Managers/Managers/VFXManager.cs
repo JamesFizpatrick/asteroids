@@ -1,61 +1,40 @@
 using Asteroids.Handlers;
-using Asteroids.Managers;
 using Asteroids.VFX;
 using UnityEngine;
 
 
 namespace Asteroids.Managers
 {
-    public class VFXManager : MonoBehaviour, IManager
+    public class VFXManager : BaseManager<VFXManager>
     {
         #region Fields
     
-        private static VFXManager instance;
         private DataManager dataManager;
+        private GameObjectsManager gameObjectsManager;
         
         #endregion
 
-
         
-        #region Properties
-
-        public static VFXManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("VFXManager");
-                    VFXManager manager = managerGo.AddComponent<VFXManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
-
-        #endregion
-
-
-    
+        
         #region Public methods
 
         public void SpawnVFX(VFXType type, Vector3 position)
         {
-            VFX.VFX vfxPrefab = dataManager.VFXPreset.GetVFX(type);
+            GameObject vfxPrefab = dataManager.VFXPreset.GetVFX(type);
 
-            VFX.VFX vfx = Instantiate(vfxPrefab, GameSceneReferences.MainCanvas.transform);
+            VFX.VFX vfx = gameObjectsManager.CreateVFX(vfxPrefab).GetComponent<VFX.VFX>();
             vfx.transform.localPosition = position;
         }
     
     
-        public void Initialize()
+        protected override void Initialize()
         {
             dataManager = ManagersHub.GetManager<DataManager>();
+            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
         }
 
     
-        public void Unload() { }
+        protected override void Deinitialize() { }
 
         #endregion
     }

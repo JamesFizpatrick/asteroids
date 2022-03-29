@@ -1,45 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using Asteroids.Managers;
 using UnityEngine;
 
 
 namespace Asteroids.Managers
 {
-    public class SoundManager : MonoBehaviour, IManager
+    public class SoundManager : BaseManager<SoundManager>
     {
         #region Fields
-    
-        private static SoundManager instance;
-
+        
         private AudioSource audioSource;
         private DataManager dataManager;
         
         #endregion
-
-
         
-        #region Properties
-
-        public static SoundManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("SoundManager");
-                    SoundManager manager = managerGo.AddComponent<SoundManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
-
-        #endregion
-
-
-    
+        
+        
         #region Public methods
 
         public void PlaySound(SoundType soundType)
@@ -49,9 +23,14 @@ namespace Asteroids.Managers
             audioSource.clip = clip;
             audioSource.Play();
         }
+        
+        #endregion
 
         
-        public void Initialize()
+
+        #region Protected methods
+
+        protected override void Initialize()
         {
             dataManager = ManagersHub.GetManager<DataManager>();
             
@@ -60,7 +39,7 @@ namespace Asteroids.Managers
             audioSource.spatialBlend = 0f;
         }
 
-        public void Unload() { }
+        protected override void Deinitialize() { }
 
         #endregion
     }

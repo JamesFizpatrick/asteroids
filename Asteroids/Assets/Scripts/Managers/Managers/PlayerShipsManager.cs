@@ -7,53 +7,33 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class PlayerShipsManager : MonoBehaviour, IManager
+    public class PlayerShipsManager : BaseManager<PlayerShipsManager>
     {
         #region Fields
 
         public Action OnPlayerKilled;
+        
         public Player Player { get; private set; }
-
-        private static PlayerShipsManager instance;
-
-        private SoundManager soundManager;
-
+        
         private Coroutine respawnCoroutine;
+        
+        private SoundManager soundManager;
+        private GameObjectsManager gameObjectsManager;
 
         #endregion
 
-
-        
-        #region Properties
-
-        public static PlayerShipsManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("PlayerShipsManager");
-                    PlayerShipsManager manager = managerGo.AddComponent<PlayerShipsManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
-
-        #endregion
-        
         
         
         #region Public methods
 
-        public void Initialize()
+        protected override void Initialize()
         {
             soundManager = ManagersHub.GetManager<SoundManager>();
+            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
         }
 
 
-        public void Unload()
+        protected override void Deinitialize()
         {
             if (Player)
             {
@@ -70,7 +50,7 @@ namespace Asteroids.Managers
         public void SpawnPlayer()
         {
             GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
-            Player = Instantiate(shipPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<Player>();
+            Player = gameObjectsManager.CreatePlayerShip(shipPrefab).GetComponent<Player>();
             Player.Killed += Player_Killed;
         }
 

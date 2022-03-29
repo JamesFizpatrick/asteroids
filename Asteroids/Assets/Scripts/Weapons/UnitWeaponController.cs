@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Asteroids.Handlers;
 using Asteroids.Managers;
 using UnityEngine;
 
@@ -23,6 +22,7 @@ namespace Asteroids.Game
         
         private DataManager dataManager;
         private SoundManager soundManager;
+        private GameObjectsManager gameObjectsManager;
         
         private Coroutine attackCoroutine;
 
@@ -39,6 +39,7 @@ namespace Asteroids.Game
         {
             dataManager = ManagersHub.GetManager<DataManager>();
             soundManager = ManagersHub.GetManager<SoundManager>();
+            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
 
             switch (currentWeaponType)
             {
@@ -160,8 +161,7 @@ namespace Asteroids.Game
 
             if (bulletsPool.Count < MaxPoolBulletsAmount)
             {
-                bullet =
-                    Instantiate(primeBulletPrefab, GameSceneReferences.MainCanvas.transform).GetComponent<WeaponsBase>();
+                bullet = gameObjectsManager.CreateBullet(primeBulletPrefab).GetComponent<WeaponsBase>();
                 bulletsPool.Add(bullet);
             }
             else

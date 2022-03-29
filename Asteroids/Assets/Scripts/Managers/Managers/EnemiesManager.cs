@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace Asteroids.Managers
 {
-    public class EnemiesManager : MonoBehaviour, IManager
+    public class EnemiesManager : BaseManager<EnemiesManager>
     {
         #region Fields
 
@@ -16,60 +16,25 @@ namespace Asteroids.Managers
         
         public UFO.UFO Enemy { get; private set; }
         private const int UFOSpawnDistance = 10;
-        private static EnemiesManager instance;
 
         private SoundManager soundManager;
         private VFXManager vfxManager;
-        
-        #endregion
-
-
-        
-        #region Properties
-
-        public static EnemiesManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("EnemiesManager");
-                    EnemiesManager manager = managerGo.AddComponent<EnemiesManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
+        private GameObjectsManager gameObjectsManager;
+        private DataManager dataManager;
 
         #endregion
-
-
-
+        
+        
+        
         #region Public methods
-
-        public void Initialize()
-        {
-            soundManager = ManagersHub.GetManager<SoundManager>();
-            vfxManager = ManagersHub.GetManager<VFXManager>();
-        }
-
-        public void Unload()
-        {
-            if (Enemy)
-            {
-                Enemy.Killed -= Enemy_Killed;
-            }
-        }
-
-
+        
         public bool HasActiveEnemy() => Enemy != null && Enemy.gameObject.activeSelf;
 
 
         public void SpawnEnemy(Player player)
         {
-            GameObject ufoPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Enemy;
-            GameObject ufo = Instantiate(ufoPrefab, GameSceneReferences.MainCanvas.transform);
+            GameObject ufoPrefab = dataManager.PlayerPreset.Enemy;
+            GameObject ufo = gameObjectsManager.CreateEnemy(ufoPrefab);
 
             Random random = new Random();
             
@@ -115,6 +80,29 @@ namespace Asteroids.Managers
         
         #endregion
 
+
+
+        #region Protected methods
+
+        protected override void Initialize()
+        {
+            soundManager = ManagersHub.GetManager<SoundManager>();
+            vfxManager = ManagersHub.GetManager<VFXManager>();
+            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            dataManager = ManagersHub.GetManager<DataManager>();
+        }
+
+        
+        protected override void Deinitialize()
+        {
+            if (Enemy)
+            {
+                Enemy.Killed -= Enemy_Killed;
+            }
+        }
+
+        #endregion
+        
         
 
         #region Event handlers

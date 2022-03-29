@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class BoundsManager : MonoBehaviour, IManager
+    public class BoundsManager : BaseManager<BoundsManager>
     {
         #region Fields
         
-        private static BoundsManager instance;
         private BoxCollider boundCollider;
 
         private int playerProjectilesLayer;
@@ -17,27 +16,6 @@ namespace Asteroids.Managers
         private int asteroidLayer;
         private int enemyLayer;
         
-        #endregion
-
-
-
-        #region Properties
-
-        public static BoundsManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("BoundsManager");
-                    BoundsManager manager = managerGo.AddComponent<BoundsManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
-
         #endregion
 
 
@@ -72,9 +50,9 @@ namespace Asteroids.Managers
 
 
 
-        #region Public methods
+        #region Protected methods
 
-        public void Initialize()
+        protected override void Initialize()
         {
             transform.parent = GameSceneReferences.MainCanvas.transform;
             gameObject.AddComponent<RectTransform>();
@@ -92,7 +70,7 @@ namespace Asteroids.Managers
         }
 
         
-        public void Unload() { }
+        protected override void Deinitialize() { }
 
         #endregion
 

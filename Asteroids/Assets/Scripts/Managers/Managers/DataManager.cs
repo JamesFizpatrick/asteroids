@@ -40,7 +40,7 @@ namespace Asteroids.Managers
         public VFXPreset VFXPreset => GetData<VFXPreset>("Data/VFXPreset");
 
         
-        public void Initialize() { }
+        public void Initialize(GameObject root) { }
 
         
         public void Unload() { }

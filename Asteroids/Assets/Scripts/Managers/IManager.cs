@@ -1,8 +1,12 @@
+using UnityEngine;
+
+
 namespace Asteroids.Managers
 {
     public interface IManager
     {
-        void Initialize();
+        void Initialize(GameObject root);
+        
         void Unload();
     }
 }

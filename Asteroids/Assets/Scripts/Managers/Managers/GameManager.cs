@@ -1,18 +1,15 @@
 using Asteroids.Data;
-using UnityEngine;
 
 
 namespace Asteroids.Managers
 {
-    public class GameManager : MonoBehaviour, IManager
+    public class GameManager : BaseManager<GameManager>
     {
         #region Fields
 
         private const int PlayerRespawnDistanceFromBorders = 100;
         private const float InitialPlayerSafeRadius = 100f;
         
-        private static GameManager instance;
-
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
@@ -25,28 +22,7 @@ namespace Asteroids.Managers
         
         #endregion
 
-
         
-        #region Properties
-
-        public static GameManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("GameManager");
-                    GameManager manager = managerGo.AddComponent<GameManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
-
-        #endregion
-
-
         
         #region Unity lifecycle
 
@@ -56,12 +32,12 @@ namespace Asteroids.Managers
 
 
 
-        #region Public methods
+        #region Protected methods
         
-        public void Initialize() { }
+        protected override void Initialize() { }
 
         
-        public void Unload() { }
+        protected override void Deinitialize() { }
         
         #endregion
 

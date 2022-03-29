@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace Asteroids.Managers
 {
-    public static class 
-        ManagersHub
+    public static class ManagersHub
     {
         #region Fields
     
@@ -19,7 +19,7 @@ namespace Asteroids.Managers
 
         public static void Initialize()
         {
-            //TODO: move initialization somewhere else to be able to freely modify the managers list 
+            //Add new services here
             managersDictionary.Add(typeof(InputManager), InputManager.Instance);
             managersDictionary.Add(typeof(DataManager), DataManager.Instance);
             managersDictionary.Add(typeof(GameManager), GameManager.Instance);
@@ -29,10 +29,14 @@ namespace Asteroids.Managers
             managersDictionary.Add(typeof(EnemiesManager), EnemiesManager.Instance);
             managersDictionary.Add(typeof(SoundManager), SoundManager.Instance);
             managersDictionary.Add(typeof(VFXManager), VFXManager.Instance);
-
+            managersDictionary.Add(typeof(GameObjectsManager), GameObjectsManager.Instance);
+            
+            
+            GameObject managersRoot = new GameObject("===MANAGERS===");
+            
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {
-                pair.Value.Initialize();
+                pair.Value.Initialize(managersRoot);
             }
         }
     

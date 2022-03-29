@@ -16,7 +16,7 @@ namespace Asteroids.Data
         private struct Preset
         {
             public VFXType Type;
-            public VFX.VFX Prefab;
+            public GameObject Prefab;
         }
 
         #endregion
@@ -33,7 +33,7 @@ namespace Asteroids.Data
         
         #region Public methods
 
-        public VFX.VFX GetVFX(VFXType vfxType, int index = -1)
+        public GameObject GetVFX(VFXType vfxType, int index = -1)
         {
             List<Preset> presetList = presets.Where(x => x.Type == vfxType).ToList();
 

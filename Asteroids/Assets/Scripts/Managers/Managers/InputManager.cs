@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class InputManager : MonoBehaviour, IManager
+    public class InputManager : BaseManager<InputManager>
     {
         #region Fields
 
@@ -15,34 +15,10 @@ namespace Asteroids.Managers
         public Action OnStartFiring;
         public Action OnStopFiring;
         public Action OnSwitchWeapon;
-
-
-        private static InputManager instance;
-
+        
         #endregion
 
-
-
-        #region Properties
-
-        public static InputManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    GameObject managerGo = new GameObject("InputManager");
-                    InputManager manager = managerGo.AddComponent<InputManager>();
-                    instance = manager;
-                }
-
-                return instance;
-            }
-        }
-
-        #endregion
-
-
+        
         
         #region Unity lifecycle
 
@@ -100,11 +76,11 @@ namespace Asteroids.Managers
 
 
         
-        #region Public methods
+        #region Protected methods
 
-        public void Initialize() { }
+        protected override void Initialize() { }
 
-        public void Unload() { }
+        protected override void Deinitialize() { }
 
         #endregion
     }
