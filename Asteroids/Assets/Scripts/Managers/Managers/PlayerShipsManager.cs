@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using Asteroids.Game;
-using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -19,6 +18,7 @@ namespace Asteroids.Managers
         
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
+        private System.Random random;
 
         #endregion
 
@@ -30,6 +30,8 @@ namespace Asteroids.Managers
         {
             soundManager = ManagersHub.GetManager<SoundManager>();
             gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            
+            random = new System.Random();
         }
 
 
@@ -72,8 +74,6 @@ namespace Asteroids.Managers
             int minY = -Screen.height / 2 + distanceFromBorders;
             int maxY = Screen.height / 2 - distanceFromBorders;
             
-            System.Random random = new System.Random();
-
             int x = random.Next(minX, maxX);
             int y = random.Next(minY, maxY);
 

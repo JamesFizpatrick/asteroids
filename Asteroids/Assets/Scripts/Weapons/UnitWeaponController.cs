@@ -69,7 +69,6 @@ namespace Asteroids.Game
             {
                 Destroy(bullet.gameObject);
             }
-
             
             foreach (WeaponsBase bullet in altBulletsPool)
             {
@@ -83,10 +82,7 @@ namespace Asteroids.Game
         
         #region Protected methods
         
-        protected void StartFire()
-        {
-            attackCoroutine = StartCoroutine(ProcessFire());
-        }
+        protected void StartFire() => attackCoroutine = StartCoroutine(ProcessFire());
 
 
         protected void StopFire()

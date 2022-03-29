@@ -17,10 +17,7 @@ namespace Asteroids.VFX
         
         #region Unity lifecycle
 
-        private void Awake()
-        {
-            destroyCoroutine = StartCoroutine(DestroyWithDelay(lifetime));
-        }
+        private void Awake() => destroyCoroutine = StartCoroutine(DestroyWithDelay(lifetime));
 
 
         private void OnDestroy()

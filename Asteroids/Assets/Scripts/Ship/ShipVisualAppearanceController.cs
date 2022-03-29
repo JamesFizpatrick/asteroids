@@ -7,13 +7,20 @@ namespace Asteroids.Game
 {
     public class ShipVisualAppearanceController : MonoBehaviour
     {
+        #region Fields
+
         [SerializeField] private Image image;
 
         private const float blinkingFrequency = 0.25f;
         
         private Coroutine blinkingCoroutine;
-        
-        
+
+        #endregion
+
+
+
+        #region Public methods
+
         public void StartToBlink()
         {
             StopToBlink();
@@ -28,8 +35,13 @@ namespace Asteroids.Game
                 StopCoroutine(blinkingCoroutine);
             }
         }
-        
-        
+
+        #endregion
+
+
+
+        #region Private methods
+
         private IEnumerator BlinkCoroutine()
         {
             while (true)
@@ -40,5 +52,7 @@ namespace Asteroids.Game
                 yield return new WaitForSeconds(blinkingFrequency);
             }
         }
+
+        #endregion
     }
 }

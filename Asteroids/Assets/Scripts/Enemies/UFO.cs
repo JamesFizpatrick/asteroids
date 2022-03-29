@@ -40,12 +40,12 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialze(Player player)
+        public void Initialize(Player player)
         {
             moveController.Initialize(player);
             weaponController.Initialize(player);
             
-            weaponController.StartFire();
+            weaponController.Fire();
         }
 
         #endregion

@@ -22,6 +22,8 @@ namespace Asteroids.Managers
         private GameObjectsManager gameObjectsManager;
         private DataManager dataManager;
 
+        private Random random;
+        
         #endregion
         
         
@@ -35,8 +37,6 @@ namespace Asteroids.Managers
         {
             GameObject ufoPrefab = dataManager.PlayerPreset.Enemy;
             GameObject ufo = gameObjectsManager.CreateEnemy(ufoPrefab);
-
-            Random random = new Random();
             
             int maxX = Screen.width / 2;
             int minX = -Screen.width / 2;
@@ -64,7 +64,7 @@ namespace Asteroids.Managers
             ufo.transform.localPosition = new Vector3(x, y);
             
             Enemy = ufo.GetComponent<UFO.UFO>();
-            Enemy.Initialze(player);
+            Enemy.Initialize(player);
             Enemy.Killed += Enemy_Killed;
         }
 
@@ -90,6 +90,8 @@ namespace Asteroids.Managers
             vfxManager = ManagersHub.GetManager<VFXManager>();
             gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
             dataManager = ManagersHub.GetManager<DataManager>();
+            
+            random = new Random();
         }
 
         

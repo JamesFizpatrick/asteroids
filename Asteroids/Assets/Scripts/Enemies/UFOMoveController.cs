@@ -11,7 +11,7 @@ namespace Asteroids.UFO
         [SerializeField] private float Speed = 0.5f;
         
         private Vector3 currentDirection;
-        private Player _playerPlayer;
+        private Player playerPlayer;
         
         #endregion
 
@@ -19,17 +19,14 @@ namespace Asteroids.UFO
         
         #region Unity lifecycle
         
-        private void FixedUpdate()
-        {
-            transform.Translate(currentDirection * Speed);
-        }
-        
+        private void FixedUpdate() => transform.Translate(currentDirection * Speed);
+
 
         private void OnDestroy()
         {
-            if (_playerPlayer)
+            if (playerPlayer)
             {
-                _playerPlayer.OnPositionChanged -= PlayerShip_OnPositionChanged;
+                playerPlayer.OnPositionChanged -= PlayerShip_OnPositionChanged;
             }
         }
 
@@ -41,9 +38,9 @@ namespace Asteroids.UFO
 
         public void Initialize(Player player)
         {
-            _playerPlayer = player;
+            playerPlayer = player;
             player.OnPositionChanged += PlayerShip_OnPositionChanged;
-            currentDirection = (_playerPlayer.transform.localPosition - gameObject.transform.localPosition).normalized;
+            currentDirection = (playerPlayer.transform.localPosition - gameObject.transform.localPosition).normalized;
         }
 
         #endregion
@@ -52,10 +49,8 @@ namespace Asteroids.UFO
         
         #region Event handlers
 
-        private void PlayerShip_OnPositionChanged(Vector3 position)
-        {
+        private void PlayerShip_OnPositionChanged(Vector3 position) =>
             currentDirection = (position - transform.localPosition).normalized;
-        }
 
         #endregion
     }

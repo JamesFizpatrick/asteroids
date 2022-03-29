@@ -10,9 +10,11 @@ namespace Asteroids.UFO
     {
         #region Fields
 
-        private Player _player;
+        private Player player;
         private System.Random random;
 
+        private Coroutine fireCoroutine;
+        
         #endregion
 
 
@@ -29,25 +31,24 @@ namespace Asteroids.UFO
         
         private void OnDisable()
         {
+            if (fireCoroutine != null)
+            {
+                StopCoroutine(fireCoroutine);
+            }
+            
             StopFire();
         }
-        
+
         #endregion
 
 
 
         #region Public methods
 
-        public void Initialize(Player player)
-        {
-            this._player = player;
-        }
-        
-        
-        public void StartFire()
-        {
-            StartCoroutine(Shoot());
-        }
+        public void Initialize(Player player) => this.player = player;
+
+
+        public void Fire() => fireCoroutine = StartCoroutine(Shoot());
 
         #endregion
 
@@ -59,7 +60,7 @@ namespace Asteroids.UFO
         {
             while (true)
             {
-                Vector3 direction = _player.transform.localPosition - transform.localPosition;
+                Vector3 direction = player.transform.localPosition - transform.localPosition;
 
                 (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(5f);
                 Vector3 newDirection = Vector3.Lerp(leftVector, rightVector, random.GetRandomFloat(0f, 1f));

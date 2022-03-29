@@ -32,11 +32,8 @@ namespace Asteroids.Game
         private void FixedUpdate() => transform.Translate(Vector3.up * speed);
 
 
-        private void OnTriggerEnter2D(Collider2D col)
-        {
-            ProcessOnTriggerEnter(col);
-        }
-    
+        private void OnTriggerEnter2D(Collider2D col) => ProcessOnTriggerEnter(col);
+
         #endregion
 
 

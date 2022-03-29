@@ -24,7 +24,10 @@ namespace Asteroids.Managers
         private VFXManager vfxManager;
         private GameObjectsManager gameObjectsManager;
         
-        private Dictionary<AsteroidType, List<GameObject>> asteroidsPool = new Dictionary<AsteroidType, List<GameObject>>();
+        private Dictionary<AsteroidType, List<GameObject>> asteroidsPool =
+            new Dictionary<AsteroidType, List<GameObject>>();
+
+        private Random random;
         
         #endregion
         
@@ -36,8 +39,6 @@ namespace Asteroids.Managers
         {
             startQuantity = quantity;
             
-            Random random = new Random();
-
             float directionX;
             float directionY;
             float positionX;
@@ -102,6 +103,8 @@ namespace Asteroids.Managers
             soundManager = ManagersHub.GetManager<SoundManager>();
             vfxManager = ManagersHub.GetManager<VFXManager>();
             gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            
+            random = new Random();
         }
 
         
@@ -131,7 +134,6 @@ namespace Asteroids.Managers
             Asteroid[] asteroids = ManagersHub.GetManager<DataManager>().PlayerPreset.Asteroids;
             List<Asteroid> selectedAsteroid = asteroids.Where(a => a.Type == type).ToList();
 
-            Random random = new Random();
             int index = random.Next(0, selectedAsteroid.Count);
 
             GameObject asteroid = gameObjectsManager.CreateAsteroid(selectedAsteroid[index].gameObject);
@@ -227,4 +229,3 @@ namespace Asteroids.Managers
         #endregion
     }
 }
-

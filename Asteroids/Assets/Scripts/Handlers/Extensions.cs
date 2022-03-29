@@ -9,22 +9,22 @@ namespace Asteroids.Handlers
 {
     public static class Extensions
     {
-        public static T Next<T>(this T src) where T : struct
+        public static EnumType Next<EnumType>(this EnumType src) where EnumType : struct
         {
-            if (!typeof(T).IsEnum)
+            if (!typeof(EnumType).IsEnum)
             {
-                throw new ArgumentException(String.Format("Argument {0} is not an Enum", typeof(T).FullName));
+                throw new ArgumentException($"Argument {typeof(EnumType).FullName} is not an Enum");
             }
 
-            T[] Arr = (T[])Enum.GetValues(src.GetType());
-            int j = Array.IndexOf<T>(Arr, src) + 1;
-            return (Arr.Length==j) ? Arr[0] : Arr[j];            
+            EnumType[] enumValues = (EnumType[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf(enumValues, src) + 1;
+            return (enumValues.Length==j) ? enumValues[0] : enumValues[j];            
         }
     
     
         public static float GetRandomFloat(this Random random, float min, float max)
         {
-            double result = (random.NextDouble() * (max - min) + min);
+            double result = random.NextDouble() * (max - min) + min;
             return (float)result;
         }
         

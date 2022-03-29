@@ -20,7 +20,6 @@ namespace Asteroids.Handlers
         #endregion
 
 
-
         
         #region Private methods
 
