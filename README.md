@@ -2,7 +2,7 @@
 
 Controls:
 
-W,S	- move
-A,D	- rotate
-E	- main/alternative weapon switch
-Spacebar	- Fire
+W,S	- move\n
+A,D	- rotate\n
+E	- main/alternative weapon switch\n
+Spacebar	- Fire\n
