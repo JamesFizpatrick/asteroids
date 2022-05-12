@@ -3,7 +3,7 @@ using Asteroids.Data;
 
 namespace Asteroids.Managers
 {
-    public class GameManager : BaseManager<GameManager>
+    public class GameManager : IManager
     {
         #region Fields
 
@@ -13,7 +13,6 @@ namespace Asteroids.Managers
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
-        private DataManager dataManager;
 
         private int currentLevelPresetIndex = -1;
         private GamePreset.LevelPreset currentLevelPreset;
@@ -24,21 +23,24 @@ namespace Asteroids.Managers
 
         
         
-        #region Unity lifecycle
-
-        public void Start() => StartGame();
-
-        #endregion
-
-
-
         #region Protected methods
         
-        protected override void Initialize() { }
+        public void Initialize(ManagersHub hub)
+        {
+            playerShipsManager = hub.GetManager<PlayerShipsManager>();
+            asteroidsManager = hub.GetManager<AsteroidsManager>();
+            enemiesManager = hub.GetManager<EnemiesManager>();
+        }
+
+
+        public void Update() { }
 
         
-        protected override void Deinitialize() { }
+        public void Unload() { }
+
         
+        public void Start() => StartGame();
+
         #endregion
 
 
@@ -47,14 +49,9 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            playerShipsManager = ManagersHub.GetManager<PlayerShipsManager>();
-            asteroidsManager = ManagersHub.GetManager<AsteroidsManager>();
-            enemiesManager = ManagersHub.GetManager<EnemiesManager>();
-            dataManager = ManagersHub.GetManager<DataManager>();
-
             SwitchToTheNextLevel();
 
-            currentPlayerHealth = dataManager.PlayerPreset.PlayerLivesQuantity;
+            currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
             
             playerShipsManager.SpawnPlayer();
             playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
@@ -95,7 +92,7 @@ namespace Asteroids.Managers
         private void ResetGame()
         {
             currentLevelPresetIndex = -1;
-            currentPlayerHealth = dataManager.PlayerPreset.PlayerLivesQuantity;
+            currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
             StartNextLevel();
         }
         
@@ -104,7 +101,7 @@ namespace Asteroids.Managers
         {
             currentLevelPresetIndex++;
 
-            GamePreset gamePreset = dataManager.GamePreset;
+            GamePreset gamePreset = DataContainer.GamePreset;
 
             if (currentLevelPresetIndex > gamePreset.GetLevelPresets().Length - 1)
             {

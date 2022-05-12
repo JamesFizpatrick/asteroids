@@ -3,25 +3,25 @@ using Asteroids.Game;
 using Asteroids.Handlers;
 using Asteroids.VFX;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = System.Random;
 
 
 namespace Asteroids.Managers
 {
-    public class EnemiesManager : BaseManager<EnemiesManager>
+    public class EnemiesManager : IManager
     {
         #region Fields
 
         public Action OnEnemyKilled;
-        
-        public UFO.UFO Enemy { get; private set; }
+
         private const int UFOSpawnDistance = 10;
+
+        public UFO.UFO Enemy { get; private set; }
 
         private SoundManager soundManager;
         private VFXManager vfxManager;
         private GameObjectsManager gameObjectsManager;
-        private DataManager dataManager;
-
         private Random random;
         
         #endregion
@@ -35,7 +35,7 @@ namespace Asteroids.Managers
 
         public void SpawnEnemy(Player player)
         {
-            GameObject ufoPrefab = dataManager.PlayerPreset.Enemy;
+            GameObject ufoPrefab = DataContainer.PlayerPreset.Enemy;
             GameObject ufo = gameObjectsManager.CreateEnemy(ufoPrefab);
             
             int maxX = Screen.width / 2;
@@ -76,39 +76,36 @@ namespace Asteroids.Managers
             if (Enemy)
             {
                 Enemy.Killed -= Enemy_Killed;
-                Destroy(Enemy.gameObject);
+                Object.Destroy(Enemy.gameObject);
             }
         }
         
-        #endregion
-
-
-
-        #region Protected methods
-
-        protected override void Initialize()
+        
+        public void Initialize(ManagersHub hub)
         {
-            soundManager = ManagersHub.GetManager<SoundManager>();
-            vfxManager = ManagersHub.GetManager<VFXManager>();
-            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
-            dataManager = ManagersHub.GetManager<DataManager>();
+            soundManager = hub.GetManager<SoundManager>();
+            vfxManager = hub.GetManager<VFXManager>();
+            gameObjectsManager = hub.GetManager<GameObjectsManager>();
             
             random = new Random();
         }
 
         
-        protected override void Deinitialize()
+        public void Update() { }
+
+
+        public void Unload()
         {
             if (Enemy)
             {
                 Enemy.Killed -= Enemy_Killed;
             }
         }
-
+        
         #endregion
-        
-        
 
+        
+        
         #region Event handlers
 
         private void Enemy_Killed()

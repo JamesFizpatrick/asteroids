@@ -3,12 +3,11 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class SoundManager : BaseManager<SoundManager>
+    public class SoundManager : IManager
     {
         #region Fields
         
         private AudioSource audioSource;
-        private DataManager dataManager;
         
         #endregion
         
@@ -18,29 +17,28 @@ namespace Asteroids.Managers
 
         public void PlaySound(SoundType soundType)
         {
-            AudioClip clip = dataManager.SoundPreset.GetAudioClip(soundType);
+            AudioClip clip = DataContainer.SoundPreset.GetAudioClip(soundType);
 
             audioSource.clip = clip;
             audioSource.Play();
         }
         
-        #endregion
-
         
-
-        #region Protected methods
-
-        protected override void Initialize()
+        public void Initialize(ManagersHub hub)
         {
-            dataManager = ManagersHub.GetManager<DataManager>();
+            GameObject audioSourceObject = new GameObject("AudioSource");
             
-            audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource = audioSourceObject.AddComponent<AudioSource>();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
         }
 
-        protected override void Deinitialize() { }
+        
+        public void Update() { }
 
+
+        public void Unload() { }
+        
         #endregion
     }
 }

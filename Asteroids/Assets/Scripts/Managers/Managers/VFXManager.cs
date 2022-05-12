@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class VFXManager : BaseManager<VFXManager>
+    public class VFXManager : IManager
     {
         #region Fields
     
-        private DataManager dataManager;
         private GameObjectsManager gameObjectsManager;
         
         #endregion
@@ -19,21 +18,23 @@ namespace Asteroids.Managers
 
         public void SpawnVFX(VFXType type, Vector3 position)
         {
-            GameObject vfxPrefab = dataManager.VFXPreset.GetVFX(type);
+            GameObject vfxPrefab = DataContainer.VFXPreset.GetVFX(type);
 
             VFX.VFX vfx = gameObjectsManager.CreateVFX(vfxPrefab).GetComponent<VFX.VFX>();
             vfx.transform.localPosition = position;
         }
     
     
-        protected override void Initialize()
+        public void Initialize(ManagersHub hub)
         {
-            dataManager = ManagersHub.GetManager<DataManager>();
-            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            gameObjectsManager = hub.GetManager<GameObjectsManager>();
         }
 
-    
-        protected override void Deinitialize() { }
+        
+        public void Update() { }
+
+
+        public void Unload() { }
 
         #endregion
     }

@@ -18,7 +18,7 @@ namespace Asteroids.Game
         protected override void Awake()
         {
             currentWeaponType = WeaponType.Player;
-            inputManager = ManagersHub.GetManager<InputManager>();
+            inputManager = ManagersHub.Instance.GetManager<InputManager>();
 
             base.Awake();
         }

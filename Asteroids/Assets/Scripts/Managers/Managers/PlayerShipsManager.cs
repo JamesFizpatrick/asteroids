@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class PlayerShipsManager : BaseManager<PlayerShipsManager>
+    public class PlayerShipsManager : IManager
     {
         #region Fields
 
@@ -25,17 +25,20 @@ namespace Asteroids.Managers
         
         
         #region Public methods
-
-        protected override void Initialize()
+        
+        public void Initialize(ManagersHub hub)
         {
-            soundManager = ManagersHub.GetManager<SoundManager>();
-            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            soundManager = hub.GetManager<SoundManager>();
+            gameObjectsManager = hub.GetManager<GameObjectsManager>();
             
             random = new System.Random();
         }
 
+        
+        public void Update() { }
 
-        protected override void Deinitialize()
+
+        public void Unload()
         {
             if (Player)
             {
@@ -43,15 +46,15 @@ namespace Asteroids.Managers
             }
 
             if (respawnCoroutine != null)
-            {
-                StopCoroutine(respawnCoroutine);
+            { 
+                CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
         }
 
 
         public void SpawnPlayer()
         {
-            GameObject shipPrefab = ManagersHub.GetManager<DataManager>().PlayerPreset.Ship;
+            GameObject shipPrefab = DataContainer.PlayerPreset.Ship;
             Player = gameObjectsManager.CreatePlayerShip(shipPrefab).GetComponent<Player>();
             Player.Killed += Player_Killed;
         }
@@ -62,9 +65,9 @@ namespace Asteroids.Managers
             // Respawn player and give them a coupe of invincibility frames
             if (respawnCoroutine != null)
             {
-                StopCoroutine(respawnCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
-            StartCoroutine(RespawnCoroutine(distanceFromBorders, preDelay, respawnDelay, iFramesDelay));
+            CoroutinesHandler.Instance.StartCoroutine(RespawnCoroutine(distanceFromBorders, preDelay, respawnDelay, iFramesDelay));
         }
         
         
@@ -87,11 +90,11 @@ namespace Asteroids.Managers
         {
             if (respawnCoroutine != null)
             {
-                StopCoroutine(respawnCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
             
             Player.Killed -= Player_Killed;
-            Destroy(Player.gameObject);
+            UnityEngine.Object.Destroy(Player.gameObject);
         }
         
         #endregion

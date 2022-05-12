@@ -20,7 +20,6 @@ namespace Asteroids.Game
         private GameObject primeBulletPrefab;
         private GameObject altBulletPrefab;
         
-        private DataManager dataManager;
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
         
@@ -37,18 +36,17 @@ namespace Asteroids.Game
 
         protected virtual void Awake()
         {
-            dataManager = ManagersHub.GetManager<DataManager>();
-            soundManager = ManagersHub.GetManager<SoundManager>();
-            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            soundManager = ManagersHub.Instance.GetManager<SoundManager>();
+            gameObjectsManager = ManagersHub.Instance.GetManager<GameObjectsManager>();
 
             switch (currentWeaponType)
             {
                 case WeaponType.Player:
-                    primeBulletPrefab = dataManager.PlayerPreset.PlayerProjectiles;
-                    altBulletPrefab = dataManager.PlayerPreset.PlayerAltProjectiles;
+                    primeBulletPrefab = DataContainer.PlayerPreset.PlayerProjectiles;
+                    altBulletPrefab = DataContainer.PlayerPreset.PlayerAltProjectiles;
                     break;
                 case WeaponType.Enemy:
-                    primeBulletPrefab = dataManager.PlayerPreset.EnemyProjectiles;
+                    primeBulletPrefab = DataContainer.PlayerPreset.EnemyProjectiles;
                     break;
                 case WeaponType.None:
                     throw new Exception($"Weapon type was no inited for {GetType()}");

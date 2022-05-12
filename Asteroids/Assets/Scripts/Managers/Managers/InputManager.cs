@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class InputManager : BaseManager<InputManager>
+    public class InputManager : IManager
     {
         #region Fields
 
@@ -12,6 +12,7 @@ namespace Asteroids.Managers
         public Action<InputRotationType> OnStopRotating;
         public Action<InputMovementType> OnStartMoving;
         public Action<InputMovementType> OnStopMoving;
+        
         public Action OnStartFiring;
         public Action OnStopFiring;
         public Action OnSwitchWeapon;
@@ -20,9 +21,12 @@ namespace Asteroids.Managers
 
         
         
-        #region Unity lifecycle
+        #region Public methods
 
-        private void Update()
+        public void Initialize(ManagersHub hub) { }
+        
+
+        public void Update()
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
@@ -72,15 +76,8 @@ namespace Asteroids.Managers
             }
         }
 
-        #endregion
-
-
         
-        #region Protected methods
-
-        protected override void Initialize() { }
-
-        protected override void Deinitialize() { }
+        public void Unload() { }
 
         #endregion
     }

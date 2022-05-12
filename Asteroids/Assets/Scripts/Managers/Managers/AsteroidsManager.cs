@@ -10,7 +10,7 @@ using Random = System.Random;
 
 namespace Asteroids.Managers
 {
-    public class AsteroidsManager : BaseManager<AsteroidsManager>
+    public class AsteroidsManager : IManager
     {
         #region Fields
 
@@ -90,7 +90,7 @@ namespace Asteroids.Managers
                 {
                     Asteroid asteroidComponent = asteroid.GetComponent<Asteroid>();
                     asteroidComponent.Destroyed -= Asteroid_Destroyed;
-                    Destroy(asteroid);
+                    UnityEngine.Object.Destroy(asteroid);
                 }
             }
 
@@ -99,17 +99,20 @@ namespace Asteroids.Managers
         }
 
 
-        protected override void Initialize()
+        public void Initialize(ManagersHub hub)
         {
-            soundManager = ManagersHub.GetManager<SoundManager>();
-            vfxManager = ManagersHub.GetManager<VFXManager>();
-            gameObjectsManager = ManagersHub.GetManager<GameObjectsManager>();
+            soundManager = hub.GetManager<SoundManager>();
+            vfxManager = hub.GetManager<VFXManager>();
+            gameObjectsManager = hub.GetManager<GameObjectsManager>();
             
             random = new Random();
         }
 
         
-        protected override void Deinitialize() { }
+        public void Update() { }
+
+
+        public void Unload() { }
         
         #endregion
 
@@ -132,7 +135,7 @@ namespace Asteroids.Managers
         
         private Asteroid SpawnNewAsteroid(AsteroidType type)
         {
-            Asteroid[] asteroids = ManagersHub.GetManager<DataManager>().PlayerPreset.Asteroids;
+            Asteroid[] asteroids = DataContainer.PlayerPreset.Asteroids;
             List<Asteroid> selectedAsteroid = asteroids.Where(a => a.Type == type).ToList();
 
             int index = random.Next(0, selectedAsteroid.Count);

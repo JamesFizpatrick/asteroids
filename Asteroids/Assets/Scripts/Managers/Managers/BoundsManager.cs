@@ -1,63 +1,41 @@
+using Asteroids.Game;
 using Asteroids.Handlers;
 using UnityEngine;
 
 
 namespace Asteroids.Managers
 {
-    public class BoundsManager : BaseManager<BoundsManager>
+    public class BoundsManager : IManager
     {
         #region Fields
         
-        private BoxCollider boundCollider;
-
         private int playerProjectilesLayer;
         private int enemyProjectilesLayer;
         private int playerLayer;
         private int asteroidLayer;
         private int enemyLayer;
+
+        private BoundsController boundsController;
         
         #endregion
-
-
-        
-        #region Unity lifecycle
-
-        private void Awake()
-        {
-            playerProjectilesLayer = LayerMasksHandler.PlayerProjectiles;
-            enemyProjectilesLayer = LayerMasksHandler.EnemyProjectiles;
-            playerLayer = LayerMasksHandler.Player;
-            asteroidLayer = LayerMasksHandler.Asteroid;
-            enemyLayer = LayerMasksHandler.Enemy;
-        }
         
         
-        private void OnTriggerExit2D(Collider2D entity)
-        {
-            int layer = entity.gameObject.layer;
-            
-            if (layer == playerProjectilesLayer || layer == enemyProjectilesLayer)
-            {
-                entity.gameObject.SetActive(false);
-            }
-            else if (layer == playerLayer || layer == asteroidLayer || layer == enemyLayer)
-            {
-                TeleportEntity(entity.gameObject);
-            }
-        }
-
-        #endregion
-
-
-
+        
         #region Protected methods
+        
+        public void Update() { }
 
-        protected override void Initialize()
+        
+        public void Initialize(ManagersHub hub)
         {
-            transform.parent = GameSceneReferences.MainCanvas.transform;
-            gameObject.AddComponent<RectTransform>();
+            InitLayers();
             
-            BoxCollider2D boxCollider = gameObject.AddComponent<BoxCollider2D>();
+            GameObject boundsControllerGameObject = new GameObject("BoundsController");
+            
+            boundsControllerGameObject.transform.parent = GameSceneReferences.MainCanvas.transform;
+            boundsControllerGameObject.AddComponent<RectTransform>();
+            
+            BoxCollider2D boxCollider = boundsControllerGameObject.AddComponent<BoxCollider2D>();
             boxCollider.isTrigger = true;
 
             Vector2 size = GameSceneReferences.MainCanvas.pixelRect.max;
@@ -65,12 +43,18 @@ namespace Asteroids.Managers
             boxCollider.size = size * scale + new Vector2(20f, 20f);
             boxCollider.offset = Vector3.zero;
                     
-            Rigidbody2D rigidBody = gameObject.AddComponent<Rigidbody2D>();
+            Rigidbody2D rigidBody = boundsControllerGameObject.gameObject.AddComponent<Rigidbody2D>();
             rigidBody.bodyType = RigidbodyType2D.Kinematic;
+
+            boundsController = boundsControllerGameObject.AddComponent<BoundsController>();
+            boundsController.OnCollisionExit += BoundsController_OnCollisionExit;
         }
 
-        
-        protected override void Deinitialize() { }
+
+        public void Unload()
+        {
+            boundsController.OnCollisionExit -= BoundsController_OnCollisionExit;
+        }
 
         #endregion
 
@@ -107,6 +91,36 @@ namespace Asteroids.Managers
             }
 
             entity.gameObject.transform.localPosition = localPosition;
+        }
+
+        
+        private void InitLayers()
+        {
+            playerProjectilesLayer = LayerMasksHandler.PlayerProjectiles;
+            enemyProjectilesLayer = LayerMasksHandler.EnemyProjectiles;
+            playerLayer = LayerMasksHandler.Player;
+            asteroidLayer = LayerMasksHandler.Asteroid;
+            enemyLayer = LayerMasksHandler.Enemy;
+        }
+        
+        #endregion
+
+        
+
+        #region Event handlers
+
+        private void BoundsController_OnCollisionExit(Collider2D entity)
+        {
+            int layer = entity.gameObject.layer;
+            
+            if (layer == playerProjectilesLayer || layer == enemyProjectilesLayer)
+            {
+                entity.gameObject.SetActive(false);
+            }
+            else if (layer == playerLayer || layer == asteroidLayer || layer == enemyLayer)
+            {
+                TeleportEntity(entity.gameObject);
+            }
         }
 
         #endregion

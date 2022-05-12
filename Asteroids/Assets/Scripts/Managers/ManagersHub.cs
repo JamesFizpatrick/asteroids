@@ -1,47 +1,62 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 
 namespace Asteroids.Managers
 {
-    public static class ManagersHub
+    public class ManagersHub
     {
         #region Fields
+
+        private static ManagersHub instance;
+
+        private Dictionary<Type, IManager> managersDictionary = new Dictionary<Type, IManager>();
     
-        private static Dictionary<Type, IManager> managersDictionary = new Dictionary<Type, IManager>();
-    
+        #endregion
+
+
+        
+        #region Properties
+
+        public static ManagersHub Instance => instance ??= new ManagersHub();
+
         #endregion
 
 
     
         #region Public methods
 
-        public static void Initialize()
+        public void Initialize()
         {
             //Add new services here
-            managersDictionary.Add(typeof(InputManager), InputManager.Instance);
-            managersDictionary.Add(typeof(DataManager), DataManager.Instance);
-            managersDictionary.Add(typeof(GameManager), GameManager.Instance);
-            managersDictionary.Add(typeof(BoundsManager), BoundsManager.Instance);
-            managersDictionary.Add(typeof(AsteroidsManager), AsteroidsManager.Instance);
-            managersDictionary.Add(typeof(PlayerShipsManager), PlayerShipsManager.Instance);
-            managersDictionary.Add(typeof(EnemiesManager), EnemiesManager.Instance);
-            managersDictionary.Add(typeof(SoundManager), SoundManager.Instance);
-            managersDictionary.Add(typeof(VFXManager), VFXManager.Instance);
-            managersDictionary.Add(typeof(GameObjectsManager), GameObjectsManager.Instance);
+            managersDictionary.Add(typeof(InputManager), new InputManager());
+            managersDictionary.Add(typeof(GameManager), new GameManager());
+            managersDictionary.Add(typeof(BoundsManager), new BoundsManager());
+            managersDictionary.Add(typeof(AsteroidsManager), new AsteroidsManager());
+            managersDictionary.Add(typeof(PlayerShipsManager), new PlayerShipsManager());
+            managersDictionary.Add(typeof(EnemiesManager), new EnemiesManager());
+            managersDictionary.Add(typeof(SoundManager), new SoundManager());
+            managersDictionary.Add(typeof(VFXManager), new VFXManager());
+            managersDictionary.Add(typeof(GameObjectsManager), new GameObjectsManager());
             
-            
-            GameObject managersRoot = new GameObject("===MANAGERS===");
             
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {
-                pair.Value.Initialize(managersRoot);
+                pair.Value.Initialize(instance);
             }
         }
-    
 
-        public static void Deinitialize()
+
+        public void Update()
+        {
+            foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
+            {
+                pair.Value.Update();
+            }
+        }
+
+        
+        public void Unload()
         {
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {
@@ -50,7 +65,7 @@ namespace Asteroids.Managers
         }
 
     
-        public static TManagerType GetManager<TManagerType>()
+        public TManagerType GetManager<TManagerType>()
         {
             Type managerType = typeof(TManagerType);
 

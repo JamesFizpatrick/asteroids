@@ -66,7 +66,7 @@ namespace Asteroids.Game
 
         private void Awake()
         {
-            inputManager = ManagersHub.GetManager<InputManager>();
+            inputManager = ManagersHub.Instance.GetManager<InputManager>();
             currentMoveDirection = Vector3.up * moveSpeed;
         }
         

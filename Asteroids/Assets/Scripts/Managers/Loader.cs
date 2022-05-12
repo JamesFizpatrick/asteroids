@@ -6,9 +6,16 @@ namespace Asteroids
 {
     public class Loader : MonoBehaviour
     {
-        private void Start() => ManagersHub.Initialize();
+        private void Start()
+        {
+            ManagersHub.Instance.Initialize();
+            ManagersHub.Instance.GetManager<GameManager>().Start();
+        }
 
 
-        private void OnDestroy() => ManagersHub.Deinitialize();
+        private void Update() => ManagersHub.Instance.Update();
+
+        
+        private void OnDestroy() => ManagersHub.Instance.Unload();
     }
 }

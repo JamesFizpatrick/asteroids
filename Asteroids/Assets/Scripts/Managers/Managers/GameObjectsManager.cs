@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class GameObjectsManager : BaseManager<GameObjectsManager>
+    public class GameObjectsManager : IManager
     {
         #region Fields
 
@@ -33,22 +33,20 @@ namespace Asteroids.Managers
 
         public GameObject CreateVFX(GameObject vfxPrefab) => CreateObject(vfxPrefab, asteroidsRoot);
         
-        #endregion
-
-
-
-        #region Protected methods
-
-        protected override void Initialize()
+        
+        public void Initialize(ManagersHub hub)
         {
             bulletsRoot = CreateRootObject("===BULLETS===");
             asteroidsRoot = CreateRootObject("===ASTEROIDS===");
             playerShipsRoot = CreateRootObject("===SHIPS===");
             enemiesRoot = CreateRootObject("===ENEMIES===");
         }
+
         
-        
-        protected override void Deinitialize() { }
+        public void Update() { }
+
+
+        public void Unload() { }
         
         #endregion
 
@@ -56,7 +54,8 @@ namespace Asteroids.Managers
         
         #region Private methods
 
-        private GameObject CreateObject(GameObject prefab, GameObject root) => Instantiate(prefab, root.transform);
+        private GameObject CreateObject(GameObject prefab, GameObject root) =>
+            Object.Instantiate(prefab, root.transform);
 
 
         private GameObject CreateRootObject(string name)
