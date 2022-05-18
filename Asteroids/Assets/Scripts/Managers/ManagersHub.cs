@@ -38,7 +38,7 @@ namespace Asteroids.Managers
             managersDictionary.Add(typeof(SoundManager), new SoundManager());
             managersDictionary.Add(typeof(VFXManager), new VFXManager());
             managersDictionary.Add(typeof(GameObjectsManager), new GameObjectsManager());
-            
+            managersDictionary.Add(typeof(UIManager), new UIManager());
             
             foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
             {

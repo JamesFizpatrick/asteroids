@@ -1,4 +1,6 @@
+using System;
 using Asteroids.Data;
+using Asteroids.UI;
 
 
 namespace Asteroids.Managers
@@ -7,12 +9,16 @@ namespace Asteroids.Managers
     {
         #region Fields
 
+        public Action OnReset; 
+        public Action<int> OnPlayerHealthValueChanged;
+
         private const int PlayerRespawnDistanceFromBorders = 100;
         private const float InitialPlayerSafeRadius = 100f;
         
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
+        private UIManager uiManager;
 
         private int currentLevelPresetIndex = -1;
         private GamePreset.LevelPreset currentLevelPreset;
@@ -30,6 +36,7 @@ namespace Asteroids.Managers
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
             asteroidsManager = hub.GetManager<AsteroidsManager>();
             enemiesManager = hub.GetManager<EnemiesManager>();
+            uiManager = hub.GetManager<UIManager>();
         }
 
 
@@ -50,7 +57,7 @@ namespace Asteroids.Managers
         private void StartGame()
         {
             SwitchToTheNextLevel();
-
+            
             currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
             
             playerShipsManager.SpawnPlayer();
@@ -91,24 +98,37 @@ namespace Asteroids.Managers
 
         private void ResetGame()
         {
+            OnReset?.Invoke();
+            
             currentLevelPresetIndex = -1;
             currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
             StartNextLevel();
+        }
+
+
+        private void EndGame()
+        {
+            uiManager.ShowScreen(ScreenType.Win, () =>
+            {
+                currentLevelPresetIndex = 0;
+                StartGame();
+            });
         }
         
         
         private void SwitchToTheNextLevel()
         {
             currentLevelPresetIndex++;
-
             GamePreset gamePreset = DataContainer.GamePreset;
-
+            
             if (currentLevelPresetIndex > gamePreset.GetLevelPresets().Length - 1)
             {
-                currentLevelPresetIndex = 0;
+                EndGame();
             }
-            
-            currentLevelPreset = gamePreset.GetLevelPreset(currentLevelPresetIndex);
+            else
+            {
+                currentLevelPreset = gamePreset.GetLevelPreset(currentLevelPresetIndex);
+            }
         }
         
         #endregion
@@ -121,9 +141,11 @@ namespace Asteroids.Managers
         {
             currentPlayerHealth--;
             
-            if (currentPlayerHealth < 0)
+            OnPlayerHealthValueChanged?.Invoke(currentPlayerHealth);
+            
+            if (currentPlayerHealth <= 0)
             {
-                ResetGame();
+                uiManager.ShowScreen(ScreenType.Lose, ResetGame);
             }
             else if (asteroidsManager.GetActiveAsteroidsCount() == 0 && !enemiesManager.HasActiveEnemy())
             {
