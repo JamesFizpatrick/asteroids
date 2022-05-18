@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,6 +9,8 @@ namespace Asteroids.VFX
     {
         #region Fields
 
+        public Action<VFX> Destroyed;
+        
         [SerializeField] private float lifetime;
         private Coroutine destroyCoroutine;
 
@@ -26,6 +29,8 @@ namespace Asteroids.VFX
             {
                 StopCoroutine(destroyCoroutine);
             }
+            
+            Destroyed?.Invoke(this);
         }
 
         #endregion

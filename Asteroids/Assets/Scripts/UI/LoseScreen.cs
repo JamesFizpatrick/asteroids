@@ -20,15 +20,12 @@ namespace Asteroids.UI
         {
             ScreenType = ScreenType.Win;
             resetButton.onClick.AddListener(ResetButton_OnClick);
-
-            Time.timeScale = 0.0f;
         }
 
         
         private void OnDestroy()
         {
             OnClose?.Invoke();
-            Time.timeScale = 1.0f;
             resetButton.onClick.RemoveListener(ResetButton_OnClick);
         }
 

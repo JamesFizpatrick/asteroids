@@ -92,9 +92,12 @@ namespace Asteroids.Managers
             {
                 CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
-            
-            Player.Killed -= Player_Killed;
-            UnityEngine.Object.Destroy(Player.gameObject);
+
+            if (Player)
+            {
+                Player.Killed -= Player_Killed;
+                UnityEngine.Object.Destroy(Player.gameObject);
+            }
         }
         
         #endregion

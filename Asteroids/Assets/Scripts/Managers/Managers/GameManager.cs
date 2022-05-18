@@ -19,6 +19,7 @@ namespace Asteroids.Managers
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
         private UIManager uiManager;
+        private VFXManager vfxManager;
 
         private int currentLevelPresetIndex = -1;
         private GamePreset.LevelPreset currentLevelPreset;
@@ -37,6 +38,7 @@ namespace Asteroids.Managers
             asteroidsManager = hub.GetManager<AsteroidsManager>();
             enemiesManager = hub.GetManager<EnemiesManager>();
             uiManager = hub.GetManager<UIManager>();
+            vfxManager = hub.GetManager<VFXManager>();
         }
 
 
@@ -56,43 +58,27 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            SwitchToTheNextLevel();
-            
             currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
-            
-            playerShipsManager.SpawnPlayer();
-            playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
-            
-            asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
-                playerShipsManager.Player.transform.localPosition,
-                InitialPlayerSafeRadius);
-            
-            asteroidsManager.OnInitialAsteroidsDestroyed += AsteroidsManager_InitialAsteroidsDestroyed;
-            asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
 
-            enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
+            if (TrySwitchToTheNextLevel())
+            {
+                SubscribeAndSpawn();
+            }
         }
 
 
         private void StartNextLevel()
         {
-            SwitchToTheNextLevel();
-            
-            playerShipsManager.Reset();
-            playerShipsManager.SpawnPlayer();
-            
-            asteroidsManager.OnInitialAsteroidsDestroyed -= AsteroidsManager_InitialAsteroidsDestroyed;
-            asteroidsManager.OnAllAsteroidsDestroyed -= AsteroidsManager_OnAllAsteroidsDestroyed;
-            
-            asteroidsManager.Reset();
-            asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
-                playerShipsManager.Player.transform.localPosition,
-                InitialPlayerSafeRadius);
-            
-            asteroidsManager.OnInitialAsteroidsDestroyed += AsteroidsManager_InitialAsteroidsDestroyed;
-            asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
+            ResetAndUnsubscribe();
 
-            enemiesManager.Reset();
+            if (TrySwitchToTheNextLevel())
+            {
+                SubscribeAndSpawn();
+            }
+            else
+            {
+                EndGame();
+            }
         }
 
 
@@ -102,6 +88,7 @@ namespace Asteroids.Managers
             
             currentLevelPresetIndex = -1;
             currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
+            
             StartNextLevel();
         }
 
@@ -111,24 +98,51 @@ namespace Asteroids.Managers
             uiManager.ShowScreen(ScreenType.Win, () =>
             {
                 currentLevelPresetIndex = 0;
-                StartGame();
+                ResetGame();
             });
         }
         
         
-        private void SwitchToTheNextLevel()
+        private bool TrySwitchToTheNextLevel()
         {
             currentLevelPresetIndex++;
             GamePreset gamePreset = DataContainer.GamePreset;
             
             if (currentLevelPresetIndex > gamePreset.GetLevelPresets().Length - 1)
             {
-                EndGame();
+                return false;
             }
-            else
-            {
-                currentLevelPreset = gamePreset.GetLevelPreset(currentLevelPresetIndex);
-            }
+            
+            currentLevelPreset = gamePreset.GetLevelPreset(currentLevelPresetIndex);
+            return true;
+        }
+
+
+        private void SubscribeAndSpawn()
+        {
+            playerShipsManager.SpawnPlayer();
+            asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
+                playerShipsManager.Player.transform.localPosition,
+                InitialPlayerSafeRadius);
+            
+            playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
+            asteroidsManager.OnInitialAsteroidsDestroyed += AsteroidsManager_InitialAsteroidsDestroyed;
+            asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
+            enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
+        }
+
+
+        private void ResetAndUnsubscribe()
+        {
+            playerShipsManager.Reset();
+            asteroidsManager.Reset();
+            enemiesManager.Reset();
+            vfxManager.Reset();
+
+            playerShipsManager.OnPlayerKilled -= PlayerShipsManager_OnPlayerKilled;
+            asteroidsManager.OnInitialAsteroidsDestroyed -= AsteroidsManager_InitialAsteroidsDestroyed;
+            asteroidsManager.OnAllAsteroidsDestroyed -= AsteroidsManager_OnAllAsteroidsDestroyed;
+            enemiesManager.OnEnemyKilled -= EnemiesManager_OnEnemyKilled;
         }
         
         #endregion
@@ -145,7 +159,11 @@ namespace Asteroids.Managers
             
             if (currentPlayerHealth <= 0)
             {
-                uiManager.ShowScreen(ScreenType.Lose, ResetGame);
+                uiManager.ShowScreen(ScreenType.Lose, () =>
+                {
+                    ResetAndUnsubscribe();
+                    ResetGame();
+                });
             }
             else if (asteroidsManager.GetActiveAsteroidsCount() == 0 && !enemiesManager.HasActiveEnemy())
             {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Asteroids.VFX;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Asteroids.Managers
         #region Fields
     
         private GameObjectsManager gameObjectsManager;
+        private List<VFX.VFX> currentVFXes = new List<VFX.VFX>();
         
         #endregion
 
@@ -22,19 +24,41 @@ namespace Asteroids.Managers
 
             VFX.VFX vfx = gameObjectsManager.CreateVFX(vfxPrefab).GetComponent<VFX.VFX>();
             vfx.transform.localPosition = position;
-        }
-    
-    
-        public void Initialize(ManagersHub hub)
-        {
-            gameObjectsManager = hub.GetManager<GameObjectsManager>();
-        }
 
-        
+            vfx.Destroyed += VFX_Destroyed;
+            
+            currentVFXes.Add(vfx);
+        }
+    
+    
+        public void Initialize(ManagersHub hub) => gameObjectsManager = hub.GetManager<GameObjectsManager>();
+
+
         public void Update() { }
 
 
         public void Unload() { }
+
+
+        public void Reset()
+        {
+            foreach (VFX.VFX vfx in currentVFXes)
+            {
+                Object.Destroy(vfx.gameObject);
+            }
+        }
+        
+        #endregion
+
+
+        
+        #region Private methods
+
+        private void VFX_Destroyed(VFX.VFX vfx)
+        {
+            currentVFXes.Remove(vfx);
+            vfx.Destroyed -= VFX_Destroyed;
+        }
 
         #endregion
     }
