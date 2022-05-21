@@ -10,8 +10,9 @@ namespace Asteroids.Managers
 
         public Action<InputRotationType> OnStartRotating;
         public Action<InputRotationType> OnStopRotating;
-        public Action<InputMovementType> OnStartMoving;
-        public Action<InputMovementType> OnStopMoving;
+        
+        public Action OnStartMoving;
+        public Action OnStopMoving;
         
         public Action OnStartFiring;
         public Action OnStopFiring;
@@ -30,15 +31,11 @@ namespace Asteroids.Managers
         {
             if (Input.GetKeyDown(KeyCode.W))
             {
-                OnStartMoving?.Invoke(InputMovementType.Forward);
+                OnStartMoving?.Invoke();
             }
             if (Input.GetKeyDown(KeyCode.A))
             {
                 OnStartRotating?.Invoke(InputRotationType.CounterClockwise);
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                OnStartMoving?.Invoke(InputMovementType.Backward);
             }
             if (Input.GetKeyDown(KeyCode.D))
             {
@@ -56,15 +53,11 @@ namespace Asteroids.Managers
             
             if (Input.GetKeyUp(KeyCode.W))
             {
-                OnStopMoving?.Invoke(InputMovementType.Forward);
+                OnStopMoving?.Invoke();
             }
             if (Input.GetKeyUp(KeyCode.A))
             {
                 OnStopRotating?.Invoke(InputRotationType.CounterClockwise);
-            }
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                OnStopMoving?.Invoke(InputMovementType.Backward);
             }
             if (Input.GetKeyUp(KeyCode.D))
             {

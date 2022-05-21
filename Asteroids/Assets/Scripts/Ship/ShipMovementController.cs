@@ -27,23 +27,13 @@ namespace Asteroids.Game
         
         private InputRotationType currentRotationType = InputRotationType.None;
         private InputMovementType currentMoveType = InputMovementType.None;
-
-        private InputMovementType previousMovementType = InputMovementType.None;
-
+        
         private InputManager inputManager;
 
         private bool canMove = true;
         
         #endregion
-
-
         
-        #region Properties
-
-        public Vector3 AimDirection => currentAimDirection;
-
-        #endregion
-    
         
         
         #region Unity lifecycle
@@ -161,36 +151,15 @@ namespace Asteroids.Game
         private void StopRotating() => currentRotationType = InputRotationType.None;
 
 
-        private void StartMoving(InputMovementType movementType)
-        {
-            if (movementType == InputMovementType.Forward)
-            {
-                currentAimDirection = Vector3.up;
-            }
-            else if (movementType == InputMovementType.Backward)
-            {
-                currentAimDirection = -Vector3.up;
-            }
-
-            if (previousMovementType != movementType)
-            {
-                currentInertia = -currentInertia;
-            }
-            
-            currentMoveType = movementType;
-        }
+        private void StartMoving() => currentMoveType = InputMovementType.Forward;
 
 
-        private void StopMoving()
-        {
-            previousMovementType = currentMoveType;
-            currentMoveType = InputMovementType.None;
-        }
+        private void StopMoving() => currentMoveType = InputMovementType.None;
 
 
         private void ProcessInertia()
         {
-            if (currentMoveType == InputMovementType.Forward || currentMoveType == InputMovementType.Backward)
+            if (currentMoveType == InputMovementType.Forward)
             {
                 if (currentInertia < maxInertia)
                 {
@@ -217,16 +186,10 @@ namespace Asteroids.Game
         
         #region Event handlers
 
-        private void InputManager_OnStartMoving(InputMovementType movementType) => StartMoving(movementType);
+        private void InputManager_OnStartMoving() => StartMoving();
 
 
-        private void InputManager_OnStopMoving(InputMovementType movementType)
-        {
-            if (currentMoveType == movementType)
-            {
-                StopMoving();
-            }
-        }
+        private void InputManager_OnStopMoving() => StopMoving();
         
         
         private void InputManager_OnStartRotating(InputRotationType rotationType) => StartRotating(rotationType);
