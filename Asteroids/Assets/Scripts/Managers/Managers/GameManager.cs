@@ -159,11 +159,8 @@ namespace Asteroids.Managers
             
             if (currentPlayerHealth <= 0)
             {
-                uiManager.ShowScreen(ScreenType.Lose, () =>
-                {
-                    ResetAndUnsubscribe();
-                    ResetGame();
-                });
+                ResetAndUnsubscribe();
+                uiManager.ShowScreen(ScreenType.Lose, ResetGame);
             }
             else if (asteroidsManager.GetActiveAsteroidsCount() == 0 && !enemiesManager.HasActiveEnemy())
             {
