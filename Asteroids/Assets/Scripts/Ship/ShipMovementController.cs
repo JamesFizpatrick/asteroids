@@ -1,6 +1,7 @@
 using System;
 using Asteroids.Managers;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 
 namespace Asteroids.Game
@@ -15,16 +16,19 @@ namespace Asteroids.Game
         [SerializeField] private float maxInertia = 1;
         [SerializeField] private float rotationSpeed = 5f;
         
-        private const float InertiaIncreaseSpeed = 0.01f;
-        private const float InertiaDecreaseSpeed = 0.01f;
+        private const float InertiaIncreaseSpeed = 0.02f;
+        private const float InertiaDecreaseSpeed = 0.005f;
         
         private float currentInertia;
         private float currentRotationAngle;
 
+        private Vector3 currentAimDirection;
         private Vector3 currentMoveDirection;
         
         private InputRotationType currentRotationType = InputRotationType.None;
         private InputMovementType currentMoveType = InputMovementType.None;
+
+        private InputMovementType previousMovementType = InputMovementType.None;
 
         private InputManager inputManager;
 
@@ -36,7 +40,7 @@ namespace Asteroids.Game
         
         #region Properties
 
-        public Vector3 MoveDirection => currentMoveDirection;
+        public Vector3 AimDirection => currentAimDirection;
 
         #endregion
     
@@ -67,7 +71,7 @@ namespace Asteroids.Game
         private void Awake()
         {
             inputManager = ManagersHub.Instance.GetManager<InputManager>();
-            currentMoveDirection = Vector3.up * moveSpeed;
+            currentAimDirection = Vector3.up;
         }
         
 
@@ -77,20 +81,36 @@ namespace Asteroids.Game
             {
                 return;
             }
-            
-            ProcessInertia();
-
-            Vector3 translateAmount = currentMoveDirection * currentInertia;
-            if (translateAmount != Vector3.zero)
-            {
-                transform.Translate(translateAmount);
-                OnPositionChanged?.Invoke(transform.localPosition);
-            }
-
+ 
             if (currentRotationType != InputRotationType.None)
             {
                 transform.Rotate(-Vector3.back, currentRotationAngle);
             }
+            
+            ProcessInertia();
+            
+            float speed = moveSpeed * currentInertia;
+            
+            Vector3 translateAmount;
+            if (currentMoveType == InputMovementType.None)
+            {
+                translateAmount = currentMoveDirection * speed;
+            }
+            else
+            {
+                translateAmount =
+                    (transform.TransformDirection(currentAimDirection) + currentMoveDirection).normalized * speed;
+            }
+
+            Vector3 prevPos = transform.position;
+            
+            if (translateAmount != Vector3.zero)
+            {
+                transform.Translate(translateAmount, Space.World);
+                OnPositionChanged?.Invoke(transform.localPosition);
+            }
+            
+            currentMoveDirection = (transform.position - prevPos).normalized;
         }
         
         #endregion
@@ -141,26 +161,40 @@ namespace Asteroids.Game
         private void StopRotating() => currentRotationType = InputRotationType.None;
 
 
-        private void StartMoving(InputMovementType movementType) => currentMoveType = movementType;
+        private void StartMoving(InputMovementType movementType)
+        {
+            if (movementType == InputMovementType.Forward)
+            {
+                currentAimDirection = Vector3.up;
+            }
+            else if (movementType == InputMovementType.Backward)
+            {
+                currentAimDirection = -Vector3.up;
+            }
+
+            if (previousMovementType != movementType)
+            {
+                currentInertia = -currentInertia;
+            }
+            
+            currentMoveType = movementType;
+        }
 
 
-        private void StopMoving() => currentMoveType = InputMovementType.None;
-        
-        
+        private void StopMoving()
+        {
+            previousMovementType = currentMoveType;
+            currentMoveType = InputMovementType.None;
+        }
+
+
         private void ProcessInertia()
         {
-            if (currentMoveType == InputMovementType.Forward)
+            if (currentMoveType == InputMovementType.Forward || currentMoveType == InputMovementType.Backward)
             {
                 if (currentInertia < maxInertia)
                 {
                     currentInertia += InertiaIncreaseSpeed * 2;
-                }
-            }
-            else if (currentMoveType == InputMovementType.Backward)
-            {
-                if (currentInertia > -maxInertia)
-                {
-                    currentInertia -= InertiaIncreaseSpeed * 2;
                 }
             }
             else
@@ -173,10 +207,6 @@ namespace Asteroids.Game
                 if (currentInertia > 0f)
                 {
                     currentInertia -= InertiaDecreaseSpeed;
-                }
-                else
-                {
-                    currentInertia += InertiaDecreaseSpeed;
                 }
             }
         }
