@@ -16,13 +16,13 @@ namespace Asteroids.Managers
 
         public struct SpawnAsteroidData
         {
-            public Vector3 LocalPosition;
-            public Vector2 ColliderSize;
+            public Vector3Int LocalPosition;
+            public Vector2Int ColliderSize;
 
             public SpawnAsteroidData(Vector3 localPosition, Vector2 colliderSize)
             {
-                LocalPosition = localPosition;
-                ColliderSize = colliderSize;
+                LocalPosition = Vector3Int.FloorToInt(localPosition);
+                ColliderSize = Vector2Int.FloorToInt(colliderSize);
             }
         }
 

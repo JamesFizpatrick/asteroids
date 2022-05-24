@@ -12,7 +12,6 @@ namespace Asteroids.Managers
         public Action OnReset; 
         public Action<int> OnPlayerHealthValueChanged;
 
-        private const int PlayerRespawnDistanceFromBorders = 100;
         private const float InitialPlayerSafeRadius = 200f;
         
         private PlayerShipsManager playerShipsManager;
@@ -168,7 +167,7 @@ namespace Asteroids.Managers
             }
             else
             {
-                playerShipsManager.RespawnPlayer(PlayerRespawnDistanceFromBorders, 2f, 1f, 2f);
+                playerShipsManager.RespawnPlayer(2f, 1f, 2f);
             }
         }
 

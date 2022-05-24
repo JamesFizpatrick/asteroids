@@ -13,6 +13,8 @@ namespace Asteroids.Managers
         #region Fields
 
         public Action OnPlayerKilled;
+
+        private const int DistanceFromBorders = 100;
         
         public Player Player { get; private set; }
         
@@ -22,6 +24,10 @@ namespace Asteroids.Managers
         private GameObjectsManager gameObjectsManager;
         private AsteroidsManager asteroidsManager;
         private System.Random random;
+
+        Dictionary<int, List<int>> possibleCoordinates = new Dictionary<int, List<int>>();
+        private List<int> possibleXCoordinates;
+        private List<int> possibleYCoordinates;
 
         #endregion
 
@@ -36,6 +42,14 @@ namespace Asteroids.Managers
             asteroidsManager = hub.GetManager<AsteroidsManager>();
             
             random = new System.Random();
+            
+            int minX = -Screen.width / 2 + DistanceFromBorders;
+            int minY = -Screen.height / 2 + DistanceFromBorders;
+            
+            possibleXCoordinates = Enumerable.Range(minX, Screen.width - DistanceFromBorders * 2).ToList();
+            possibleYCoordinates = Enumerable.Range(minY, Screen.height - DistanceFromBorders * 2).ToList();
+            
+            
         }
 
         
@@ -64,43 +78,30 @@ namespace Asteroids.Managers
         }
 
 
-        public void RespawnPlayer(int distanceFromBorders, float preDelay, float respawnDelay, float iFramesDelay)
+        public void RespawnPlayer(float preDelay, float respawnDelay, float iFramesDelay)
         {
             // Respawn player and give them a coupe of invincibility frames
             if (respawnCoroutine != null)
             {
                 CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
-            CoroutinesHandler.Instance.StartCoroutine(RespawnCoroutine(distanceFromBorders, preDelay, respawnDelay, iFramesDelay));
+            CoroutinesHandler.Instance.StartCoroutine(RespawnCoroutine(preDelay, respawnDelay, iFramesDelay));
         }
         
         
-        public void RespawnPlayer(int distanceFromBorders)
+        public void RespawnPlayer()
         {
-            List<AsteroidsManager.SpawnAsteroidData> asteroidsData = asteroidsManager.GetActiveAsteroidsData();
-            
-            int minX = -Screen.width / 2 + distanceFromBorders;
-            int maxX = Screen.width / 2 - distanceFromBorders;
-            int minY = -Screen.height / 2 + distanceFromBorders;
-            int maxY = Screen.height / 2 - distanceFromBorders;
-            
-            List<int> possibleXCoordinates = Enumerable.Range(minX, Screen.width - distanceFromBorders * 2).ToList();
-            List<int> possibleYCoordinates = Enumerable.Range(minY, Screen.height - distanceFromBorders * 2).ToList();
+            ResetPossibleCoordinatesDictionary();
 
-            Dictionary<int, List<int>> possibleCoordinates = new Dictionary<int, List<int>>();
-            
-            foreach (int x in possibleXCoordinates)
-            {
-                possibleCoordinates.Add(x, possibleYCoordinates);
-            }
+            List<AsteroidsManager.SpawnAsteroidData> asteroidsData = asteroidsManager.GetActiveAsteroidsData();
             
             foreach (AsteroidsManager.SpawnAsteroidData data in asteroidsData)
             {
-                int asteroidMinX = (int)(data.LocalPosition.x - data.ColliderSize.x / 2);
-                int asteroidMaxX = (int)(asteroidMinX + data.ColliderSize.x);
+                int asteroidMinX = data.LocalPosition.x - data.ColliderSize.x / 2;
+                int asteroidMaxX = asteroidMinX + data.ColliderSize.x;
                 
-                int asteroidMinY = (int)(data.LocalPosition.y - data.ColliderSize.y / 2);
-                int asteroidMaxY = (int)(asteroidMinY + data.ColliderSize.y);
+                int asteroidMinY = data.LocalPosition.y - data.ColliderSize.y / 2;
+                int asteroidMaxY = asteroidMinY + data.ColliderSize.y;
 
                 for (int x = asteroidMinX; x <= asteroidMaxX; x++)
                 {
@@ -152,7 +153,7 @@ namespace Asteroids.Managers
         
         #region Private methods
 
-        private IEnumerator RespawnCoroutine(int distanceFromBorders, float preDelay,
+        private IEnumerator RespawnCoroutine(float preDelay,
             float respawnDelay, float iFramesDelay)
         {
             Player.EnableIFrames(false);
@@ -161,13 +162,24 @@ namespace Asteroids.Managers
             Player.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(respawnDelay);
-            RespawnPlayer(distanceFromBorders);
+            RespawnPlayer();
             Player.EnableIFrames(true);
 
             yield return new WaitForSeconds(iFramesDelay);
             Player.DisableIFrames();
         }
 
+
+        private void ResetPossibleCoordinatesDictionary()
+        {
+            possibleCoordinates.Clear();
+            
+            foreach (int x in possibleXCoordinates)
+            {
+                possibleCoordinates.Add(x, possibleYCoordinates);
+            }
+        }
+        
         #endregion
 
         
