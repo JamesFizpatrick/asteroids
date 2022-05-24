@@ -115,7 +115,8 @@ namespace Asteroids.Managers
             foreach (GameObject activeAsteroid in activeAsteroids)
             {
                 BoxCollider2D collider = activeAsteroid.GetComponent<BoxCollider2D>();
-                Vector2 colliderSize = collider.size + new Vector2(AsteroidBorderGap, AsteroidBorderGap);
+                Vector2 colliderSize = new Vector2(collider.size.x + AsteroidBorderGap,
+                    collider.size.y + AsteroidBorderGap);
                 
                 SpawnAsteroidData data = new SpawnAsteroidData(activeAsteroid.transform.localPosition, colliderSize);
                 result.Add(data);

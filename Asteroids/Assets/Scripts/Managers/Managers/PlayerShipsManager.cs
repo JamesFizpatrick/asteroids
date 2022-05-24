@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Asteroids.Game;
 using UnityEngine;
+using Random = System.Random;
 
 
 namespace Asteroids.Managers
@@ -15,6 +16,8 @@ namespace Asteroids.Managers
         public Action OnPlayerKilled;
 
         private const int DistanceFromBorders = 100;
+
+        private const int FieldSegmentsGridModule = 10;
         
         public Player Player { get; private set; }
         
@@ -23,12 +26,10 @@ namespace Asteroids.Managers
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
         private AsteroidsManager asteroidsManager;
-        private System.Random random;
+        private Random random;
 
-        Dictionary<int, List<int>> possibleCoordinates = new Dictionary<int, List<int>>();
-        private List<int> possibleXCoordinates;
-        private List<int> possibleYCoordinates;
-
+        List<FieldSegment> fieldSegments = new List<FieldSegment>();
+        
         #endregion
 
         
@@ -41,15 +42,9 @@ namespace Asteroids.Managers
             gameObjectsManager = hub.GetManager<GameObjectsManager>();
             asteroidsManager = hub.GetManager<AsteroidsManager>();
             
-            random = new System.Random();
-            
-            int minX = -Screen.width / 2 + DistanceFromBorders;
-            int minY = -Screen.height / 2 + DistanceFromBorders;
-            
-            possibleXCoordinates = Enumerable.Range(minX, Screen.width - DistanceFromBorders * 2).ToList();
-            possibleYCoordinates = Enumerable.Range(minY, Screen.height - DistanceFromBorders * 2).ToList();
-            
-            
+            InitFieldSegments();
+
+            random = new Random();
         }
 
         
@@ -94,39 +89,12 @@ namespace Asteroids.Managers
             ResetPossibleCoordinatesDictionary();
 
             List<AsteroidsManager.SpawnAsteroidData> asteroidsData = asteroidsManager.GetActiveAsteroidsData();
+
+            BlockCoordinateSegments(asteroidsData);
             
-            foreach (AsteroidsManager.SpawnAsteroidData data in asteroidsData)
-            {
-                int asteroidMinX = data.LocalPosition.x - data.ColliderSize.x / 2;
-                int asteroidMaxX = asteroidMinX + data.ColliderSize.x;
-                
-                int asteroidMinY = data.LocalPosition.y - data.ColliderSize.y / 2;
-                int asteroidMaxY = asteroidMinY + data.ColliderSize.y;
-
-                for (int x = asteroidMinX; x <= asteroidMaxX; x++)
-                {
-                    if (possibleCoordinates.TryGetValue(x, out List<int> yCoordinates))
-                    {
-                        for (int y = asteroidMinY; y <= asteroidMaxY; y++)
-                        {
-                            if (yCoordinates.Contains(y))
-                            {
-                                yCoordinates.Remove(y);
-                            }
-                        }
-
-                        possibleCoordinates.Remove(x);
-                        possibleCoordinates.Add(x, yCoordinates);
-                    }
-                }
-            }
-            
-            KeyValuePair<int, List<int>> pair = possibleCoordinates.ElementAt(random.Next(0, possibleCoordinates.Keys.Count));
-
-            int newX = pair.Key;
-            int newY = pair.Value.ElementAt(random.Next(0, pair.Value.Count));
-
-            Vector3 newCoordinates = new Vector3(newX, newY);
+            FieldSegment segment = GetRandomOpenSegment();
+            Vector2Int intCoordinates = segment?.GetRandomCoordinate() ?? Vector2Int.zero;
+            Vector3 newCoordinates = new Vector3(intCoordinates.x, intCoordinates.y);
             
             Player.transform.localPosition = newCoordinates;
             Player.gameObject.SetActive(true);
@@ -170,14 +138,75 @@ namespace Asteroids.Managers
         }
 
 
+        private void InitFieldSegments()
+        {
+            int minX = -Screen.width / 2 + DistanceFromBorders;
+            int minY = -Screen.height / 2 + DistanceFromBorders;
+            int maxX = Screen.width / 2 - DistanceFromBorders;
+            int maxY = Screen.height / 2 - DistanceFromBorders;
+
+            int xStep = Mathf.Abs(maxX - minX) / FieldSegmentsGridModule;
+            int yStep = Mathf.Abs(maxY - minY) / FieldSegmentsGridModule;
+
+            int x = minX;
+            int y = minY;
+            
+            while (x <= maxX)
+            {
+                while (y <= maxY)
+                {
+                    Vector2Int xRange = new Vector2Int(x, x + xStep);
+                    Vector2Int yRange = new Vector2Int(y, y + yStep);;
+                    
+                    FieldSegment segment = new FieldSegment(xRange, yRange, false);
+                    
+                    fieldSegments.Add(segment);
+
+                    y += yStep;
+                }
+
+                x += xStep;
+            }
+        }
+        
+        
         private void ResetPossibleCoordinatesDictionary()
         {
-            possibleCoordinates.Clear();
-            
-            foreach (int x in possibleXCoordinates)
+            foreach (FieldSegment segment in fieldSegments)
             {
-                possibleCoordinates.Add(x, possibleYCoordinates);
+                segment.Unblock();
             }
+        }
+
+
+        private void BlockCoordinateSegments(List<AsteroidsManager.SpawnAsteroidData> asteroidsData)
+        {
+            foreach (AsteroidsManager.SpawnAsteroidData data in asteroidsData)
+            {
+                int minX = data.LocalPosition.x - data.ColliderSize.x / 2;
+                int minY = data.LocalPosition.y - data.ColliderSize.y / 2;
+                int maxX = data.LocalPosition.x + data.ColliderSize.x / 2;
+                int maxY = data.LocalPosition.y + data.ColliderSize.y / 2;
+                
+                Vector2Int minRange = new Vector2Int(minX, minY);
+                Vector2Int maxRange = new Vector2Int(maxX, maxY);
+                
+                foreach (FieldSegment fieldSegment in fieldSegments)
+                {
+                    if (fieldSegment.Contains(minRange, maxRange))
+                    {
+                        fieldSegment.Block();
+                    }
+                }
+            }
+        }
+
+
+        private FieldSegment GetRandomOpenSegment()
+        {
+            List<FieldSegment> openSegments = fieldSegments.Where(x => !x.Blocked).ToList();
+            int index = random.Next(0, openSegments.Count);
+            return openSegments[index];
         }
         
         #endregion
