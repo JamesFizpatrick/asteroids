@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GamePreset
   m_EditorClassIdentifier: 
   levelPresets:
-  - AsteroidsCount: 1
+  - AsteroidsCount: 2
     EnemiesCount: 0
   - AsteroidsCount: 2
     EnemiesCount: 1

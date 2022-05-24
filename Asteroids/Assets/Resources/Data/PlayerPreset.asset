@@ -22,3 +22,9 @@ MonoBehaviour:
   - {fileID: 7218160246245490849, guid: 5757d0bee7ce94f12ad14ff01d42b3e1, type: 3}
   - {fileID: 3076338761641162365, guid: fec2b9c81fd05480eb02d9e19c9e294e, type: 3}
   - {fileID: 279877532526053710, guid: 3a9d04b4b8d2649f48a1e1b1cd9ded58, type: 3}
+  healthBar: {fileID: 4450341179350108976, guid: fca3367560f2245b5b2e27fab8965e3c, type: 3}
+  screens:
+  - type: 1
+    screen: {fileID: 5589361193593634151, guid: 88a321523f1754204974087d2cac96fc, type: 3}
+  - type: 2
+    screen: {fileID: 5265523461448802092, guid: 9f263ba2a9e974217b229984a8361502, type: 3}

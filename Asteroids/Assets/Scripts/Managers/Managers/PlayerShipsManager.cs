@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Asteroids.Game;
 using UnityEngine;
 
@@ -18,6 +20,7 @@ namespace Asteroids.Managers
         
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
+        private AsteroidsManager asteroidsManager;
         private System.Random random;
 
         #endregion
@@ -30,6 +33,7 @@ namespace Asteroids.Managers
         {
             soundManager = hub.GetManager<SoundManager>();
             gameObjectsManager = hub.GetManager<GameObjectsManager>();
+            asteroidsManager = hub.GetManager<AsteroidsManager>();
             
             random = new System.Random();
         }
@@ -73,15 +77,57 @@ namespace Asteroids.Managers
         
         public void RespawnPlayer(int distanceFromBorders)
         {
+            List<AsteroidsManager.SpawnAsteroidData> asteroidsData = asteroidsManager.GetActiveAsteroidsData();
+            
             int minX = -Screen.width / 2 + distanceFromBorders;
             int maxX = Screen.width / 2 - distanceFromBorders;
             int minY = -Screen.height / 2 + distanceFromBorders;
             int maxY = Screen.height / 2 - distanceFromBorders;
             
-            int x = random.Next(minX, maxX);
-            int y = random.Next(minY, maxY);
+            List<int> possibleXCoordinates = Enumerable.Range(minX, Screen.width - distanceFromBorders * 2).ToList();
+            List<int> possibleYCoordinates = Enumerable.Range(minY, Screen.height - distanceFromBorders * 2).ToList();
 
-            Player.transform.localPosition = new Vector3(x, y);
+            Dictionary<int, List<int>> possibleCoordinates = new Dictionary<int, List<int>>();
+            
+            foreach (int x in possibleXCoordinates)
+            {
+                possibleCoordinates.Add(x, possibleYCoordinates);
+            }
+            
+            foreach (AsteroidsManager.SpawnAsteroidData data in asteroidsData)
+            {
+                int asteroidMinX = (int)(data.LocalPosition.x - data.ColliderSize.x / 2);
+                int asteroidMaxX = (int)(asteroidMinX + data.ColliderSize.x);
+                
+                int asteroidMinY = (int)(data.LocalPosition.y - data.ColliderSize.y / 2);
+                int asteroidMaxY = (int)(asteroidMinY + data.ColliderSize.y);
+
+                for (int x = asteroidMinX; x <= asteroidMaxX; x++)
+                {
+                    if (possibleCoordinates.TryGetValue(x, out List<int> yCoordinates))
+                    {
+                        for (int y = asteroidMinY; y <= asteroidMaxY; y++)
+                        {
+                            if (yCoordinates.Contains(y))
+                            {
+                                yCoordinates.Remove(y);
+                            }
+                        }
+
+                        possibleCoordinates.Remove(x);
+                        possibleCoordinates.Add(x, yCoordinates);
+                    }
+                }
+            }
+            
+            KeyValuePair<int, List<int>> pair = possibleCoordinates.ElementAt(random.Next(0, possibleCoordinates.Keys.Count));
+
+            int newX = pair.Key;
+            int newY = pair.Value.ElementAt(random.Next(0, pair.Value.Count));
+
+            Vector3 newCoordinates = new Vector3(newX, newY);
+            
+            Player.transform.localPosition = newCoordinates;
             Player.gameObject.SetActive(true);
         }
 

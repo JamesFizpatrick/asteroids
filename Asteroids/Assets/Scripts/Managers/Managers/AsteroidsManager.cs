@@ -12,8 +12,28 @@ namespace Asteroids.Managers
 {
     public class AsteroidsManager : IManager
     {
+        #region Nested types
+
+        public struct SpawnAsteroidData
+        {
+            public Vector3 LocalPosition;
+            public Vector2 ColliderSize;
+
+            public SpawnAsteroidData(Vector3 localPosition, Vector2 colliderSize)
+            {
+                LocalPosition = localPosition;
+                ColliderSize = colliderSize;
+            }
+        }
+
+        #endregion
+        
+        
+        
         #region Fields
 
+        private const int AsteroidBorderGap = 60;
+        
         public Action<int> OnInitialAsteroidsDestroyed;
         public Action OnAllAsteroidsDestroyed;
         
@@ -70,18 +90,41 @@ namespace Asteroids.Managers
         }
 
 
-        public int GetActiveAsteroidsCount()
+        public int GetActiveAsteroidsCount() => GetActiveAsteroids().Count;
+
+
+        public List<GameObject> GetActiveAsteroids()
         {
-            int count = 0;
+            List<GameObject> asteroids = new List<GameObject>();
             foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
             {
-                count += pair.Value.Count(x => x.activeSelf);
+                IEnumerable<GameObject> activeAsteroids = pair.Value.Where(x => x.activeSelf);
+                asteroids.AddRange(activeAsteroids);
             }
 
-            return count;
+            return asteroids;
         }
-        
-        
+
+
+        public List<SpawnAsteroidData> GetActiveAsteroidsData()
+        {
+            List<SpawnAsteroidData> result = new List<SpawnAsteroidData>();
+            
+            List<GameObject> activeAsteroids = GetActiveAsteroids();
+
+            foreach (GameObject activeAsteroid in activeAsteroids)
+            {
+                BoxCollider2D collider = activeAsteroid.GetComponent<BoxCollider2D>();
+                Vector2 colliderSize = collider.size + new Vector2(AsteroidBorderGap, AsteroidBorderGap);
+                
+                SpawnAsteroidData data = new SpawnAsteroidData(activeAsteroid.transform.localPosition, colliderSize);
+                result.Add(data);
+            }
+
+            return result;
+        }
+
+            
         public void Reset()
         {
             foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
