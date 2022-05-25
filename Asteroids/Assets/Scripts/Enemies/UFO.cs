@@ -1,6 +1,8 @@
 using System;
 using Asteroids.Game;
 using Asteroids.Handlers;
+using Asteroids.Managers;
+using Asteroids.VFX;
 using UnityEngine;
 
 
@@ -15,6 +17,9 @@ namespace Asteroids.UFO
         private UFOMoveController moveController;
         private UFOWeaponController weaponController;
 
+        private SoundManager soundManager;
+        private VFXManager vfxManager;
+        
         private int weaponLayerMask;
 
         #endregion
@@ -40,8 +45,11 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialize(Player player)
+        public void Initialize(Player player, ManagersHub hub)
         {
+            soundManager = hub.GetManager<SoundManager>();
+            vfxManager = hub.GetManager<VFXManager>();
+            
             moveController.Initialize(player);
             weaponController.Initialize(player);
             
@@ -60,6 +68,9 @@ namespace Asteroids.UFO
             {
                 Killed?.Invoke();
                 gameObject.SetActive(false);
+                
+                soundManager.PlaySound(SoundType.Explosion);
+                vfxManager.SpawnVFX(VFXType.Explosion, transform.localPosition);
             }
         }
 

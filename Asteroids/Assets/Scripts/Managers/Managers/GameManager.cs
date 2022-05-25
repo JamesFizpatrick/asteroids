@@ -120,12 +120,13 @@ namespace Asteroids.Managers
         private void SubscribeAndSpawn()
         {
             playerShipsManager.SpawnPlayer();
+            enemiesManager.StartSpawnCoroutine(currentLevelPreset.EnemiesDelay);
+
             asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
                 playerShipsManager.Player.transform.localPosition,
                 InitialPlayerSafeRadius);
             
             playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
-            asteroidsManager.OnInitialAsteroidsDestroyed += AsteroidsManager_InitialAsteroidsDestroyed;
             asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
             enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
         }
@@ -139,7 +140,6 @@ namespace Asteroids.Managers
             vfxManager.Reset();
 
             playerShipsManager.OnPlayerKilled -= PlayerShipsManager_OnPlayerKilled;
-            asteroidsManager.OnInitialAsteroidsDestroyed -= AsteroidsManager_InitialAsteroidsDestroyed;
             asteroidsManager.OnAllAsteroidsDestroyed -= AsteroidsManager_OnAllAsteroidsDestroyed;
             enemiesManager.OnEnemyKilled -= EnemiesManager_OnEnemyKilled;
         }
@@ -170,22 +170,8 @@ namespace Asteroids.Managers
                 playerShipsManager.RespawnPlayer(2f, 1f, 2f);
             }
         }
-
-
-        private void AsteroidsManager_InitialAsteroidsDestroyed(int destroyedQuantity)
-        {
-            if (destroyedQuantity >= currentLevelPreset.AsteroidsCount / 2)
-            {
-                for (int i = 0; i < currentLevelPreset.EnemiesCount; i++)
-                {
-                    enemiesManager.SpawnEnemy(playerShipsManager.Player);
-                }
-                
-                asteroidsManager.OnInitialAsteroidsDestroyed -= AsteroidsManager_InitialAsteroidsDestroyed;
-            }
-        }
-
-
+        
+        
         private void AsteroidsManager_OnAllAsteroidsDestroyed()
         {
             if (!enemiesManager.HasActiveEnemy())

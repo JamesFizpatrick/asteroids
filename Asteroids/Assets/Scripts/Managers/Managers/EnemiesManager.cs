@@ -1,7 +1,6 @@
 using System;
-using Asteroids.Game;
+using System.Collections;
 using Asteroids.Handlers;
-using Asteroids.VFX;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = System.Random;
@@ -19,21 +18,77 @@ namespace Asteroids.Managers
 
         public UFO.UFO Enemy { get; private set; }
 
-        private SoundManager soundManager;
-        private VFXManager vfxManager;
+        
         private GameObjectsManager gameObjectsManager;
+        private PlayerShipsManager playerShipsManager;
         private Random random;
+
+        private Coroutine spawnCoroutine;
+
+        private float currentSpawnDelay = 10f;
+
+        private ManagersHub hub;
         
         #endregion
         
         
         
         #region Public methods
+
+        public void StartSpawnCoroutine(float delay)
+        {
+            currentSpawnDelay = delay;
+            spawnCoroutine = CoroutinesHandler.Instance.StartCoroutine(SpawnWithDelay(currentSpawnDelay));
+        }
+
         
         public bool HasActiveEnemy() => Enemy != null && Enemy.gameObject.activeSelf;
 
+        
+        public void Reset()
+        {
+            if (Enemy)
+            {
+                Enemy.Killed -= Enemy_Killed;
+                Object.Destroy(Enemy.gameObject);
+            }
 
-        public void SpawnEnemy(Player player)
+            if (spawnCoroutine != null)
+            {
+                CoroutinesHandler.Instance.StopCoroutine(spawnCoroutine);
+            }
+        }
+        
+        
+        public void Initialize(ManagersHub hub)
+        {
+            this.hub = hub;
+            
+            gameObjectsManager = hub.GetManager<GameObjectsManager>();
+            playerShipsManager = hub.GetManager<PlayerShipsManager>();
+            
+            random = new Random();
+        }
+
+        
+        public void Update() { }
+
+
+        public void Unload()
+        {
+            if (Enemy)
+            {
+                Enemy.Killed -= Enemy_Killed;
+            }
+        }
+        
+        #endregion
+
+
+        
+        #region Private methods
+
+        private void SpawnEnemy()
         {
             GameObject ufoPrefab = DataContainer.PlayerPreset.Enemy;
             GameObject ufo = gameObjectsManager.CreateEnemy(ufoPrefab);
@@ -66,53 +121,28 @@ namespace Asteroids.Managers
             ufo.transform.localPosition = new Vector3(x, y);
             
             Enemy = ufo.GetComponent<UFO.UFO>();
-            Enemy.Initialize(player);
+            Enemy.Initialize(playerShipsManager.Player, hub);
             Enemy.Killed += Enemy_Killed;
         }
-
-
-        public void Reset()
-        {
-            if (Enemy)
-            {
-                Enemy.Killed -= Enemy_Killed;
-                Object.Destroy(Enemy.gameObject);
-            }
-        }
         
         
-        public void Initialize(ManagersHub hub)
+        private IEnumerator SpawnWithDelay(float delay)
         {
-            soundManager = hub.GetManager<SoundManager>();
-            vfxManager = hub.GetManager<VFXManager>();
-            gameObjectsManager = hub.GetManager<GameObjectsManager>();
-            
-            random = new Random();
+            yield return new WaitForSeconds(delay);
+            SpawnEnemy();
         }
 
-        
-        public void Update() { }
-
-
-        public void Unload()
-        {
-            if (Enemy)
-            {
-                Enemy.Killed -= Enemy_Killed;
-            }
-        }
-        
         #endregion
-
+        
         
         
         #region Event handlers
 
         private void Enemy_Killed()
         {
-            soundManager.PlaySound(SoundType.Explosion);
-            vfxManager.SpawnVFX(VFXType.Explosion, Enemy.transform.localPosition);
             OnEnemyKilled?.Invoke();
+            
+            spawnCoroutine = CoroutinesHandler.Instance.StartCoroutine(SpawnWithDelay(currentSpawnDelay));
         }
 
         #endregion

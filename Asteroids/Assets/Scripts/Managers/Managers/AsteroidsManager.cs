@@ -34,11 +34,9 @@ namespace Asteroids.Managers
 
         private const int AsteroidBorderGap = 60;
         
-        public Action<int> OnInitialAsteroidsDestroyed;
         public Action OnAllAsteroidsDestroyed;
         
         private int startQuantity = 0;
-        private int destroyedCount = 0;
 
         private SoundManager soundManager;
         private VFXManager vfxManager;
@@ -138,7 +136,6 @@ namespace Asteroids.Managers
                 }
             }
 
-            destroyedCount = 0;
             asteroidsPool.Clear();
         }
 
@@ -236,14 +233,6 @@ namespace Asteroids.Managers
             soundManager.PlaySound(SoundType.Explosion);
             vfxManager.SpawnVFX(VFXType.Explosion, asteroid.transform.localPosition);
             
-            if (asteroid.Type == AsteroidType.Huge)
-            {
-                if (destroyedCount != startQuantity)
-                {
-                    destroyedCount++;
-                    OnInitialAsteroidsDestroyed?.Invoke(destroyedCount);
-                }
-            }
             
             // Spawn two smaller asteroids
             Vector3 direction = asteroid.CurrentDirection;

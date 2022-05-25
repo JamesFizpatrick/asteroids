@@ -13,7 +13,7 @@ namespace Asteroids.Data
         public struct LevelPreset
         {
             public int AsteroidsCount;
-            public int EnemiesCount;
+            public int EnemiesDelay;
         }
 
         #endregion
