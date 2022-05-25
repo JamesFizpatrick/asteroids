@@ -1,22 +1,25 @@
 using UnityEngine;
 
 
-public class CoroutinesHandler : MonoBehaviour
+namespace Asteroids.Handlers
 {
-    private static CoroutinesHandler instance;
-
-    public static CoroutinesHandler Instance
+    public class CoroutinesHandler : MonoBehaviour
     {
-        get
-        {
-            if (instance == null)
-            {
-                GameObject helperGo = new GameObject(typeof(CoroutinesHandler).ToString());
-                CoroutinesHandler manager = helperGo.AddComponent<CoroutinesHandler>();
-                instance = manager;
-            }
+        private static CoroutinesHandler instance;
 
-            return instance;
+        public static CoroutinesHandler Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    GameObject helperGo = new GameObject(typeof(CoroutinesHandler).ToString());
+                    CoroutinesHandler manager = helperGo.AddComponent<CoroutinesHandler>();
+                    instance = manager;
+                }
+
+                return instance;
+            }
         }
     }
 }

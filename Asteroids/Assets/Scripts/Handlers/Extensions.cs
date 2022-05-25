@@ -10,7 +10,7 @@ namespace Asteroids.Handlers
     public static class Extensions
     {
         /// <summary>
-        /// Get next element
+        /// Get next enum element
         /// </summary>
         public static EnumType Next<EnumType>(this EnumType src) where EnumType : struct
         {
@@ -29,7 +29,7 @@ namespace Asteroids.Handlers
         /// Get random float value between two values
         /// </summary>
         /// <param name="min">Min value</param>
-        /// <param name="max">Max value (will not be incluede)</param>
+        /// <param name="max">Max value (will not be included)</param>
         /// <returns></returns>
         public static float GetRandomFloat(this Random random, float min, float max)
         {

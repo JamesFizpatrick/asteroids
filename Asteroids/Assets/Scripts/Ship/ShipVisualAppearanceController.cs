@@ -11,7 +11,7 @@ namespace Asteroids.Game
 
         [SerializeField] private Image image;
 
-        private const float blinkingFrequency = 0.25f;
+        private const float BlinkingFrequency = 0.25f;
         
         private Coroutine blinkingCoroutine;
 
@@ -47,9 +47,9 @@ namespace Asteroids.Game
             while (true)
             {
                 image.gameObject.SetActive(false);
-                yield return new WaitForSeconds(blinkingFrequency);
+                yield return new WaitForSeconds(BlinkingFrequency);
                 image.gameObject.SetActive(true);
-                yield return new WaitForSeconds(blinkingFrequency);
+                yield return new WaitForSeconds(BlinkingFrequency);
             }
         }
 

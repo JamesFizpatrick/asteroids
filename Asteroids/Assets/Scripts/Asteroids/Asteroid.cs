@@ -20,7 +20,7 @@ namespace Asteroids.Asteroids
         [SerializeField] private float moveSpeed;
 
         private int weaponLayerMask;
-        private Vector3 currentDirection;
+        private Vector3 currentMoveDirection;
         
         #endregion
 
@@ -31,7 +31,7 @@ namespace Asteroids.Asteroids
         public AsteroidType Type => asteroidType;
         
         
-        public Vector3 CurrentDirection => currentDirection;
+        public Vector3 CurrentMoveDirection => currentMoveDirection;
         
         #endregion
 
@@ -48,7 +48,7 @@ namespace Asteroids.Asteroids
 
         private void FixedUpdate()
         {
-            transform.Translate(currentDirection * moveSpeed);
+            transform.Translate(currentMoveDirection * moveSpeed);
 
             noMineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
             mineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
@@ -63,7 +63,7 @@ namespace Asteroids.Asteroids
         
         #region Public methods
 
-        public void OverrideDirection(Vector3 newDirection) => currentDirection = newDirection;
+        public void OverrideDirection(Vector3 newDirection) => currentMoveDirection = newDirection;
 
         #endregion
 

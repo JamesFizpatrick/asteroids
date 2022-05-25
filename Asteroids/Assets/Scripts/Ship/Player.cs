@@ -14,7 +14,6 @@ namespace Asteroids.Game
         
         private ShipMovementController shipMovementController;
         private ShipVisualAppearanceController shipVisualAppearanceController;
-        private ShipWeaponController shipWeaponController;
 
         private int enemyProjectilesLayer;
         private int asteroidsLayer;
@@ -92,7 +91,6 @@ namespace Asteroids.Game
         {
             shipMovementController = GetComponent<ShipMovementController>();
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
-            shipWeaponController = GetComponent<ShipWeaponController>();
         }
         
         #endregion

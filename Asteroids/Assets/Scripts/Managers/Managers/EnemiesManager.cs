@@ -15,19 +15,17 @@ namespace Asteroids.Managers
         public Action OnEnemyKilled;
 
         private const int UFOSpawnDistance = 10;
-
-        public UFO.UFO Enemy { get; private set; }
-
         
-        private GameObjectsManager gameObjectsManager;
-        private PlayerShipsManager playerShipsManager;
-        private Random random;
-
-        private Coroutine spawnCoroutine;
-
         private float currentSpawnDelay = 10f;
 
+        private GameObjectsManager gameObjectsManager;
+        private PlayerShipsManager playerShipsManager;
+        
+        private Random random;
+        private Coroutine spawnCoroutine;
+        
         private ManagersHub hub;
+        private UFO.UFO enemy;
         
         #endregion
         
@@ -42,15 +40,15 @@ namespace Asteroids.Managers
         }
 
         
-        public bool HasActiveEnemy() => Enemy != null && Enemy.gameObject.activeSelf;
+        public bool HasActiveEnemy() => enemy != null && enemy.gameObject.activeSelf;
 
         
         public void Reset()
         {
-            if (Enemy)
+            if (enemy)
             {
-                Enemy.Killed -= Enemy_Killed;
-                Object.Destroy(Enemy.gameObject);
+                enemy.Killed -= Enemy_Killed;
+                Object.Destroy(enemy.gameObject);
             }
 
             if (spawnCoroutine != null)
@@ -76,9 +74,9 @@ namespace Asteroids.Managers
 
         public void Unload()
         {
-            if (Enemy)
+            if (enemy)
             {
-                Enemy.Killed -= Enemy_Killed;
+                enemy.Killed -= Enemy_Killed;
             }
         }
         
@@ -120,9 +118,9 @@ namespace Asteroids.Managers
             
             ufo.transform.localPosition = new Vector3(x, y);
             
-            Enemy = ufo.GetComponent<UFO.UFO>();
-            Enemy.Initialize(playerShipsManager.Player, hub);
-            Enemy.Killed += Enemy_Killed;
+            enemy = ufo.GetComponent<UFO.UFO>();
+            enemy.Initialize(playerShipsManager.Player, hub);
+            enemy.Killed += Enemy_Killed;
         }
         
         

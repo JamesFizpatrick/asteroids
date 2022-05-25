@@ -12,6 +12,7 @@ namespace Asteroids.VFX
         public Action<VFX> Destroyed;
         
         [SerializeField] private float lifetime;
+        
         private Coroutine destroyCoroutine;
 
         #endregion

@@ -31,12 +31,10 @@ namespace Asteroids.Managers
         
         
         #region Fields
-
-        private const int AsteroidBorderGap = 60;
         
         public Action OnAllAsteroidsDestroyed;
         
-        private int startQuantity = 0;
+        private const int AsteroidBorderGap = 60;
 
         private SoundManager soundManager;
         private VFXManager vfxManager;
@@ -53,34 +51,30 @@ namespace Asteroids.Managers
         
         #region Public methods
         
-        public void SpawnAsteroids(int quantity, Vector3 playerPosition, float safeRadius)
+        public void SpawnAsteroids(int quantity, Vector3Int playerPosition, int safeRadius)
         {
-            startQuantity = quantity;
-            
-            float directionX;
-            float directionY;
-            float positionX;
-            float positionY;
-            Vector3 direction;
-            Vector3 position;
-
-            int minX = (int)(playerPosition.x - safeRadius);
-            int maxX = (int)(playerPosition.x + safeRadius);
-            int minY = (int)(playerPosition.y - safeRadius);
-            int maxY = (int)(playerPosition.y + safeRadius);
+            int minX = playerPosition.x - safeRadius;
+            int maxX = playerPosition.x + safeRadius;
+            int minY = playerPosition.y - safeRadius;
+            int maxY = playerPosition.y + safeRadius;
 
             // spawn asteroids around the player not crossing safe zone
             for (int i = 0; i < quantity; i++)
             {
-                positionX =
-                    random.GetRandomExclude(-Screen.width / 2, Screen.width / 2, minX, maxX);
-                positionY =
-                    random.GetRandomExclude(-Screen.height / 2, Screen.height / 2, minY, maxY);
-                position = new Vector3(positionX, positionY);
+                var positionX = random.GetRandomExclude(-Screen.width / 2,
+                    Screen.width / 2,
+                    minX,
+                    maxX);
+                var positionY = random.GetRandomExclude(-Screen.height / 2,
+                    Screen.height / 2,
+                    minY,
+                    maxY);
+                var position = new Vector3(positionX, positionY);
 
-                directionX = positionX > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
-                directionY = positionY > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
-                direction = new Vector3(directionX, directionY);
+                var directionX = positionX > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
+                var directionY = positionY > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
+                
+                var direction = new Vector3(directionX, directionY);
                 
                 Asteroid asteroid = SpawnAsteroid(AsteroidType.Huge, position);
                 asteroid.OverrideDirection(direction);
@@ -90,20 +84,7 @@ namespace Asteroids.Managers
 
         public int GetActiveAsteroidsCount() => GetActiveAsteroids().Count;
 
-
-        public List<GameObject> GetActiveAsteroids()
-        {
-            List<GameObject> asteroids = new List<GameObject>();
-            foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
-            {
-                IEnumerable<GameObject> activeAsteroids = pair.Value.Where(x => x.activeSelf);
-                asteroids.AddRange(activeAsteroids);
-            }
-
-            return asteroids;
-        }
-
-
+        
         public List<SpawnAsteroidData> GetActiveAsteroidsData()
         {
             List<SpawnAsteroidData> result = new List<SpawnAsteroidData>();
@@ -160,7 +141,7 @@ namespace Asteroids.Managers
 
 
         #region Private methods
-
+        
         private Asteroid SpawnAsteroid(AsteroidType type, Vector3 position)
         {
             Asteroid asteroid = TryReuseAsteroid(type);
@@ -220,6 +201,19 @@ namespace Asteroids.Managers
             return reusableAsteroid.GetComponent<Asteroid>();
         }
         
+        
+        private List<GameObject> GetActiveAsteroids()
+        {
+            List<GameObject> asteroids = new List<GameObject>();
+            foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
+            {
+                IEnumerable<GameObject> activeAsteroids = pair.Value.Where(x => x.activeSelf);
+                asteroids.AddRange(activeAsteroids);
+            }
+
+            return asteroids;
+        }
+        
         #endregion
 
 
@@ -233,9 +227,8 @@ namespace Asteroids.Managers
             soundManager.PlaySound(SoundType.Explosion);
             vfxManager.SpawnVFX(VFXType.Explosion, asteroid.transform.localPosition);
             
-            
             // Spawn two smaller asteroids
-            Vector3 direction = asteroid.CurrentDirection;
+            Vector3 direction = asteroid.CurrentMoveDirection;
             AsteroidType nextType = asteroid.Type.Next();
             Vector3 parentLocalPosition = asteroid.transform.localPosition;
             

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Asteroids.Game;
+using Asteroids.Handlers;
 using UnityEngine;
 using Random = System.Random;
 
@@ -16,7 +17,6 @@ namespace Asteroids.Managers
         public Action OnPlayerKilled;
 
         private const int DistanceFromBorders = 100;
-
         private const int FieldSegmentsGridModule = 10;
         
         public Player Player { get; private set; }
@@ -80,7 +80,9 @@ namespace Asteroids.Managers
             {
                 CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
-            CoroutinesHandler.Instance.StartCoroutine(RespawnCoroutine(preDelay, respawnDelay, iFramesDelay));
+            
+            respawnCoroutine = 
+                CoroutinesHandler.Instance.StartCoroutine(RespawnCoroutine(preDelay, respawnDelay, iFramesDelay));
         }
         
         
@@ -138,6 +140,7 @@ namespace Asteroids.Managers
         }
 
 
+        // Methods for dividing the field into several segments to find coordinates for safe respawn 
         private void InitFieldSegments()
         {
             int minX = -Screen.width / 2 + DistanceFromBorders;

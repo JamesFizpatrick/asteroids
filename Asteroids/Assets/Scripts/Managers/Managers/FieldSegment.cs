@@ -50,7 +50,6 @@ namespace Asteroids.Managers
 
         public Vector2Int GetRandomCoordinate() => new Vector2Int(random.Next(minCoordinates.x, maxCoordinates.x),
             random.Next(minCoordinates.y, maxCoordinates.y));
-
         
         #endregion
     }

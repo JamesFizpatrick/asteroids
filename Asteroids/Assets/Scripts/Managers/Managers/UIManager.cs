@@ -33,14 +33,5 @@ namespace Asteroids.Managers
 
             currentScreen.OnClose += () => onClose?.Invoke();
         }
-
-        
-        public void HideScreen()
-        {
-            if (currentScreen != null)
-            {
-                GameObject.Destroy(currentScreen.gameObject);
-            }
-        }
     }
 }

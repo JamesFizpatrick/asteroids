@@ -51,10 +51,7 @@ namespace Asteroids.Managers
         }
 
 
-        public void Unload()
-        {
-            boundsController.OnCollisionExit -= BoundsController_OnCollisionExit;
-        }
+        public void Unload() => boundsController.OnCollisionExit -= BoundsController_OnCollisionExit;
 
         #endregion
 

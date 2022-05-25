@@ -1,6 +1,8 @@
 using System;
 using Asteroids.Data;
+using Asteroids.Handlers;
 using Asteroids.UI;
+using UnityEngine;
 
 
 namespace Asteroids.Managers
@@ -12,7 +14,7 @@ namespace Asteroids.Managers
         public Action OnReset; 
         public Action<int> OnPlayerHealthValueChanged;
 
-        private const float InitialPlayerSafeRadius = 200f;
+        private const int InitialPlayerSafeRadius = 200;
         
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
@@ -123,7 +125,7 @@ namespace Asteroids.Managers
             enemiesManager.StartSpawnCoroutine(currentLevelPreset.EnemiesDelay);
 
             asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
-                playerShipsManager.Player.transform.localPosition,
+                Vector3Int.FloorToInt(playerShipsManager.Player.transform.localPosition),
                 InitialPlayerSafeRadius);
             
             playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
