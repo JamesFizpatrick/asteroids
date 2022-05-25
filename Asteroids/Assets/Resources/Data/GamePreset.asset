@@ -15,9 +15,9 @@ MonoBehaviour:
   levelPresets:
   - AsteroidsCount: 2
     EnemiesDelay: 30
-  - AsteroidsCount: 2
-    EnemiesDelay: 30
   - AsteroidsCount: 4
-    EnemiesDelay: 25
+    EnemiesDelay: 30
   - AsteroidsCount: 6
+    EnemiesDelay: 25
+  - AsteroidsCount: 8
     EnemiesDelay: 20
