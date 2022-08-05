@@ -1,6 +1,5 @@
 using System;
 using Asteroids.Data;
-using Asteroids.Handlers;
 using Asteroids.UI;
 using UnityEngine;
 
@@ -26,13 +25,21 @@ namespace Asteroids.Managers
         private GamePreset.LevelPreset currentLevelPreset;
 
         private int currentPlayerHealth;
-        
+
         #endregion
 
-        
-        
+
+
+        #region Unity lifecycle
+
+        public void Start() => StartGame();
+
+        #endregion
+
+
+
         #region Protected methods
-        
+
         public void Initialize(ManagersHub hub)
         {
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
@@ -41,16 +48,7 @@ namespace Asteroids.Managers
             uiManager = hub.GetManager<UIManager>();
             vfxManager = hub.GetManager<VFXManager>();
         }
-
-
-        public void Update() { }
-
-        
-        public void Unload() { }
-
-        
-        public void Start() => StartGame();
-
+              
         #endregion
 
 

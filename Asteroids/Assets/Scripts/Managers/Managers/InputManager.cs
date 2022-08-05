@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class InputManager : IManager
+    public class InputManager : IManager, IUpdatableManager
     {
         #region Fields
 
@@ -68,10 +68,7 @@ namespace Asteroids.Managers
                 OnStopFiring?.Invoke();
             }
         }
-
         
-        public void Unload() { }
-
         #endregion
     }
 }

@@ -8,7 +8,7 @@ using Random = System.Random;
 
 namespace Asteroids.Managers
 {
-    public class EnemiesManager : IManager
+    public class EnemiesManager : IManager, IUnloadableManager
     {
         #region Fields
 
@@ -68,10 +68,7 @@ namespace Asteroids.Managers
             random = new Random();
         }
 
-        
-        public void Update() { }
-
-
+       
         public void Unload()
         {
             if (enemy)

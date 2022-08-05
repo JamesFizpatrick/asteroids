@@ -9,10 +9,10 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        [SerializeField] private Image image;
-
         private const float BlinkingFrequency = 0.25f;
-        
+
+        [SerializeField] private Image image;
+      
         private Coroutine blinkingCoroutine;
 
         #endregion

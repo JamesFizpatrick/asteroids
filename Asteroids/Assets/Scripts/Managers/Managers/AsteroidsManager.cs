@@ -129,13 +129,7 @@ namespace Asteroids.Managers
             
             random = new Random();
         }
-
-        
-        public void Update() { }
-
-
-        public void Unload() { }
-        
+               
         #endregion
 
 

@@ -10,12 +10,15 @@ namespace Asteroids.Managers
 
         private static ManagersHub instance;
 
-        private Dictionary<Type, IManager> managersDictionary = new Dictionary<Type, IManager>();
-    
+        private Dictionary<Type, IManager> managers = new Dictionary<Type, IManager>();
+
+        private List<IUpdatableManager> updatableManagers = new List<IUpdatableManager>();
+        private List<IUnloadableManager> unloadableManagers = new List<IUnloadableManager>();
+
         #endregion
 
 
-        
+
         #region Properties
 
         public static ManagersHub Instance => instance ??= new ManagersHub();
@@ -29,18 +32,19 @@ namespace Asteroids.Managers
         public void Initialize()
         {
             //Add new services here
-            managersDictionary.Add(typeof(InputManager), new InputManager());
-            managersDictionary.Add(typeof(GameManager), new GameManager());
-            managersDictionary.Add(typeof(BoundsManager), new BoundsManager());
-            managersDictionary.Add(typeof(AsteroidsManager), new AsteroidsManager());
-            managersDictionary.Add(typeof(PlayerShipsManager), new PlayerShipsManager());
-            managersDictionary.Add(typeof(EnemiesManager), new EnemiesManager());
-            managersDictionary.Add(typeof(SoundManager), new SoundManager());
-            managersDictionary.Add(typeof(VFXManager), new VFXManager());
-            managersDictionary.Add(typeof(GameObjectsManager), new GameObjectsManager());
-            managersDictionary.Add(typeof(UIManager), new UIManager());
+
+            AddManager(new InputManager());
+            AddManager(new GameManager());
+            AddManager(new BoundsManager());
+            AddManager(new AsteroidsManager());
+            AddManager(new PlayerShipsManager());
+            AddManager(new EnemiesManager());
+            AddManager(new SoundManager());
+            AddManager(new VFXManager());
+            AddManager(new GameObjectsManager());
+            AddManager(new UIManager());
             
-            foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
+            foreach (KeyValuePair<Type, IManager> pair in managers)
             {
                 pair.Value.Initialize(instance);
             }
@@ -49,18 +53,18 @@ namespace Asteroids.Managers
 
         public void Update()
         {
-            foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
+            foreach (IUpdatableManager manager in updatableManagers)
             {
-                pair.Value.Update();
+                manager.Update();
             }
         }
 
         
         public void Unload()
         {
-            foreach (KeyValuePair<Type, IManager> pair in managersDictionary)
+            foreach (IUnloadableManager manager in unloadableManagers)
             {
-                pair.Value.Unload();
+                manager.Unload();
             }
         }
 
@@ -69,13 +73,35 @@ namespace Asteroids.Managers
         {
             Type managerType = typeof(TManagerType);
 
-            IManager manager = managersDictionary[managerType];
+            IManager manager = managers[managerType];
+
             if (manager == null)
             {
                 throw new NullReferenceException("There is no manager of type " + managerType + "!");
             }
         
             return (TManagerType)manager;
+        }
+
+        #endregion
+
+
+
+        #region Private methods
+
+        private void AddManager<TManager>(TManager manager)
+        {
+            managers.Add(typeof(TManager), manager as IManager);
+
+            if (manager is IUpdatableManager updatableManager)
+            {
+                updatableManagers.Add(updatableManager);
+            }
+
+            if (manager is IUnloadableManager unloadableManager)
+            {
+                unloadableManagers.Add(unloadableManager);
+            }
         }
 
         #endregion

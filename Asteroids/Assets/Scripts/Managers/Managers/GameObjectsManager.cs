@@ -41,13 +41,7 @@ namespace Asteroids.Managers
             playerShipsRoot = CreateRootObject("===SHIPS===");
             enemiesRoot = CreateRootObject("===ENEMIES===");
         }
-
-        
-        public void Update() { }
-
-
-        public void Unload() { }
-        
+              
         #endregion
 
 

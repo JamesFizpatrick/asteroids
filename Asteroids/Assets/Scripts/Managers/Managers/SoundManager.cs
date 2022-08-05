@@ -32,13 +32,7 @@ namespace Asteroids.Managers
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
         }
-
-        
-        public void Update() { }
-
-
-        public void Unload() { }
-        
+               
         #endregion
     }
 }

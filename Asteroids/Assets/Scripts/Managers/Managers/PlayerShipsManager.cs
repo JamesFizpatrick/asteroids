@@ -10,7 +10,7 @@ using Random = System.Random;
 
 namespace Asteroids.Managers
 {
-    public class PlayerShipsManager : IManager
+    public class PlayerShipsManager : IManager, IUnloadableManager
     {
         #region Fields
 
@@ -47,10 +47,7 @@ namespace Asteroids.Managers
             random = new Random();
         }
 
-        
-        public void Update() { }
-
-
+       
         public void Unload()
         {
             if (Player)
