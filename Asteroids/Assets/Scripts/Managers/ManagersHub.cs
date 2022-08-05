@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Asteroids.Managers
@@ -31,17 +32,12 @@ namespace Asteroids.Managers
 
         public void Initialize()
         {
-            //Add new services here
-            AddManager(new InputManager());
-            AddManager(new GameManager());
-            AddManager(new BoundsManager());
-            AddManager(new AsteroidsManager());
-            AddManager(new PlayerShipsManager());
-            AddManager(new EnemiesManager());
-            AddManager(new SoundManager());
-            AddManager(new VFXManager());
-            AddManager(new GameObjectsManager());
-            AddManager(new UIManager());
+            IEnumerable<Type> managerEntites = GetAllManagerEntities();
+          
+            foreach (Type managerType in managerEntites)
+            {
+                AddManager(managerType);
+            }
             
             foreach (KeyValuePair<Type, IManager> pair in managers)
             {
@@ -88,19 +84,31 @@ namespace Asteroids.Managers
 
         #region Private methods
 
-        private void AddManager<TManager>(TManager manager)
+        private void AddManager(Type managerType)
         {
-            managers.Add(typeof(TManager), manager as IManager);
+            object newManager = Activator.CreateInstance(managerType);
 
-            if (manager is IUpdatableManager updatableManager)
+            managers.Add(managerType, newManager as IManager);
+
+            if (newManager is IUpdatableManager updatableManager)
             {
                 updatableManagers.Add(updatableManager);
             }
 
-            if (manager is IUnloadableManager unloadableManager)
+            if (newManager is IUnloadableManager unloadableManager)
             {
                 unloadableManagers.Add(unloadableManager);
             }
+        }
+
+
+        private IEnumerable<Type> GetAllManagerEntities()
+        {
+            System.Reflection.Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            IEnumerable<Type> types = assemblies.SelectMany(x => x.GetTypes());
+            IEnumerable<Type> selectedTypes = types.Where(x => typeof(IManager).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract);
+            
+            return selectedTypes.ToList();                        
         }
 
         #endregion
