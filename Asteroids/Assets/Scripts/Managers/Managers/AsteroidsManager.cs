@@ -121,7 +121,7 @@ namespace Asteroids.Managers
         }
 
 
-        public void Initialize(ManagersHub hub)
+        public void Initialize(IManagersHub hub)
         {
             soundManager = hub.GetManager<SoundManager>();
             vfxManager = hub.GetManager<VFXManager>();

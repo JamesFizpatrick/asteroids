@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Asteroids.Managers
 {
-    public class ManagersHub
+    public class ManagersHub : IManagersHub
     {
         #region Fields
 
@@ -32,7 +32,6 @@ namespace Asteroids.Managers
         public void Initialize()
         {
             //Add new services here
-
             AddManager(new InputManager());
             AddManager(new GameManager());
             AddManager(new BoundsManager());

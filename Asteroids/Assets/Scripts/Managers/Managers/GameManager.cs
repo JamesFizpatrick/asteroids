@@ -40,7 +40,7 @@ namespace Asteroids.Managers
 
         #region Protected methods
 
-        public void Initialize(ManagersHub hub)
+        public void Initialize(IManagersHub hub)
         {
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
             asteroidsManager = hub.GetManager<AsteroidsManager>();

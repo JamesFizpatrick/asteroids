@@ -34,7 +34,7 @@ namespace Asteroids.UI
 
         #region Public methods
 
-        public void Init(ManagersHub hub)
+        public void Init(IManagersHub hub)
         {
             gameManager = hub.GetManager<GameManager>();
             gameManager.OnReset += GameManager_OnReset;

@@ -32,7 +32,7 @@ namespace Asteroids.Managers
         }
     
     
-        public void Initialize(ManagersHub hub) =>
+        public void Initialize(IManagersHub hub) =>
             gameObjectsManager = hub.GetManager<GameObjectsManager>();
 
 

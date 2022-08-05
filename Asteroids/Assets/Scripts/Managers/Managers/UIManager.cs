@@ -11,7 +11,7 @@ namespace Asteroids.Managers
         private HealthBar healthBar;
         private BaseScreen currentScreen;
         
-        public void Initialize(ManagersHub hub)
+        public void Initialize(IManagersHub hub)
         {
             healthBar = GameObject.Instantiate(DataContainer.PlayerPreset.HealthBar,
                 GameSceneReferences.MainCanvas.transform);

@@ -36,7 +36,7 @@ namespace Asteroids.Managers
         
         #region Public methods
         
-        public void Initialize(ManagersHub hub)
+        public void Initialize(IManagersHub hub)
         {
             soundManager = hub.GetManager<SoundManager>();
             gameObjectsManager = hub.GetManager<GameObjectsManager>();

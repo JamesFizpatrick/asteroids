@@ -34,7 +34,7 @@ namespace Asteroids.Managers
         public GameObject CreateVFX(GameObject vfxPrefab) => CreateObject(vfxPrefab, asteroidsRoot);
         
         
-        public void Initialize(ManagersHub hub)
+        public void Initialize(IManagersHub hub)
         {
             bulletsRoot = CreateRootObject("===BULLETS===");
             asteroidsRoot = CreateRootObject("===ASTEROIDS===");

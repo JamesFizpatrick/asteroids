@@ -24,7 +24,7 @@ namespace Asteroids.Managers
         private Random random;
         private Coroutine spawnCoroutine;
         
-        private ManagersHub hub;
+        private IManagersHub hub;
         private UFO.UFO enemy;
         
         #endregion
@@ -58,7 +58,7 @@ namespace Asteroids.Managers
         }
         
         
-        public void Initialize(ManagersHub hub)
+        public void Initialize(IManagersHub hub)
         {
             this.hub = hub;
             

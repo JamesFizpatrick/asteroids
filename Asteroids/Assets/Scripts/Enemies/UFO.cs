@@ -45,7 +45,7 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialize(Player player, ManagersHub hub)
+        public void Initialize(Player player, IManagersHub hub)
         {
             soundManager = hub.GetManager<SoundManager>();
             vfxManager = hub.GetManager<VFXManager>();
