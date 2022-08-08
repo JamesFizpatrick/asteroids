@@ -13,7 +13,7 @@ namespace Asteroids.Managers
         
         public void Initialize(IManagersHub hub)
         {
-            healthBar = GameObject.Instantiate(DataContainer.PlayerPreset.HealthBar,
+            healthBar = GameObject.Instantiate(DataContainer.UiPreset.HealthBar,
                 GameSceneReferences.MainCanvas.transform);
             healthBar.Init(hub);
         }
@@ -21,7 +21,7 @@ namespace Asteroids.Managers
                    
         public void ShowScreen(ScreenType screenType, Action onClose = null)
         {
-            BaseScreen screenGO = DataContainer.PlayerPreset.GetScreen(screenType);
+            BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
             currentScreen = GameObject.Instantiate(screenGO,
                 GameSceneReferences.MainCanvas.transform);
 

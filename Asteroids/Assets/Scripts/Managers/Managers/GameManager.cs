@@ -22,7 +22,7 @@ namespace Asteroids.Managers
         private VFXManager vfxManager;
 
         private int currentLevelPresetIndex = -1;
-        private GamePreset.LevelPreset currentLevelPreset;
+        private LevelsPreset.LevelPreset currentLevelPreset;
 
         private int currentPlayerHealth;
 
@@ -57,7 +57,7 @@ namespace Asteroids.Managers
 
         private void StartGame()
         {
-            currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
+            currentPlayerHealth = DataContainer.GamePreset.PlayerLivesQuantity;
 
             if (TrySwitchToTheNextLevel())
             {
@@ -86,7 +86,7 @@ namespace Asteroids.Managers
             OnReset?.Invoke();
             
             currentLevelPresetIndex = -1;
-            currentPlayerHealth = DataContainer.PlayerPreset.PlayerLivesQuantity;
+            currentPlayerHealth = DataContainer.GamePreset.PlayerLivesQuantity;
             
             StartNextLevel();
         }
@@ -105,7 +105,7 @@ namespace Asteroids.Managers
         private bool TrySwitchToTheNextLevel()
         {
             currentLevelPresetIndex++;
-            GamePreset gamePreset = DataContainer.GamePreset;
+            LevelsPreset gamePreset = DataContainer.LevelsPreset;
             
             if (currentLevelPresetIndex > gamePreset.GetLevelPresets().Length - 1)
             {

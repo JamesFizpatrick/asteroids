@@ -22,8 +22,7 @@ namespace Asteroids.Managers
         {
             GameObject vfxPrefab = DataContainer.VFXPreset.GetVFX(type);
 
-            VFX.VFX vfx =
-                gameObjectsManager.CreateVFX(vfxPrefab).GetComponent<VFX.VFX>();
+            VFX.VFX vfx = gameObjectsManager.CreateVFX(vfxPrefab).GetComponent<VFX.VFX>();
 
             vfx.transform.localPosition = position;
             vfx.Destroyed += VFX_Destroyed;

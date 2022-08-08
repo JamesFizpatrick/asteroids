@@ -151,7 +151,7 @@ namespace Asteroids.Managers
         
         private Asteroid SpawnNewAsteroid(AsteroidType type)
         {
-            Asteroid[] asteroids = DataContainer.PlayerPreset.Asteroids;
+            Asteroid[] asteroids = DataContainer.GamePreset.Asteroids;
             List<Asteroid> selectedAsteroid = asteroids.Where(a => a.Type == type).ToList();
 
             int index = random.Next(0, selectedAsteroid.Count);
@@ -184,7 +184,7 @@ namespace Asteroids.Managers
             }
             
             List<GameObject> spawnedAsteroids = asteroidsPool[type];
-            GameObject reusableAsteroid = spawnedAsteroids.Find(asteroid => !asteroid.gameObject.activeSelf);
+            GameObject reusableAsteroid = spawnedAsteroids.Find(asteroid => !asteroid.activeSelf);
 
             if (reusableAsteroid == null)
             {

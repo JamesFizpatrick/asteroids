@@ -49,8 +49,8 @@ namespace Asteroids.UFO
         
         #region Event handlers
 
-        private void PlayerShip_OnPositionChanged(Vector3 position) =>
-            currentDirection = (position - transform.localPosition).normalized;
+        private void PlayerShip_OnPositionChanged(Vector3 localPosition) =>
+            currentDirection = (localPosition - transform.localPosition).normalized;
 
         #endregion
     }

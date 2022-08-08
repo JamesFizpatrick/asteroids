@@ -85,7 +85,7 @@ namespace Asteroids.Managers
 
         private void SpawnEnemy()
         {
-            GameObject ufoPrefab = DataContainer.PlayerPreset.Enemy;
+            GameObject ufoPrefab = DataContainer.GamePreset.Enemy;
             GameObject ufo = gameObjectsManager.CreateEnemy(ufoPrefab);
             
             int maxX = Screen.width / 2;
@@ -102,15 +102,21 @@ namespace Asteroids.Managers
 
             if (divider == 0)
             {
-                x = random.GetRandomExclude(minX - UFOSpawnDistance, maxX + UFOSpawnDistance,
-                    minX, maxX);
+                x = random.GetRandomExclude(minX - UFOSpawnDistance,
+                    maxX + UFOSpawnDistance,
+                    minX,
+                    maxX);
+
                 y = random.Next(minY, maxY);
             }
             else
             {
                 x = random.Next(minX, maxX);
-                y = random.GetRandomExclude(minY - UFOSpawnDistance, maxY + UFOSpawnDistance,
-                    minY, maxY);
+
+                y = random.GetRandomExclude(minY - UFOSpawnDistance,
+                    maxY + UFOSpawnDistance,
+                    minY,
+                    maxY);
             }
             
             ufo.transform.localPosition = new Vector3(x, y);

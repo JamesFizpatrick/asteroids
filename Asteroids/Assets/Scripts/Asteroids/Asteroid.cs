@@ -21,7 +21,9 @@ namespace Asteroids.Asteroids
 
         private int weaponLayerMask;
         private Vector3 currentMoveDirection;
-        
+
+        System.Random random;
+
         #endregion
 
 
@@ -41,6 +43,8 @@ namespace Asteroids.Asteroids
 
         private void Awake()
         {
+            random = new System.Random();
+
             weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
             SelectMineralsTexture();
         }
@@ -73,7 +77,6 @@ namespace Asteroids.Asteroids
 
         private void SelectMineralsTexture()
         {
-            System.Random random = new System.Random();
             int decision = random.Next(0, 2);
                 
             noMineralsImage.gameObject.SetActive(decision == 0);

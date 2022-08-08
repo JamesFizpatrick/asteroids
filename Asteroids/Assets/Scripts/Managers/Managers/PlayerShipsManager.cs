@@ -64,7 +64,7 @@ namespace Asteroids.Managers
 
         public void SpawnPlayer()
         {
-            GameObject shipPrefab = DataContainer.PlayerPreset.Ship;
+            GameObject shipPrefab = DataContainer.GamePreset.Ship;
             Player = gameObjectsManager.CreatePlayerShip(shipPrefab).GetComponent<Player>();
             Player.Killed += Player_Killed;
         }

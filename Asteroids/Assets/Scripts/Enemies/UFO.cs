@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace Asteroids.UFO
 {
+    [RequireComponent(typeof(UFOMoveController))]
+    [RequireComponent(typeof(UFOWeaponController))]
+
     public class UFO : MonoBehaviour
     {
         #region Fields

@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
+    [RequireComponent(typeof(ShipMovementController))]
+    [RequireComponent(typeof(ShipVisualAppearanceController))]
+
     public class Player : MonoBehaviour
     {
         #region Fields

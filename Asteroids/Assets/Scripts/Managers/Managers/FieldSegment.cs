@@ -43,12 +43,15 @@ namespace Asteroids.Managers
         
         public bool Contains(Vector2Int inputMinRange, Vector2Int inputMaxRange)
         {
-            return minCoordinates.x >= inputMinRange.x && maxCoordinates.x < inputMaxRange.x &&
-                   minCoordinates.y >= inputMaxRange.y && maxCoordinates.y < inputMaxRange.y;
+            return minCoordinates.x >= inputMinRange.x &&
+                maxCoordinates.x < inputMaxRange.x &&
+                minCoordinates.y >= inputMaxRange.y &&
+                maxCoordinates.y < inputMaxRange.y;
         }
 
 
-        public Vector2Int GetRandomCoordinate() => new Vector2Int(random.Next(minCoordinates.x, maxCoordinates.x),
+        public Vector2Int GetRandomCoordinate() =>
+            new Vector2Int(random.Next(minCoordinates.x, maxCoordinates.x),
             random.Next(minCoordinates.y, maxCoordinates.y));
         
         #endregion

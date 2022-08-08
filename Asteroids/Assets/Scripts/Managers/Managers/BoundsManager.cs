@@ -65,8 +65,7 @@ namespace Asteroids.Managers
             float minX = -Screen.width / 2f;
             float minY = -Screen.height / 2f;
                 
-            // Move the entity to the opposite side of the screen
-            
+            // Move the entity to the opposite side of the screen            
             if (localPosition.x > maxX)
             {
                 localPosition.x = minX;

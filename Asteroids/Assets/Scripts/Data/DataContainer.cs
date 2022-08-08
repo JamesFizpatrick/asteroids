@@ -19,21 +19,24 @@ namespace Asteroids.Managers
         
         #region Public methods
 
-        public static PlayerPreset PlayerPreset => GetData<PlayerPreset>("Data/PlayerPreset");
+        public static GamePreset GamePreset => GetData<GamePreset>("Data/GamePreset");
         
         
         public static SoundPreset SoundPreset => GetData<SoundPreset>("Data/SoundPreset");
 
 
-        public static GamePreset GamePreset => GetData<GamePreset>("Data/GamePreset");
+        public static LevelsPreset LevelsPreset => GetData<LevelsPreset>("Data/LevelsPreset");
         
         
         public static VFXPreset VFXPreset => GetData<VFXPreset>("Data/VFXPreset");
-        
+
+
+        public static UiPreset UiPreset => GetData<UiPreset>("Data/UiPreset");
+
         #endregion
 
 
-        
+
         #region Private methods
 
         private static TDataType GetData<TDataType>(string path) where TDataType : ScriptableObject

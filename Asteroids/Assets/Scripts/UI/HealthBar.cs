@@ -40,7 +40,7 @@ namespace Asteroids.UI
             gameManager.OnReset += GameManager_OnReset;
             gameManager.OnPlayerHealthValueChanged += GameManager_OnPlayerHealthValueChanged;
             
-            SetHealth(DataContainer.PlayerPreset.PlayerLivesQuantity);
+            SetHealth(DataContainer.GamePreset.PlayerLivesQuantity);
         }
 
         #endregion
@@ -88,7 +88,7 @@ namespace Asteroids.UI
 
         private void GameManager_OnPlayerHealthValueChanged(int healthValue) => SetHealth(healthValue);
         
-        private void GameManager_OnReset() => SetHealth(DataContainer.PlayerPreset.PlayerLivesQuantity);
+        private void GameManager_OnReset() => SetHealth(DataContainer.GamePreset.PlayerLivesQuantity);
 
         #endregion
     }

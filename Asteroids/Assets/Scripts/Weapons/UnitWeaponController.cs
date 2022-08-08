@@ -42,11 +42,11 @@ namespace Asteroids.Game
             switch (currentWeaponType)
             {
                 case WeaponType.Player:
-                    primeBulletPrefab = DataContainer.PlayerPreset.PlayerProjectiles;
-                    altBulletPrefab = DataContainer.PlayerPreset.PlayerAltProjectiles;
+                    primeBulletPrefab = DataContainer.GamePreset.PlayerProjectiles;
+                    altBulletPrefab = DataContainer.GamePreset.PlayerAltProjectiles;
                     break;
                 case WeaponType.Enemy:
-                    primeBulletPrefab = DataContainer.PlayerPreset.EnemyProjectiles;
+                    primeBulletPrefab = DataContainer.GamePreset.EnemyProjectiles;
                     break;
                 case WeaponType.None:
                     throw new Exception($"Weapon type was no inited for {GetType()}");

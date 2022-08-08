@@ -23,6 +23,11 @@ namespace Asteroids.Handlers
         
         #region Private methods
 
+        /// <summary>
+        /// Get layer number by name
+        /// </summary>
+        /// <param name="layer">Layer name</param>
+        /// <returns>Layer number</returns>
         private static int GetLayer(string layer) => LayerMask.NameToLayer(layer);
         
         #endregion
