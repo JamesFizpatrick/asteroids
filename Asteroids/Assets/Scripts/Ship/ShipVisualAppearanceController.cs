@@ -1,4 +1,5 @@
 using System.Collections;
+using Asteroids.Handlers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +9,6 @@ namespace Asteroids.Game
     public class ShipVisualAppearanceController : MonoBehaviour
     {
         #region Fields
-
-        private const float BlinkingFrequency = 0.25f;
 
         [SerializeField] private Image image;
       
@@ -47,9 +46,10 @@ namespace Asteroids.Game
             while (true)
             {
                 image.gameObject.SetActive(false);
-                yield return new WaitForSeconds(BlinkingFrequency);
+                yield return new WaitForSeconds(PlayerConstants.IFramesBlinkingFrequency);
+
                 image.gameObject.SetActive(true);
-                yield return new WaitForSeconds(BlinkingFrequency);
+                yield return new WaitForSeconds(PlayerConstants.IFramesBlinkingFrequency);
             }
         }
 

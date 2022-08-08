@@ -12,8 +12,6 @@ namespace Asteroids.Asteroids
 
         public Action<Asteroid> Destroyed;
         
-        private const float RotationSpeed = 0.7f;
-
         [SerializeField] private AsteroidType asteroidType;
         [SerializeField] private Image noMineralsImage;
         [SerializeField] private Image mineralsImage;
@@ -54,8 +52,9 @@ namespace Asteroids.Asteroids
         {
             transform.Translate(currentMoveDirection * moveSpeed);
 
-            noMineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
-            mineralsImage.transform.Rotate(Vector3.forward, RotationSpeed);
+            //TODO: Rotate root object
+            noMineralsImage.transform.Rotate(Vector3.forward, PlayerConstants.AsteroidRotationSpeed);
+            mineralsImage.transform.Rotate(Vector3.forward, PlayerConstants.AsteroidRotationSpeed);
         }
 
 

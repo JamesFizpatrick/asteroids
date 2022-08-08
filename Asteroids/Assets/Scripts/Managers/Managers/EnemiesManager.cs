@@ -13,8 +13,6 @@ namespace Asteroids.Managers
         #region Fields
 
         public Action OnEnemyKilled;
-
-        private const int UFOSpawnDistance = 10;
         
         private float currentSpawnDelay = 10f;
 
@@ -102,8 +100,9 @@ namespace Asteroids.Managers
 
             if (divider == 0)
             {
-                x = random.GetRandomExclude(minX - UFOSpawnDistance,
-                    maxX + UFOSpawnDistance,
+                x = random.GetRandomExclude(
+                    minX - PlayerConstants.UFOSpawnDistance,
+                    maxX + PlayerConstants.UFOSpawnDistance,
                     minX,
                     maxX);
 
@@ -113,8 +112,9 @@ namespace Asteroids.Managers
             {
                 x = random.Next(minX, maxX);
 
-                y = random.GetRandomExclude(minY - UFOSpawnDistance,
-                    maxY + UFOSpawnDistance,
+                y = random.GetRandomExclude(
+                    minY - PlayerConstants.UFOSpawnDistance,
+                    maxY + PlayerConstants.UFOSpawnDistance,
                     minY,
                     maxY);
             }

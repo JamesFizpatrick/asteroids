@@ -11,7 +11,7 @@ namespace Asteroids.UFO
         [SerializeField] private float Speed = 0.5f;
         
         private Vector3 currentDirection;
-        private Player playerPlayer;
+        private Ship playerPlayer;
         
         #endregion
 
@@ -36,7 +36,7 @@ namespace Asteroids.UFO
         
         #region Public methods
 
-        public void Initialize(Player player)
+        public void Initialize(Ship player)
         {
             playerPlayer = player;
             player.OnPositionChanged += PlayerShip_OnPositionChanged;

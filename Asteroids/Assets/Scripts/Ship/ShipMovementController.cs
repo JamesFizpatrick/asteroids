@@ -1,4 +1,5 @@
 using System;
+using Asteroids.Handlers;
 using Asteroids.Managers;
 using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
@@ -15,10 +16,7 @@ namespace Asteroids.Game
         [SerializeField] private float moveSpeed = 3f;
         [SerializeField] private float maxInertia = 1;
         [SerializeField] private float rotationSpeed = 5f;
-        
-        private const float InertiaIncreaseSpeed = 0.02f;
-        private const float InertiaDecreaseSpeed = 0.005f;
-        
+                
         private float currentInertia;
         private float currentRotationAngle;
 
@@ -163,7 +161,7 @@ namespace Asteroids.Game
             {
                 if (currentInertia < maxInertia)
                 {
-                    currentInertia += InertiaIncreaseSpeed * 2;
+                    currentInertia += PlayerConstants.InertiaIncreaseSpeed * 2;
                 }
             }
             else
@@ -175,7 +173,7 @@ namespace Asteroids.Game
                 
                 if (currentInertia > 0f)
                 {
-                    currentInertia -= InertiaDecreaseSpeed;
+                    currentInertia -= PlayerConstants.InertiaDecreaseSpeed;
                 }
             }
         }

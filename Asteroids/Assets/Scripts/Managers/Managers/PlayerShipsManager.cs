@@ -15,14 +15,14 @@ namespace Asteroids.Managers
         #region Fields
 
         public Action OnPlayerKilled;
+        public Action<int> OnPlayerHealthValueChanged;
 
-        private const int DistanceFromBorders = 100;
-        private const int FieldSegmentsGridModule = 10;
-        
-        public Player Player { get; private set; }
+        public Ship Player { get; private set; }
         
         private Coroutine respawnCoroutine;
-        
+
+        private int currentPlayerHealth;
+
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
         private AsteroidsManager asteroidsManager;
@@ -52,7 +52,7 @@ namespace Asteroids.Managers
         {
             if (Player)
             {
-                Player.Killed -= Player_Killed;
+                Player.OnPlayerDamaged -= Player_OnPlayerDamaged;
             }
 
             if (respawnCoroutine != null)
@@ -65,8 +65,10 @@ namespace Asteroids.Managers
         public void SpawnPlayer()
         {
             GameObject shipPrefab = DataContainer.GamePreset.Ship;
-            Player = gameObjectsManager.CreatePlayerShip(shipPrefab).GetComponent<Player>();
-            Player.Killed += Player_Killed;
+            Player = gameObjectsManager.CreatePlayerShip(shipPrefab).GetComponent<Ship>();
+            Player.OnPlayerDamaged += Player_OnPlayerDamaged;
+
+            currentPlayerHealth = DataContainer.GamePreset.PlayerLivesQuantity;
         }
 
 
@@ -109,16 +111,31 @@ namespace Asteroids.Managers
 
             if (Player)
             {
-                Player.Killed -= Player_Killed;
+                Player.OnPlayerDamaged -= Player_OnPlayerDamaged;
                 UnityEngine.Object.Destroy(Player.gameObject);
             }
         }
-        
+
         #endregion
 
 
-        
+
         #region Private methods
+
+        public int DecereaseHealthBy(int value)
+        {
+            currentPlayerHealth -= value;
+
+            if (currentPlayerHealth <= 0)
+            {
+
+            }
+
+            OnPlayerHealthValueChanged?.Invoke(currentPlayerHealth);
+
+            return currentPlayerHealth;
+        }
+
 
         private IEnumerator RespawnCoroutine(float preDelay,
             float respawnDelay, float iFramesDelay)
@@ -140,13 +157,13 @@ namespace Asteroids.Managers
         // Methods for dividing the field into several segments to find coordinates for safe respawn 
         private void InitFieldSegments()
         {
-            int minX = -Screen.width / 2 + DistanceFromBorders;
-            int minY = -Screen.height / 2 + DistanceFromBorders;
-            int maxX = Screen.width / 2 - DistanceFromBorders;
-            int maxY = Screen.height / 2 - DistanceFromBorders;
+            int minX = -Screen.width / 2 + PlayerConstants.RespawnDistanceFromBorders;
+            int minY = -Screen.height / 2 + PlayerConstants.RespawnDistanceFromBorders;
+            int maxX = Screen.width / 2 - PlayerConstants.RespawnDistanceFromBorders;
+            int maxY = Screen.height / 2 - PlayerConstants.RespawnDistanceFromBorders;
 
-            int xStep = Mathf.Abs(maxX - minX) / FieldSegmentsGridModule;
-            int yStep = Mathf.Abs(maxY - minY) / FieldSegmentsGridModule;
+            int xStep = Mathf.Abs(maxX - minX) / PlayerConstants.RespawnFieldSegmentsGridModule;
+            int yStep = Mathf.Abs(maxY - minY) / PlayerConstants.RespawnFieldSegmentsGridModule;
 
             int x = minX;
             int y = minY;
@@ -215,10 +232,20 @@ namespace Asteroids.Managers
         
         #region Event handlers
 
-        private void Player_Killed()
+        private void Player_OnPlayerDamaged()
         {
+            DecereaseHealthBy(1);
+
             soundManager.PlaySound(SoundType.Death);
-            OnPlayerKilled?.Invoke();
+
+            if (currentPlayerHealth > 0)
+            {
+                OnPlayerHealthValueChanged?.Invoke(currentPlayerHealth);
+            }
+            else
+            {
+                OnPlayerKilled?.Invoke();
+            }
         }
 
         #endregion

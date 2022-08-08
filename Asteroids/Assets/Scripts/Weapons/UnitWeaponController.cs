@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Asteroids.Handlers;
 using Asteroids.Managers;
 using UnityEngine;
 
@@ -11,8 +12,6 @@ namespace Asteroids.Game
     public class UnitWeaponController : MonoBehaviour
     {
         #region Fields
-
-        private const int MaxPoolBulletsAmount = 20;
 
         protected float FireCooldown = 0.0f;
         protected WeaponType currentWeaponType = WeaponType.None;
@@ -153,7 +152,7 @@ namespace Asteroids.Game
         {
             WeaponsBase bullet;
 
-            if (bulletsPool.Count < MaxPoolBulletsAmount)
+            if (bulletsPool.Count < PlayerConstants.MaxPoolBulletsAmount)
             {
                 bullet = gameObjectsManager.CreateBullet(primeBulletPrefab).GetComponent<WeaponsBase>();
                 bulletsPool.Add(bullet);

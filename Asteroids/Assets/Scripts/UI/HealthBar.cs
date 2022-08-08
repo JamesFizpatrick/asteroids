@@ -15,6 +15,7 @@ namespace Asteroids.UI
         private List<GameObject> pool = new List<GameObject>();
 
         private GameManager gameManager;
+        private PlayerShipsManager playerShipsManager;
 
         #endregion
 
@@ -25,7 +26,7 @@ namespace Asteroids.UI
         public void OnDestroy()
         {
             gameManager.OnReset -= GameManager_OnReset;
-            gameManager.OnPlayerHealthValueChanged -= GameManager_OnPlayerHealthValueChanged;
+            playerShipsManager.OnPlayerHealthValueChanged -= GameManager_OnPlayerHealthValueChanged;
         }
 
         #endregion
@@ -37,8 +38,10 @@ namespace Asteroids.UI
         public void Init(IManagersHub hub)
         {
             gameManager = hub.GetManager<GameManager>();
+            playerShipsManager = hub.GetManager<PlayerShipsManager>();
+
             gameManager.OnReset += GameManager_OnReset;
-            gameManager.OnPlayerHealthValueChanged += GameManager_OnPlayerHealthValueChanged;
+            playerShipsManager.OnPlayerHealthValueChanged += GameManager_OnPlayerHealthValueChanged;
             
             SetHealth(DataContainer.GamePreset.PlayerLivesQuantity);
         }

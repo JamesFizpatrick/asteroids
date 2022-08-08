@@ -10,7 +10,7 @@ namespace Asteroids.UFO
     {
         #region Fields
 
-        private Player player;
+        private Ship player;
         private System.Random random;
 
         private Coroutine fireCoroutine;
@@ -45,7 +45,7 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialize(Player player) => this.player = player;
+        public void Initialize(Ship player) => this.player = player;
 
 
         public void Fire() => fireCoroutine = StartCoroutine(Shoot());

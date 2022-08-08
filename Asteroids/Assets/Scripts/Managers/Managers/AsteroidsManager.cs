@@ -34,8 +34,6 @@ namespace Asteroids.Managers
         
         public Action OnAllAsteroidsDestroyed;
         
-        private const int AsteroidBorderGap = 60;
-
         private SoundManager soundManager;
         private VFXManager vfxManager;
         private GameObjectsManager gameObjectsManager;
@@ -94,8 +92,8 @@ namespace Asteroids.Managers
             foreach (GameObject activeAsteroid in activeAsteroids)
             {
                 BoxCollider2D collider = activeAsteroid.GetComponent<BoxCollider2D>();
-                Vector2 colliderSize = new Vector2(collider.size.x + AsteroidBorderGap,
-                    collider.size.y + AsteroidBorderGap);
+                Vector2 colliderSize = new Vector2(collider.size.x + PlayerConstants.AsteroidBorderGap,
+                    collider.size.y + PlayerConstants.AsteroidBorderGap);
                 
                 SpawnAsteroidData data = new SpawnAsteroidData(activeAsteroid.transform.localPosition, colliderSize);
                 result.Add(data);

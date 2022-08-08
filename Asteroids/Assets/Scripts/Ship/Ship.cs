@@ -8,12 +8,12 @@ namespace Asteroids.Game
     [RequireComponent(typeof(ShipMovementController))]
     [RequireComponent(typeof(ShipVisualAppearanceController))]
 
-    public class Player : MonoBehaviour
+    public class Ship : MonoBehaviour
     {
         #region Fields
 
         public Action<Vector3> OnPositionChanged;
-        public Action Killed;
+        public Action OnPlayerDamaged;
         
         private ShipMovementController shipMovementController;
         private ShipVisualAppearanceController shipVisualAppearanceController;
@@ -46,9 +46,11 @@ namespace Asteroids.Game
         private void OnTriggerEnter2D(Collider2D col)
         {
             int layer = col.gameObject.layer;
-            if (layer == enemyProjectilesLayer || layer == asteroidsLayer || layer == enemyLayer)
+            if (layer == enemyProjectilesLayer ||
+                layer == asteroidsLayer ||
+                layer == enemyLayer)
             {
-                Killed?.Invoke();
+                OnPlayerDamaged?.Invoke();
             }
         }
 
