@@ -15,17 +15,16 @@ namespace Asteroids.Game
 
         protected float FireCooldown = 0.0f;
         protected WeaponType currentWeaponType = WeaponType.None;
-        
-        private GameObject primeBulletPrefab;
-        private GameObject altBulletPrefab;
-        
+                
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
         
         private Coroutine attackCoroutine;
 
-        private List<WeaponsBase> bulletsPool = new List<WeaponsBase>();
-        private List<WeaponsBase> altBulletsPool = new List<WeaponsBase>();
+        private List<Weapon> weapons = new List<Weapon>();
+
+        private Weapon currentWeapon;
+        private int currentWeaponIndex;
 
         #endregion
 
@@ -41,17 +40,19 @@ namespace Asteroids.Game
             switch (currentWeaponType)
             {
                 case WeaponType.Player:
-                    primeBulletPrefab = DataContainer.GamePreset.PlayerProjectiles;
-                    altBulletPrefab = DataContainer.GamePreset.PlayerAltProjectiles;
+                    weapons.Add(new Weapon(DataContainer.GamePreset.PlayerProjectiles));
+                    weapons.Add(new Weapon(DataContainer.GamePreset.PlayerAltProjectiles));
                     break;
                 case WeaponType.Enemy:
-                    primeBulletPrefab = DataContainer.GamePreset.EnemyProjectiles;
+                    weapons.Add(new Weapon(DataContainer.GamePreset.EnemyProjectiles));
                     break;
                 case WeaponType.None:
                     throw new Exception($"Weapon type was no inited for {GetType()}");
             }
 
-            FireCooldown = primeBulletPrefab.GetComponent<WeaponsBase>().FireCooldown;
+            currentWeaponIndex = 0;
+            currentWeapon = weapons[currentWeaponIndex];
+            FireCooldown = currentWeapon.ShotPrefab.GetComponent<ShotBase>().FireCooldown;
         }
 
         
@@ -61,15 +62,13 @@ namespace Asteroids.Game
             {
                 StopCoroutine(attackCoroutine);
             }
-            
-            foreach (WeaponsBase bullet in bulletsPool)
+
+            foreach (Weapon weapon in weapons)
             {
-                Destroy(bullet.gameObject);
-            }
-            
-            foreach (WeaponsBase bullet in altBulletsPool)
-            {
-                Destroy(bullet.gameObject);
+                foreach (ShotBase bullet in weapon.Pool)
+                {
+                    Destroy(bullet.gameObject);
+                }
             }
         }
         
@@ -93,16 +92,21 @@ namespace Asteroids.Game
         
         protected void SwitchWeaponType()
         {
-            (primeBulletPrefab, altBulletPrefab) = (altBulletPrefab, primeBulletPrefab);
-            (bulletsPool, altBulletsPool) = (altBulletsPool, bulletsPool);
-            
-            FireCooldown = primeBulletPrefab.GetComponent<WeaponsBase>().FireCooldown;
+            currentWeaponIndex++;
+
+            if (currentWeaponIndex > weapons.Count - 1)
+            {
+                currentWeaponIndex = 0;
+            }
+
+            currentWeapon = weapons[currentWeaponIndex];            
+            FireCooldown = currentWeapon.ShotPrefab.GetComponent<ShotBase>().FireCooldown;
         }
         
 
         protected void FireSingleShot(Vector3 direction)
         {
-            WeaponsBase bullet = FireShot();
+            ShotBase bullet = FireSingleShot();
 
             if (bullet == null)
             {
@@ -128,7 +132,7 @@ namespace Asteroids.Game
         {
             while (true)
             {
-                WeaponsBase bullet = FireShot();
+                ShotBase bullet = FireSingleShot();
 
                 if (bullet == null)
                 {
@@ -148,18 +152,18 @@ namespace Asteroids.Game
         }
 
 
-        private WeaponsBase FireShot()
+        private ShotBase FireSingleShot()
         {
-            WeaponsBase bullet;
+            ShotBase bullet;
 
-            if (bulletsPool.Count < PlayerConstants.MaxPoolBulletsAmount)
+            if (currentWeapon.Pool.Count < PlayerConstants.MaxPoolBulletsAmount)
             {
-                bullet = gameObjectsManager.CreateBullet(primeBulletPrefab).GetComponent<WeaponsBase>();
-                bulletsPool.Add(bullet);
+                bullet = gameObjectsManager.CreateBullet(currentWeapon.ShotPrefab).GetComponent<ShotBase>();
+                currentWeapon.Pool.Add(bullet);
             }
             else
             {
-                bullet = bulletsPool.FirstOrDefault(b => b.gameObject.activeSelf == false);
+                bullet = currentWeapon.Pool.FirstOrDefault(b => b.gameObject.activeSelf == false);
             }
 
             return bullet;

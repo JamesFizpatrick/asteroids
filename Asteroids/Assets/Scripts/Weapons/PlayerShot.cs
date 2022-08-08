@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    public class EnemyWeapon : WeaponsBase
+    public class PlayerShot : ShotBase
     {
         #region Fields
 
-        private int playerLayer;
+        private int asteroidLayer;
+        private int enemyLayer;
 
         #endregion
 
@@ -16,7 +17,11 @@ namespace Asteroids.Game
         
         #region Unity lifecycle
 
-        private void Awake() => playerLayer = LayerMasksHandler.Player;
+        private void Awake()
+        {
+            asteroidLayer = LayerMasksHandler.Asteroid;
+            enemyLayer = LayerMasksHandler.Enemy;
+        }
 
         #endregion
 
@@ -26,12 +31,13 @@ namespace Asteroids.Game
 
         protected override void ProcessOnTriggerEnter(Collider2D col)
         {
-            if (col.gameObject.layer == playerLayer)
+            int colliderLayer = col.gameObject.layer;
+            if (colliderLayer == asteroidLayer || colliderLayer == enemyLayer)
             {
                 gameObject.SetActive(false);
             }
         }
 
         #endregion
-    }
+    } 
 }

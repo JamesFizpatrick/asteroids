@@ -69,36 +69,10 @@ namespace Asteroids.Game
             {
                 return;
             }
- 
-            if (currentRotationType != InputRotationType.None)
-            {
-                transform.Rotate(-Vector3.back, currentRotationAngle);
-            }
-            
-            ProcessInertia();
-            
-            float speed = moveSpeed * currentInertia;
-            
-            Vector3 translateAmount;
-            if (currentMoveType == InputMovementType.None)
-            {
-                translateAmount = currentMoveDirection * speed;
-            }
-            else
-            {
-                translateAmount =
-                    (transform.TransformDirection(currentAimDirection) + currentMoveDirection).normalized * speed;
-            }
 
-            Vector3 prevPos = transform.position;
-            
-            if (translateAmount != Vector3.zero)
-            {
-                transform.Translate(translateAmount, Space.World);
-                OnPositionChanged?.Invoke(transform.localPosition);
-            }
-            
-            currentMoveDirection = (transform.position - prevPos).normalized;
+            ProcessRotation();                        
+            ProcessInertia();
+            ProcessMovement();
         }
         
         #endregion
@@ -177,7 +151,43 @@ namespace Asteroids.Game
                 }
             }
         }
-        
+
+
+        private void ProcessRotation()
+        {
+            if (currentRotationType != InputRotationType.None)
+            {
+                transform.Rotate(-Vector3.back, currentRotationAngle);
+            }
+        }
+
+
+        private void ProcessMovement()
+        {
+            float speed = moveSpeed * currentInertia;
+
+            Vector3 translateAmount;
+
+            if (currentMoveType == InputMovementType.None)
+            {
+                translateAmount = currentMoveDirection * speed;
+            }
+            else
+            {
+                translateAmount = (transform.TransformDirection(currentAimDirection) + currentMoveDirection).normalized * speed;
+            }
+
+            Vector3 prevPos = transform.position;
+
+            if (translateAmount != Vector3.zero)
+            {
+                transform.Translate(translateAmount, Space.World);
+                OnPositionChanged?.Invoke(transform.localPosition);
+            }
+
+            currentMoveDirection = (transform.position - prevPos).normalized;
+        }
+
         #endregion
     
     

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    public class WeaponsBase : MonoBehaviour
+    public class ShotBase : MonoBehaviour
     {
         #region Fields
 

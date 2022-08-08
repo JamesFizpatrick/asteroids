@@ -11,17 +11,18 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action OnReset; 
-        
+        public Action OnReset;
+
+        private int currentLevelPresetIndex = -1;
+
+        private LevelsPreset.LevelPreset currentLevelPreset;
+
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
         private UIManager uiManager;
         private VFXManager vfxManager;
-
-        private int currentLevelPresetIndex = -1;
-        private LevelsPreset.LevelPreset currentLevelPreset;
-
+       
         #endregion
 
 
@@ -60,7 +61,7 @@ namespace Asteroids.Managers
         }
 
 
-        private void StartNextLevel()
+        private void SwitchToTheNextLevel()
         {
             ResetAndUnsubscribe();
 
@@ -80,10 +81,9 @@ namespace Asteroids.Managers
             OnReset?.Invoke();
             
             currentLevelPresetIndex = -1;
-
             playerShipsManager.Reset();
 
-            StartNextLevel();
+            SwitchToTheNextLevel();
         }
 
 
@@ -108,6 +108,7 @@ namespace Asteroids.Managers
             }
             
             currentLevelPreset = gamePreset.GetLevelPreset(currentLevelPresetIndex);
+
             return true;
         }
 
@@ -163,7 +164,7 @@ namespace Asteroids.Managers
             if (asteroidsManager.GetActiveAsteroidsCount() == 0 &&
                 !enemiesManager.HasActiveEnemy())
             {
-                StartNextLevel();
+                SwitchToTheNextLevel();
             }
             else
             {
@@ -176,7 +177,7 @@ namespace Asteroids.Managers
         {
             if (!enemiesManager.HasActiveEnemy())
             {
-                StartNextLevel();
+                SwitchToTheNextLevel();
             }
         }
 
@@ -185,7 +186,7 @@ namespace Asteroids.Managers
         {
             if (asteroidsManager.GetActiveAsteroidsCount() == 0)
             {
-                StartNextLevel();
+                SwitchToTheNextLevel();
             }
         }
         

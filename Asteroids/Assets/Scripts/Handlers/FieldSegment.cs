@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-namespace Asteroids.Managers
+namespace Asteroids.Handlers
 {
     public class FieldSegment
     {
