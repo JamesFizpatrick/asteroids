@@ -55,15 +55,10 @@ namespace Asteroids.UI
         private void SetHealth(int healthValue)
         {
             if (pool.Count >= healthValue)
-            {
-                foreach (GameObject segment in pool)
+            {                
+                for (int i = 0; i < pool.Count; i++)
                 {
-                    segment.SetActive(false);
-                }
-                
-                for (int i = 0; i < healthValue; i++)
-                {
-                    pool[i].SetActive(true);
+                    pool[i].SetActive(i < healthValue);
                 }
             }
             else
