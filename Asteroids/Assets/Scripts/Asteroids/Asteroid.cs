@@ -15,6 +15,7 @@ namespace Asteroids.Asteroids
         [SerializeField] private AsteroidType asteroidType;
         [SerializeField] private Image noMineralsImage;
         [SerializeField] private Image mineralsImage;
+        [SerializeField] private Transform rotationRoot;
         [SerializeField] private float moveSpeed;
 
         private int weaponLayerMask;
@@ -51,10 +52,7 @@ namespace Asteroids.Asteroids
         private void FixedUpdate()
         {
             transform.Translate(currentMoveDirection * moveSpeed);
-
-            //TODO: Rotate root object
-            noMineralsImage.transform.Rotate(Vector3.forward, PlayerConstants.AsteroidRotationSpeed);
-            mineralsImage.transform.Rotate(Vector3.forward, PlayerConstants.AsteroidRotationSpeed);
+            rotationRoot.Rotate(Vector3.forward, PlayerConstants.AsteroidRotationSpeed);
         }
 
 
