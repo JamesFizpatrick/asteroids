@@ -22,14 +22,14 @@ namespace Asteroids.Managers
         private AsteroidsManager asteroidsManager;
         private UIManager uiManager;
         private VFXManager vfxManager;
-       
+
         #endregion
 
 
 
         #region Unity lifecycle
 
-        public void Start() => StartGame();
+        public void Start() => uiManager.ShowScreen(ScreenType.Start);
 
         #endregion
 
@@ -45,59 +45,61 @@ namespace Asteroids.Managers
             uiManager = hub.GetManager<UIManager>();
             vfxManager = hub.GetManager<VFXManager>();
         }
-              
+
+        #endregion
+
+
+
+        #region Public methods
+
+        public void StartGame()
+        {
+            if (CanSwitchToTheNextLevel())
+            {
+                SubscribeAndSpawn();
+            }
+        }
+
+
+        public void ResetGame()
+        {
+            OnReset?.Invoke();
+
+            currentLevelPresetIndex = -1;
+            playerShipsManager.Reset();
+
+            TrySwitchToTheNextLevel();
+        }
+
         #endregion
 
 
 
         #region Private methods
 
-        private void StartGame()
-        {
-            if (TrySwitchToTheNextLevel())
-            {
-                SubscribeAndSpawn();
-            }
-        }
-
-
-        private void SwitchToTheNextLevel()
-        {
+        private void TrySwitchToTheNextLevel(bool withInterScreen = false)
+        {            
             ResetAndUnsubscribe();
 
-            if (TrySwitchToTheNextLevel())
+            if (CanSwitchToTheNextLevel())
             {
-                SubscribeAndSpawn();
+                if (withInterScreen)
+                {
+                    uiManager.ShowScreen(ScreenType.Inter, SubscribeAndSpawn);
+                }
+                else
+                {
+                    SubscribeAndSpawn();
+                }
             }
             else
             {
-                WinGame();
+                uiManager.ShowScreen(ScreenType.Win);
             }
         }
 
-
-        private void ResetGame()
-        {
-            OnReset?.Invoke();
-            
-            currentLevelPresetIndex = -1;
-            playerShipsManager.Reset();
-
-            SwitchToTheNextLevel();
-        }
-
-
-        private void WinGame()
-        {
-            uiManager.ShowScreen(ScreenType.Win, () =>
-            {
-                currentLevelPresetIndex = 0;
-                ResetGame();
-            });
-        }
-        
-        
-        private bool TrySwitchToTheNextLevel()
+     
+        private bool CanSwitchToTheNextLevel()
         {
             currentLevelPresetIndex++;
             LevelsPreset gamePreset = DataContainer.LevelsPreset;
@@ -145,7 +147,7 @@ namespace Asteroids.Managers
 
             enemiesManager.OnEnemyKilled -= EnemiesManager_OnEnemyKilled;
         }
-        
+
         #endregion
 
 
@@ -155,7 +157,7 @@ namespace Asteroids.Managers
         private void PlayerShipsManager_OnPlayerKilled()
         {
             ResetAndUnsubscribe();
-            uiManager.ShowScreen(ScreenType.Lose, ResetGame);            
+            uiManager.ShowScreen(ScreenType.Lose);            
         }
 
 
@@ -164,7 +166,7 @@ namespace Asteroids.Managers
             if (asteroidsManager.GetActiveAsteroidsCount() == 0 &&
                 !enemiesManager.HasActiveEnemy())
             {
-                SwitchToTheNextLevel();
+                TrySwitchToTheNextLevel(true);
             }
             else
             {
@@ -177,7 +179,7 @@ namespace Asteroids.Managers
         {
             if (!enemiesManager.HasActiveEnemy())
             {
-                SwitchToTheNextLevel();
+                TrySwitchToTheNextLevel(true);
             }
         }
 
@@ -186,7 +188,7 @@ namespace Asteroids.Managers
         {
             if (asteroidsManager.GetActiveAsteroidsCount() == 0)
             {
-                SwitchToTheNextLevel();
+                TrySwitchToTheNextLevel(true);
             }
         }
         

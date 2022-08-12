@@ -17,10 +17,28 @@ namespace Asteroids.Managers
                 GameSceneReferences.MainCanvas.transform);
             healthBar.Init(hub);
         }
-  
-                   
-        public void ShowScreen(ScreenType screenType, Action onClose = null)
+
+
+        public void ShowScreen(ScreenType screenType)
         {
+            if (currentScreen != null)
+            {
+                currentScreen.CloseScreen();
+            }
+
+            BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
+            currentScreen = GameObject.Instantiate(screenGO,
+                GameSceneReferences.MainCanvas.transform);
+        }
+
+
+        public void ShowScreen(ScreenType screenType, Action onClose)
+        {
+            if (currentScreen != null)
+            {
+                currentScreen.CloseScreen();
+            }
+
             BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
             currentScreen = GameObject.Instantiate(screenGO,
                 GameSceneReferences.MainCanvas.transform);
