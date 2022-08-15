@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelPresets:
   - AsteroidsCount: 1
-    EnemiesDelay: 5000
+    EnemiesDelay: 30
   - AsteroidsCount: 4
     EnemiesDelay: 30
   - AsteroidsCount: 6
