@@ -11,7 +11,7 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action OnReset;
+        public Action<GameState> OnGameStateChanged;
 
         private int currentLevelPresetIndex = -1;
 
@@ -63,7 +63,7 @@ namespace Asteroids.Managers
 
         public void ResetGame()
         {
-            OnReset?.Invoke();
+            OnGameStateChanged?.Invoke(GameState.InGame);
 
             currentLevelPresetIndex = -1;
             playerShipsManager.Reset();
@@ -85,6 +85,7 @@ namespace Asteroids.Managers
             {
                 if (withInterScreen)
                 {
+                    OnGameStateChanged?.Invoke(GameState.NotInGame);
                     uiManager.ShowScreen(ScreenType.Inter, SubscribeAndSpawn);
                 }
                 else
@@ -130,6 +131,8 @@ namespace Asteroids.Managers
             asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
 
             enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
+
+            OnGameStateChanged?.Invoke(GameState.InGame);
         }
 
 
@@ -157,7 +160,8 @@ namespace Asteroids.Managers
         private void PlayerShipsManager_OnPlayerKilled()
         {
             ResetAndUnsubscribe();
-            uiManager.ShowScreen(ScreenType.Lose);            
+            uiManager.ShowScreen(ScreenType.Lose);
+            OnGameStateChanged?.Invoke(GameState.NotInGame);
         }
 
 
