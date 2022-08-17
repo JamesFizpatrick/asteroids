@@ -21,5 +21,7 @@ namespace Asteroids.Handlers
                 return instance;
             }
         }
+
+        private void Awake() => DontDestroyOnLoad(this);
     }
 }

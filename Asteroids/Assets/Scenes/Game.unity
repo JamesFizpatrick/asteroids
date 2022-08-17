@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311915, g: 0.3807396, b: 0.35872662, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -387,6 +387,7 @@ GameObject:
   - component: {fileID: 1071298301}
   - component: {fileID: 1071298300}
   - component: {fileID: 1071298299}
+  - component: {fileID: 1071298302}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -459,3 +460,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1071298302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1071298298}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ca82c575c26471a88799cc49b9f4d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shader: {fileID: 4800000, guid: 77816a0e164fc4545955a8b12282ed26, type: 3}
+  bend: 4
+  scanlineSize1: 200
+  scanlineSpeed1: 5
+  scanlineSize2: 20
+  scanlineSpeed2: 5
+  scanlineAmount: 0.02
+  vignetteSize: 1.9
+  vignetteSmoothness: 0.3
+  vignetteEdgeRound: 10
+  noiseSize: 200
+  noiseAmount: 0.05
+  redOffset: {x: 0, y: -0.005}
+  blueOffset: {x: 0, y: 0}
+  greenOffset: {x: 0, y: 0.005}
