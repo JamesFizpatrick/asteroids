@@ -22,3 +22,9 @@ MonoBehaviour:
     screen: {fileID: 8131592468622327303, guid: a75fd16661fb949319d591685667e654, type: 3}
   - type: 4
     screen: {fileID: 6442126226623561405, guid: 9fb7b78d6ca294e678b00511d2bbcb30, type: 3}
+  - type: 5
+    screen: {fileID: 3570723808741214211, guid: e1ad45f21cb9243db92695023b1af057, type: 3}
+  - type: 6
+    screen: {fileID: 635603496491297206, guid: 843a6e1317e7248c08ece9de0ccfba1b, type: 3}
+  - type: 7
+    screen: {fileID: 518761362302313059, guid: ec38f3757408546e7933f617d660f893, type: 3}

@@ -10,6 +10,8 @@ namespace Asteroids.UI
         #region Fields
 
         [SerializeField] private Button startButton;
+        [SerializeField] private Button controlsButton;
+        [SerializeField] private Button settingsButton;
 
         #endregion
 
@@ -19,15 +21,21 @@ namespace Asteroids.UI
 
         private void Awake()
         {
-            ScreenType = ScreenType.Lose;
+            ScreenType = ScreenType.Start;
+
             startButton.onClick.AddListener(StartButton_OnClick);
+            controlsButton.onClick.AddListener(ControlsButton_OnClick);
+            settingsButton.onClick.AddListener(SettingsButton_OnClick);
         }
 
-
+        
         private void OnDestroy()
         {
             OnClose?.Invoke();
+
             startButton.onClick.RemoveListener(StartButton_OnClick);
+            controlsButton.onClick.RemoveListener(ControlsButton_OnClick);
+            settingsButton.onClick.RemoveListener(SettingsButton_OnClick);
         }
 
         #endregion
@@ -40,7 +48,22 @@ namespace Asteroids.UI
         {
             GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
             gameManager.StartGame();
-            CloseScreen();
+
+            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
+            uiManager.ShowScreen(ScreenType.Game);
+        }
+
+        private void SettingsButton_OnClick()
+        {
+            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
+            uiManager.ShowScreen(ScreenType.Settings);
+        }
+
+
+        private void ControlsButton_OnClick()
+        {
+            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
+            uiManager.ShowScreen(ScreenType.Controls);
         }
 
         #endregion
