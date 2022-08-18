@@ -28,3 +28,5 @@ MonoBehaviour:
     screen: {fileID: 635603496491297206, guid: 843a6e1317e7248c08ece9de0ccfba1b, type: 3}
   - type: 7
     screen: {fileID: 518761362302313059, guid: ec38f3757408546e7933f617d660f893, type: 3}
+  - type: 8
+    screen: {fileID: 4632109438456026978, guid: d28281235c10e494994f9b9f740384fb, type: 3}

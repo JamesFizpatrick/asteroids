@@ -9,6 +9,7 @@ namespace Asteroids.UI
         Inter       = 4,
         Settings    = 5,
         Controls    = 6,
-        Game        = 7
+        Game        = 7,
+        Pause       = 8
     }
 }

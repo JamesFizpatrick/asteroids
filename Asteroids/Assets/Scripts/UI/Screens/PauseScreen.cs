@@ -5,11 +5,11 @@ using UnityEngine.UI;
 
 namespace Asteroids.UI
 {
-    public class LoseScreen : BaseScreen
+    public class PauseScreen : BaseScreen
     {
         #region Fields
 
-        [SerializeField] private Button resetButton;
+        [SerializeField] private Button resumeButton;
         [SerializeField] private Button mainMenuButton;
 
         #endregion
@@ -20,9 +20,9 @@ namespace Asteroids.UI
 
         private void Awake()
         {
-            ScreenType = ScreenType.Lose;
-           
-            resetButton.onClick.AddListener(ResetButton_OnClick);
+            ScreenType = ScreenType.Pause;
+
+            resumeButton.onClick.AddListener(ResumeButton_OnClick);
             mainMenuButton.onClick.AddListener(MainMenuButton_OnClick);
         }
 
@@ -34,7 +34,7 @@ namespace Asteroids.UI
 
         protected override void PreClose()
         {
-            resetButton.onClick.RemoveListener(ResetButton_OnClick);
+            resumeButton.onClick.RemoveListener(ResumeButton_OnClick);
             mainMenuButton.onClick.RemoveListener(MainMenuButton_OnClick);
         }
 
@@ -44,24 +44,22 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void ResetButton_OnClick()
+        private void ResumeButton_OnClick()
         {
-            GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
-            gameManager.ResetGame();
-
-            CloseScreen();
+            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
+            uiManager.ShowScreen(ScreenType.Game);
+            //TODO: Set GameStateMachine to InGameState
         }
-    
+
 
 
         private void MainMenuButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
             uiManager.ShowScreen(ScreenType.Start);
-
-            CloseScreen();
         }
 
         #endregion
     }
 }
+

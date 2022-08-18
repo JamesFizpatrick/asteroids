@@ -11,7 +11,7 @@ namespace Asteroids.UI
 
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private TMPro.TextMeshProUGUI levelNumber;
-        //[SerializeField] private Button pauseButton;
+        [SerializeField] private Button pauseButton;
 
         #endregion
 
@@ -22,18 +22,20 @@ namespace Asteroids.UI
         private void Awake()
         {
             ScreenType = ScreenType.Game;
-            //pauseButton.onClick.AddListener(PauseButton_OnClick);
+            pauseButton.onClick.AddListener(PauseButton_OnClick);
         }
 
 
         private void Start() => healthBar.Init(ManagersHub.Instance);
 
+        #endregion
 
-        private void OnDestroy()
-        {
-            OnClose?.Invoke();
-            //pauseButton.onClick.RemoveListener(PauseButton_OnClick);
-        }
+
+
+        #region Protected methods
+
+        protected override void PreClose() =>
+            pauseButton.onClick.RemoveListener(PauseButton_OnClick);
 
         #endregion
 
@@ -44,7 +46,7 @@ namespace Asteroids.UI
         private void PauseButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            //uiManager.ShowScreen(ScreenType.Pause);
+            uiManager.ShowScreen(ScreenType.Pause);
         }
 
         #endregion

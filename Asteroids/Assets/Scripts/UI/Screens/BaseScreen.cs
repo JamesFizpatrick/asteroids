@@ -19,6 +19,6 @@ namespace Asteroids.UI
             Destroy(gameObject);
         }
 
-        public virtual void PreClose() {}
+        protected virtual void PreClose() {}
     }
 }

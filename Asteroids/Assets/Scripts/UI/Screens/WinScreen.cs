@@ -23,12 +23,14 @@ namespace Asteroids.UI
             startButton.onClick.AddListener(StartButton_OnClick);
         }
 
+        #endregion
 
-        private void OnDestroy()
-        {
-            OnClose?.Invoke();
+
+
+        #region Protected methods
+
+        protected override void PreClose() =>
             startButton.onClick.RemoveListener(StartButton_OnClick);
-        }
 
         #endregion
 
