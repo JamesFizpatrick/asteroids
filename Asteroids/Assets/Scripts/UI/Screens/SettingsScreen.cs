@@ -18,19 +18,14 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake()
+        private void OnEnable()
         {
             muteButton.onClick.AddListener(MuteButton_OnClick);
             closeButton.onClick.AddListener(CloseButton_OnClick);
         }
 
-        #endregion
 
-
-
-        #region Protected methods
-
-        protected override void PreClose()
+        private void OnDisable()
         {
             muteButton.onClick.RemoveListener(MuteButton_OnClick);
             closeButton.onClick.RemoveListener(CloseButton_OnClick);
@@ -45,7 +40,7 @@ namespace Asteroids.UI
         private void CloseButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen<StartScreen>();
+            uiManager.ShowScreen<MenuScreen>();
         }
 
 
@@ -57,4 +52,3 @@ namespace Asteroids.UI
         #endregion
     }
 }
-

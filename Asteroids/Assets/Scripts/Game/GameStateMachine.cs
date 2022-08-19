@@ -24,7 +24,7 @@ namespace Asteroids.Game
                 [typeof(BootState)] = new BootState(this),
                 [typeof(MainMenuState)] = new MainMenuState(this),
                 [typeof(StartGameState)] = new StartGameState(this),
-                [typeof(GameplayState)] = new GameplayState()
+                [typeof(GameplayState)] = new GameplayState(this)
             };
         }
 
@@ -47,6 +47,12 @@ namespace Asteroids.Game
             newState.Enter(parameter);
         }
 
+
+        #endregion
+
+
+
+        #region Private methods
 
         private TState GetState<TState>() where TState : class, IExitableState =>
             states[typeof(TState)] as TState;

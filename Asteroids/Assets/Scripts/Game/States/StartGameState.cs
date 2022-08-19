@@ -6,12 +6,24 @@ namespace Asteroids.Game
 {
     public class StartGameState : IState
     {
+        #region Fields
+
         private GameStateMachine gameStateMachine;
 
+        #endregion
+
+
+
+        #region Class lifecycle
 
         public StartGameState(GameStateMachine gameStateMachine) =>
             this.gameStateMachine = gameStateMachine;
 
+        #endregion
+
+
+
+        #region Public methods
 
         public void Enter()
         {
@@ -26,5 +38,7 @@ namespace Asteroids.Game
 
 
         public void Exit() { }
+
+        #endregion
     }
 }

@@ -17,16 +17,10 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake() => startButton.onClick.AddListener(StartButton_OnClick);
-
-        #endregion
+        private void OnEnable() => startButton.onClick.AddListener(StartButton_OnClick);
 
 
-
-        #region Protected methods
-
-        protected override void PreClose() =>
-            startButton.onClick.RemoveListener(StartButton_OnClick);
+        private void OnDisable() => startButton.onClick.RemoveListener(StartButton_OnClick);
 
         #endregion
 

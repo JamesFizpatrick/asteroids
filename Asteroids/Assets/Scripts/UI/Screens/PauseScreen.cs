@@ -12,25 +12,25 @@ namespace Asteroids.UI
         [SerializeField] private Button resumeButton;
         [SerializeField] private Button mainMenuButton;
 
+        private UIManager uiManager;
+
         #endregion
 
 
 
         #region Unity lifecycle
 
-        private void Awake()
+        private void Start() => uiManager = ManagersHub.Instance.GetManager<UIManager>();
+
+
+        private void OnEnable()
         {
             resumeButton.onClick.AddListener(ResumeButton_OnClick);
             mainMenuButton.onClick.AddListener(MainMenuButton_OnClick);
         }
 
-        #endregion
 
-
-
-        #region Protected methods
-
-        protected override void PreClose()
+        private void OnDisable()
         {
             resumeButton.onClick.RemoveListener(ResumeButton_OnClick);
             mainMenuButton.onClick.RemoveListener(MainMenuButton_OnClick);
@@ -42,21 +42,11 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void ResumeButton_OnClick()
-        {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen<GameScreen>();
-        }
+        private void ResumeButton_OnClick() => uiManager.ShowScreen<GameScreen>();
 
 
-
-        private void MainMenuButton_OnClick()
-        {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen<StartScreen>();
-        }
+        private void MainMenuButton_OnClick() => uiManager.ShowScreen<MenuScreen>();
 
         #endregion
     }
 }
-

@@ -19,19 +19,13 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake() => pauseButton.onClick.AddListener(PauseButton_OnClick);
+        private void OnEnable() => pauseButton.onClick.AddListener(PauseButton_OnClick);
+
+
+        private void OnDisable() => pauseButton.onClick.RemoveListener(PauseButton_OnClick);
 
 
         private void Start() => healthBar.Init(ManagersHub.Instance);
-
-        #endregion
-
-
-
-        #region Protected methods
-
-        protected override void PreClose() =>
-            pauseButton.onClick.RemoveListener(PauseButton_OnClick);
 
         #endregion
 

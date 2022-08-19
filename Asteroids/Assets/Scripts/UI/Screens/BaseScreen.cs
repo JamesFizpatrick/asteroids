@@ -7,11 +7,18 @@ namespace Asteroids.UI
 {
     public class BaseScreen : MonoBehaviour
     {
+        #region Fields
+
         public Action OnClose;
 
         protected IManagersHub managersHub;
         protected object parameter;
 
+        #endregion
+
+
+
+        #region Public methods
 
         public virtual void Init(IManagersHub hub, object parameter = null)
         {
@@ -22,11 +29,10 @@ namespace Asteroids.UI
 
         public void CloseScreen()
         {
-            PreClose();
             OnClose?.Invoke();
             Destroy(gameObject);
         }
 
-        protected virtual void PreClose() {}
+        #endregion
     }
 }

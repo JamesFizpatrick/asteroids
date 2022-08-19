@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Asteroids.UI
 {
-    public class StartScreen : BaseScreen
+    public class MenuScreen : BaseScreen
     {
         #region Fields
 
@@ -15,7 +15,6 @@ namespace Asteroids.UI
         [SerializeField] private Button settingsButton;
 
         private UIManager uiManager;
-
         private GameStateMachine stateMachine;
 
         #endregion
@@ -24,11 +23,19 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake()
+        private void OnEnable()
         {
             startButton.onClick.AddListener(StartButton_OnClick);
             controlsButton.onClick.AddListener(ControlsButton_OnClick);
             settingsButton.onClick.AddListener(SettingsButton_OnClick);
+        }
+
+
+        private void OnDisable()
+        {
+            startButton.onClick.RemoveListener(StartButton_OnClick);
+            controlsButton.onClick.RemoveListener(ControlsButton_OnClick);
+            settingsButton.onClick.RemoveListener(SettingsButton_OnClick);
         }
 
 
@@ -41,19 +48,6 @@ namespace Asteroids.UI
                 // TODO: Should be more clear
                 stateMachine = parameter as GameStateMachine;
             }
-        }
-
-        #endregion
-
-
-
-        #region Protected methods
-
-        protected override void PreClose()
-        {
-            startButton.onClick.RemoveListener(StartButton_OnClick);
-            controlsButton.onClick.RemoveListener(ControlsButton_OnClick);
-            settingsButton.onClick.RemoveListener(SettingsButton_OnClick);
         }
 
         #endregion

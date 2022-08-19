@@ -18,19 +18,14 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake()
+        private void OnEnable()
         {           
             resetButton.onClick.AddListener(ResetButton_OnClick);
             mainMenuButton.onClick.AddListener(MainMenuButton_OnClick);
         }
 
-        #endregion
 
-
-
-        #region Protected methods
-
-        protected override void PreClose()
+        private void OnDisable()
         {
             resetButton.onClick.RemoveListener(ResetButton_OnClick);
             mainMenuButton.onClick.RemoveListener(MainMenuButton_OnClick);
@@ -55,7 +50,7 @@ namespace Asteroids.UI
         private void MainMenuButton_OnClick()
         {
             UIManager uiManager = managersHub.GetManager<UIManager>();
-            uiManager.ShowScreen<StartScreen>();
+            uiManager.ShowScreen<MenuScreen>();
         }
 
         #endregion

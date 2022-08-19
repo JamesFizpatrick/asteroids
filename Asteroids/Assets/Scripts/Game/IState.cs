@@ -4,16 +4,4 @@
     {
         void Enter();
     }
-
-
-    public interface IParametricState<TParameter> : IExitableState
-    {
-        void Enter(TParameter parameter);
-    }
-
-
-    public interface IExitableState
-    {
-        void Exit();
-    }
 }

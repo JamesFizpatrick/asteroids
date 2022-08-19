@@ -5,12 +5,26 @@ namespace Asteroids.Game
 {
     public class BootState : IState
     {
+        #region Fields
+
         private GameStateMachine gameStateMachine;
+
+        #endregion
+
+
+
+        #region Class lifecycle
 
         public BootState(GameStateMachine gameStateMachine)
         {
             this.gameStateMachine = gameStateMachine;
         }
+
+        #endregion
+
+
+
+        #region Public methods
 
         public void Enter()
         {
@@ -18,9 +32,8 @@ namespace Asteroids.Game
             gameStateMachine.EnterState<MainMenuState>();
         }
 
+        public void Exit() { }
 
-        public void Exit()
-        {
-        }
+        #endregion
     }
 }
