@@ -1,4 +1,5 @@
 using System;
+using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -8,11 +9,15 @@ namespace Asteroids.UI
     {
         public Action OnClose;
 
+        protected IManagersHub managersHub;
+        protected object parameter;
 
-        public ScreenType ScreenType { get; protected set; }
 
-
-        public virtual void Init(object parameter) { }
+        public virtual void Init(IManagersHub hub, object parameter = null)
+        {
+            managersHub = hub;
+            this.parameter = parameter;
+        }
 
 
         public void CloseScreen()

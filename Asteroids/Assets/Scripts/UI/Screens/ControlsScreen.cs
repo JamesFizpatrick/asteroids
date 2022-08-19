@@ -17,11 +17,7 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake()
-        {
-            ScreenType = ScreenType.Controls;
-            actionButton.onClick.AddListener(ActionButton_OnClick);
-        }
+        private void Awake() => actionButton.onClick.AddListener(ActionButton_OnClick);
 
         #endregion
 
@@ -41,7 +37,7 @@ namespace Asteroids.UI
         private void ActionButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Start);
+            uiManager.ShowScreen<StartScreen>();
         }
 
         #endregion

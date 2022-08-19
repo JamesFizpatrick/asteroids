@@ -143,7 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5424216045915502567}
-  - component: {fileID: 6442126226623561405}
+  - component: {fileID: 7418747945908684218}
   m_Layer: 5
   m_Name: InterScreen
   m_TagString: Untagged
@@ -173,7 +173,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &6442126226623561405
+--- !u!114 &7418747945908684218
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,7 +185,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b60bfd0b52442c7aa6a9b4ecd0c07e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screenType: 4
   actionButton: {fileID: 126062621239058659}
 --- !u!1 &2859296330376429679
 GameObject:

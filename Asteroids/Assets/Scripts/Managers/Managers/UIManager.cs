@@ -19,52 +19,37 @@ namespace Asteroids.Managers
 
         #region Public methods
 
-        public void Initialize(IManagersHub hub)
-        {
-            managersHub = hub;
-        }
+        public void Initialize(IManagersHub hub) => managersHub = hub;
 
 
-        public void ShowScreen(ScreenType screenType)
+        public void ShowScreen<TScreenType>(object parameter = null)
         {
             if (currentScreen != null)
             {
                 currentScreen.CloseScreen();
             }
 
-            BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
+            BaseScreen screenGO = DataContainer.UiPreset.GetScreen<TScreenType>();
             currentScreen = GameObject.Instantiate(screenGO,
                 GameSceneReferences.MainCanvas.transform);
+
+            currentScreen.Init(managersHub, parameter);
         }
 
 
-        public void ShowScreen(ScreenType screenType, Action onClose)
+        // TODO: Remove callback
+        public void ShowScreen<TScreenType>(Action onClose, object parameter = null)
         {
             if (currentScreen != null)
             {
                 currentScreen.CloseScreen();
             }
 
-            BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
+            BaseScreen screenGO = DataContainer.UiPreset.GetScreen<TScreenType>();
             currentScreen = GameObject.Instantiate(screenGO,
                 GameSceneReferences.MainCanvas.transform);
 
             currentScreen.OnClose += () => onClose?.Invoke();
-        }
-
-
-        public void ShowScreen(ScreenType screenType, object parameter)
-        {
-            if (currentScreen != null)
-            {
-                currentScreen.CloseScreen();
-            }
-
-            BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
-            currentScreen = GameObject.Instantiate(screenGO,
-                GameSceneReferences.MainCanvas.transform);
-
-            currentScreen.Init(parameter);
         }
 
         #endregion

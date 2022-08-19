@@ -19,11 +19,7 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake()
-        {
-            ScreenType = ScreenType.Game;
-            pauseButton.onClick.AddListener(PauseButton_OnClick);
-        }
+        private void Awake() => pauseButton.onClick.AddListener(PauseButton_OnClick);
 
 
         private void Start() => healthBar.Init(ManagersHub.Instance);
@@ -46,7 +42,7 @@ namespace Asteroids.UI
         private void PauseButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Pause);
+            uiManager.ShowScreen<PauseScreen>();
         }
 
         #endregion

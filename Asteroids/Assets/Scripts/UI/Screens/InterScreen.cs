@@ -4,11 +4,10 @@ using UnityEngine.UI;
 
 namespace Asteroids.UI
 {
-    public class SingleButtonScreen : BaseScreen
+    public class InterScreen : BaseScreen
     {
         #region Fields
 
-        [SerializeField] private ScreenType screenType;
         [SerializeField] private Button actionButton;
 
         #endregion
@@ -19,7 +18,6 @@ namespace Asteroids.UI
 
         private void Awake()
         {
-            ScreenType = screenType;
             actionButton.onClick.AddListener(ActionButton_OnClick);
         }
 

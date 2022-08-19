@@ -19,9 +19,7 @@ namespace Asteroids.UI
         #region Unity lifecycle
 
         private void Awake()
-        {
-            ScreenType = ScreenType.Lose;
-           
+        {           
             resetButton.onClick.AddListener(ResetButton_OnClick);
             mainMenuButton.onClick.AddListener(MainMenuButton_OnClick);
         }
@@ -46,7 +44,7 @@ namespace Asteroids.UI
 
         private void ResetButton_OnClick()
         {
-            GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
+            GameManager gameManager = managersHub.GetManager<GameManager>();
             gameManager.ResetGame();
 
             CloseScreen();
@@ -56,10 +54,8 @@ namespace Asteroids.UI
 
         private void MainMenuButton_OnClick()
         {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Start);
-
-            CloseScreen();
+            UIManager uiManager = managersHub.GetManager<UIManager>();
+            uiManager.ShowScreen<StartScreen>();
         }
 
         #endregion

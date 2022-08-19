@@ -78,7 +78,7 @@ namespace Asteroids.Managers
                 if (withInterScreen)
                 {
                     OnGameStateChanged?.Invoke(GameState.NotInGame);
-                    uiManager.ShowScreen(ScreenType.Inter, SubscribeAndSpawn);
+                    uiManager.ShowScreen<InterScreen>(SubscribeAndSpawn);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace Asteroids.Managers
             }
             else
             {
-                uiManager.ShowScreen(ScreenType.Win);
+                uiManager.ShowScreen<WinScreen>();
             }
         }
 
@@ -152,7 +152,7 @@ namespace Asteroids.Managers
         private void PlayerShipsManager_OnPlayerKilled()
         {
             ResetAndUnsubscribe();
-            uiManager.ShowScreen(ScreenType.Lose);
+            uiManager.ShowScreen<LoseScreen>();
             OnGameStateChanged?.Invoke(GameState.NotInGame);
         }
 

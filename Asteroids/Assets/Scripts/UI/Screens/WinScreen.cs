@@ -17,11 +17,7 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Awake()
-        {
-            ScreenType = ScreenType.Lose;
-            startButton.onClick.AddListener(StartButton_OnClick);
-        }
+        private void Awake() => startButton.onClick.AddListener(StartButton_OnClick);
 
         #endregion
 

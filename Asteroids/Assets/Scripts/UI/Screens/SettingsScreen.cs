@@ -20,8 +20,6 @@ namespace Asteroids.UI
 
         private void Awake()
         {
-            ScreenType = ScreenType.Controls;
-
             muteButton.onClick.AddListener(MuteButton_OnClick);
             closeButton.onClick.AddListener(CloseButton_OnClick);
         }
@@ -47,7 +45,7 @@ namespace Asteroids.UI
         private void CloseButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Start);
+            uiManager.ShowScreen<StartScreen>();
         }
 
 

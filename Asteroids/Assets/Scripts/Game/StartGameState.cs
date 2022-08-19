@@ -16,7 +16,7 @@ namespace Asteroids.Game
         public void Enter()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Game);
+            uiManager.ShowScreen<GameScreen>();
 
             GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
             gameManager.StartGame();

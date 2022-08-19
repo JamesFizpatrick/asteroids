@@ -20,8 +20,6 @@ namespace Asteroids.UI
 
         private void Awake()
         {
-            ScreenType = ScreenType.Pause;
-
             resumeButton.onClick.AddListener(ResumeButton_OnClick);
             mainMenuButton.onClick.AddListener(MainMenuButton_OnClick);
         }
@@ -47,8 +45,7 @@ namespace Asteroids.UI
         private void ResumeButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Game);
-            //TODO: Set GameStateMachine to InGameState
+            uiManager.ShowScreen<GameScreen>();
         }
 
 
@@ -56,7 +53,7 @@ namespace Asteroids.UI
         private void MainMenuButton_OnClick()
         {
             UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Start);
+            uiManager.ShowScreen<StartScreen>();
         }
 
         #endregion

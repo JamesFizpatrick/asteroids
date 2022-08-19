@@ -26,26 +26,21 @@ namespace Asteroids.UI
 
         private void Awake()
         {
-            ScreenType = ScreenType.Start;
-
             startButton.onClick.AddListener(StartButton_OnClick);
             controlsButton.onClick.AddListener(ControlsButton_OnClick);
             settingsButton.onClick.AddListener(SettingsButton_OnClick);
         }
 
 
-        private void Start() =>
-            uiManager = ManagersHub.Instance.GetManager<UIManager>();
-
-        #endregion
-
-
-
-        #region Public methods
-
-        public override void Init(object parameter)
+        private void Start()
         {
-            stateMachine = parameter as GameStateMachine;
+            uiManager = managersHub.GetManager<UIManager>();
+
+            if (parameter != null)
+            {
+                // TODO: Should be more clear
+                stateMachine = parameter as GameStateMachine;
+            }
         }
 
         #endregion
@@ -67,13 +62,13 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void StartButton_OnClick() => stateMachine.EnterState<StartGameState>();
+        private void StartButton_OnClick() => stateMachine?.EnterState<StartGameState>();
 
 
-        private void SettingsButton_OnClick() => uiManager.ShowScreen(ScreenType.Settings);
+        private void SettingsButton_OnClick() => uiManager.ShowScreen<SettingsScreen>();
 
 
-        private void ControlsButton_OnClick() => uiManager.ShowScreen(ScreenType.Controls);
+        private void ControlsButton_OnClick() => uiManager.ShowScreen<ControlsScreen>();
 
         #endregion
     }

@@ -1,4 +1,3 @@
-using System;
 using Asteroids.UI;
 using UnityEngine;
 using System.Linq;
@@ -9,35 +8,25 @@ namespace Asteroids.Data
     [CreateAssetMenu(fileName = "CustomAssets/UiPreset")]
     public class UiPreset : ScriptableObject
     {
-        #region Nested types
-
-        [Serializable]
-        private struct Screen
-        {
-            public ScreenType type;
-            public BaseScreen screen;
-        }
-
-        #endregion
-
-
-
         #region Fields
 
-        [Header("UI")]
+        [Header("UI elements")]
         [SerializeField] private HealthBar healthBar;
-        [SerializeField] private Screen[] screens;
+
+        [Header("Screens")]
+        [SerializeField] private BaseScreen[] screenPrefabs;
 
         #endregion
 
 
 
         #region Properties
-  
+
         public HealthBar HealthBar => healthBar;
 
 
-        public BaseScreen GetScreen(ScreenType type) => screens.FirstOrDefault(x => x.type == type).screen;
+        public BaseScreen GetScreen<TScreenType>() =>
+            screenPrefabs.FirstOrDefault(x => x.GetType() == typeof(TScreenType));
 
         #endregion
     }
