@@ -27,14 +27,6 @@ namespace Asteroids.Managers
 
 
 
-        #region Unity lifecycle
-
-        public void Start() => uiManager.ShowScreen(ScreenType.Start);
-
-        #endregion
-
-
-
         #region Protected methods
 
         public void Initialize(IManagersHub hub)

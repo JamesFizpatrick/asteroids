@@ -53,6 +53,20 @@ namespace Asteroids.Managers
         }
 
 
+        public void ShowScreen(ScreenType screenType, object parameter)
+        {
+            if (currentScreen != null)
+            {
+                currentScreen.CloseScreen();
+            }
+
+            BaseScreen screenGO = DataContainer.UiPreset.GetScreen(screenType);
+            currentScreen = GameObject.Instantiate(screenGO,
+                GameSceneReferences.MainCanvas.transform);
+
+            currentScreen.Init(parameter);
+        }
+
         #endregion
     }
 }

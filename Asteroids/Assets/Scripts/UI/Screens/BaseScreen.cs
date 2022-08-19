@@ -12,6 +12,9 @@ namespace Asteroids.UI
         public ScreenType ScreenType { get; protected set; }
 
 
+        public virtual void Init(object parameter) { }
+
+
         public void CloseScreen()
         {
             PreClose();

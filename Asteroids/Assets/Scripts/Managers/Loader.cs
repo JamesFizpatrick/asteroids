@@ -1,15 +1,19 @@
 using UnityEngine;
 using Asteroids.Managers;
+using Asteroids.Game;
 
 
 namespace Asteroids
 {
     public class Loader : MonoBehaviour
     {
+        private GameStateMachine stateMachine;
+
+
         private void Start()
         {
-            ManagersHub.Instance.Initialize();
-            ManagersHub.Instance.GetManager<GameManager>().Start();
+            stateMachine = new GameStateMachine();
+            stateMachine.EnterState<BootState>();
         }
 
 

@@ -1,3 +1,4 @@
+using Asteroids.Game;
 using Asteroids.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,10 @@ namespace Asteroids.UI
         [SerializeField] private Button controlsButton;
         [SerializeField] private Button settingsButton;
 
+        private UIManager uiManager;
+
+        private GameStateMachine stateMachine;
+
         #endregion
 
 
@@ -27,7 +32,22 @@ namespace Asteroids.UI
             controlsButton.onClick.AddListener(ControlsButton_OnClick);
             settingsButton.onClick.AddListener(SettingsButton_OnClick);
         }
-       
+
+
+        private void Start() =>
+            uiManager = ManagersHub.Instance.GetManager<UIManager>();
+
+        #endregion
+
+
+
+        #region Public methods
+
+        public override void Init(object parameter)
+        {
+            stateMachine = parameter as GameStateMachine;
+        }
+
         #endregion
 
 
@@ -47,27 +67,13 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void StartButton_OnClick()
-        {
-            GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
-            gameManager.StartGame();
-
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Game);
-        }
-
-        private void SettingsButton_OnClick()
-        {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Settings);
-        }
+        private void StartButton_OnClick() => stateMachine.EnterState<StartGameState>();
 
 
-        private void ControlsButton_OnClick()
-        {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen(ScreenType.Controls);
-        }
+        private void SettingsButton_OnClick() => uiManager.ShowScreen(ScreenType.Settings);
+
+
+        private void ControlsButton_OnClick() => uiManager.ShowScreen(ScreenType.Controls);
 
         #endregion
     }
