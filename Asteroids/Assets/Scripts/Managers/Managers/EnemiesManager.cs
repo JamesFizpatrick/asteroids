@@ -14,7 +14,7 @@ namespace Asteroids.Managers
 
         public Action OnEnemyKilled;
         
-        private float currentSpawnDelay = 10f;
+        private float currentSpawnDelay;
 
         private GameObjectsManager gameObjectsManager;
         private PlayerShipsManager playerShipsManager;
@@ -66,62 +66,28 @@ namespace Asteroids.Managers
             random = new Random();
         }
 
-       
-        public void Unload()
-        {
-            if (enemy)
-            {
-                enemy.Killed -= Enemy_Killed;
-            }
-        }
-        
+
+        public void Unload() => Reset();
+
         #endregion
 
 
-        
+
         #region Private methods
 
         private void SpawnEnemy()
         {
-            GameObject ufoPrefab = DataContainer.GamePreset.Enemy;
-            GameObject ufo = gameObjectsManager.CreateEnemy(ufoPrefab);
+            GameObject ufo = gameObjectsManager.CreateEnemy();
             
-            int maxX = Screen.width / 2;
-            int minX = -Screen.width / 2;
-            int maxY = Screen.height / 2;
-            int minY = -Screen.height / 2;
+            // spawn the enemy behind the screen         
+            ufo.transform.localPosition = GetSpawnCoordinates(
+                -Screen.width / 2,
+                -Screen.height / 2,
+                Screen.width / 2,
+                Screen.height / 2);
 
-            int x;
-            int y;
-            
-            // spawn enemy behind the screen
-            
-            int divider = random.Next(0, 2);
-
-            if (divider == 0)
-            {
-                x = random.GetRandomExclude(
-                    minX - PlayerConstants.UFOSpawnDistance,
-                    maxX + PlayerConstants.UFOSpawnDistance,
-                    minX,
-                    maxX);
-
-                y = random.Next(minY, maxY);
-            }
-            else
-            {
-                x = random.Next(minX, maxX);
-
-                y = random.GetRandomExclude(
-                    minY - PlayerConstants.UFOSpawnDistance,
-                    maxY + PlayerConstants.UFOSpawnDistance,
-                    minY,
-                    maxY);
-            }
-            
-            ufo.transform.localPosition = new Vector3(x, y);
-            
             enemy = ufo.GetComponent<UFO.UFO>();
+
             enemy.Initialize(playerShipsManager.Player, hub);
             enemy.Killed += Enemy_Killed;
         }
@@ -132,6 +98,38 @@ namespace Asteroids.Managers
             yield return new WaitForSeconds(delay);
             SpawnEnemy();
         }
+
+
+        private Vector3 GetSpawnCoordinates(int minX, int minY, int maxX, int maxY)
+        {
+            Vector3 result = Vector3.zero;
+
+            int divider = random.Next(0, 2);
+
+            if (divider == 0)
+            {
+                result.x = random.GetRandomExclude(
+                    minX - PlayerConstants.UFOSpawnDistance,
+                    maxX + PlayerConstants.UFOSpawnDistance,
+                    minX,
+                    maxX);
+
+                result.y = random.Next(minY, maxY);
+            }
+            else
+            {
+                result.x = random.Next(minX, maxX);
+
+                result.y = random.GetRandomExclude(
+                    minY - PlayerConstants.UFOSpawnDistance,
+                    maxY + PlayerConstants.UFOSpawnDistance,
+                    minY,
+                    maxY);
+            }
+
+            return result;
+        }
+
 
         #endregion
         

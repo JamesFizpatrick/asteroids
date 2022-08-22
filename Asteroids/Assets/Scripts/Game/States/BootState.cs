@@ -28,7 +28,6 @@ namespace Asteroids.Game
 
         public void Enter()
         {
-            ManagersHub.Instance.Initialize();
             gameStateMachine.EnterState<MainMenuState>();
         }
 

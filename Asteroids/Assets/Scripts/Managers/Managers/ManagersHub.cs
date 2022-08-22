@@ -22,30 +22,27 @@ namespace Asteroids.Managers
 
         #region Properties
 
-        public static ManagersHub Instance => instance ??= new ManagersHub();
+        public static ManagersHub Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ManagersHub();
+                    instance.Initialize();
+                }
+
+                return instance;
+            }
+            
+        }
 
         #endregion
 
 
     
         #region Public methods
-
-        public void Initialize()
-        {
-            IEnumerable<Type> managerEntites = GetAllManagerEntities();
-          
-            foreach (Type managerType in managerEntites)
-            {
-                AddManager(managerType);
-            }
-            
-            foreach (KeyValuePair<Type, IManager> pair in managers)
-            {
-                pair.Value.Initialize(instance);
-            }
-        }
-
-
+       
         public void Update()
         {
             foreach (IUpdatableManager manager in updatableManagers)
@@ -64,7 +61,7 @@ namespace Asteroids.Managers
         }
 
     
-        public TManagerType GetManager<TManagerType>()
+        public TManagerType GetManager<TManagerType>() where TManagerType : IManager
         {
             Type managerType = typeof(TManagerType);
 
@@ -83,6 +80,22 @@ namespace Asteroids.Managers
 
 
         #region Private methods
+
+        private void Initialize()
+        {
+            IEnumerable<Type> managerEntites = GetAllManagerEntities();
+
+            foreach (Type managerType in managerEntites)
+            {
+                AddManager(managerType);
+            }
+
+            foreach (KeyValuePair<Type, IManager> pair in managers)
+            {
+                pair.Value.Initialize(instance);
+            }
+        }
+
 
         private void AddManager(Type managerType)
         {

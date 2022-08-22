@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Asteroids.Managers;
 
 
 namespace Asteroids.Game
@@ -17,7 +18,7 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public GameStateMachine()
+        public GameStateMachine(IManagersHub managersHub)
         {
             states = new Dictionary<Type, IExitableState>
             {

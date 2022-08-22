@@ -22,13 +22,13 @@ namespace Asteroids.Managers
         public GameObject CreateBullet(GameObject bulletPrefab) => CreateObject(bulletPrefab, bulletsRoot);
 
 
-        public GameObject CreatePlayerShip(GameObject shipPrefab) => CreateObject(shipPrefab, playerShipsRoot);
+        public GameObject CreatePlayerShip() => CreateObject(DataContainer.GamePreset.Ship, playerShipsRoot);
 
 
         public GameObject CreateAsteroid(GameObject asteroidPrefab) => CreateObject(asteroidPrefab, asteroidsRoot);
 
         
-        public GameObject CreateEnemy(GameObject enemyPrefab) => CreateObject(enemyPrefab, enemiesRoot);
+        public GameObject CreateEnemy() => CreateObject(DataContainer.GamePreset.Enemy, enemiesRoot);
 
 
         public GameObject CreateVFX(GameObject vfxPrefab) => CreateObject(vfxPrefab, asteroidsRoot);

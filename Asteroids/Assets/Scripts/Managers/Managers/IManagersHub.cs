@@ -2,6 +2,6 @@ namespace Asteroids.Managers
 {
     public interface IManagersHub
     {
-        TManagerType GetManager<TManagerType>();
+        TManagerType GetManager<TManagerType>() where TManagerType : IManager;
     }
 }

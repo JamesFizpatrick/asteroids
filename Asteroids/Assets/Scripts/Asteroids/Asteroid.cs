@@ -1,5 +1,7 @@
 using System;
 using Asteroids.Handlers;
+using Asteroids.Managers;
+using Asteroids.VFX;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +25,9 @@ namespace Asteroids.Asteroids
 
         System.Random random;
 
+        SoundManager soundManager;
+        VFXManager vfxManager;
+
         #endregion
 
 
@@ -40,15 +45,6 @@ namespace Asteroids.Asteroids
         
         #region Unity lifecycle
 
-        private void Awake()
-        {
-            random = new System.Random();
-
-            weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
-            SelectMineralsTexture();
-        }
-
-
         private void FixedUpdate()
         {
             transform.Translate(currentMoveDirection * moveSpeed);
@@ -63,6 +59,18 @@ namespace Asteroids.Asteroids
 
         
         #region Public methods
+
+        public void Init(SoundManager soundManager, VFXManager vfxManager)
+        {
+            random = new System.Random();
+
+            this.soundManager = soundManager;
+            this.vfxManager = vfxManager;
+
+            weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
+            SelectMineralsTexture();
+        }
+
 
         public void OverrideDirection(Vector3 newDirection) => currentMoveDirection = newDirection;
 
@@ -85,6 +93,9 @@ namespace Asteroids.Asteroids
         {
             if (inputCollider.gameObject.layer == weaponLayerMask)
             {
+                soundManager.PlaySound(SoundType.Explosion);
+                vfxManager.SpawnVFX(VFXType.Explosion, transform.localPosition);
+
                 gameObject.SetActive(false);
                 Destroyed?.Invoke(this);
             }

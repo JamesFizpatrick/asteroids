@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Asteroids.Asteroids;
 using Asteroids.Handlers;
-using Asteroids.VFX;
 using UnityEngine;
-using Random = System.Random;
 
 
 namespace Asteroids.Managers
@@ -19,11 +16,8 @@ namespace Asteroids.Managers
         private SoundManager soundManager;
         private VFXManager vfxManager;
         private GameObjectsManager gameObjectsManager;
-        
-        private Dictionary<AsteroidType, List<GameObject>> asteroidsPool =
-            new Dictionary<AsteroidType, List<GameObject>>();
 
-        private Random random;
+        private AsteroidsPool asteroidsPool;
         
         #endregion
         
@@ -33,71 +27,30 @@ namespace Asteroids.Managers
         
         public void SpawnAsteroids(int quantity, Vector3Int playerPosition, int safeRadius)
         {
-            int minX = playerPosition.x - safeRadius;
-            int maxX = playerPosition.x + safeRadius;
-            int minY = playerPosition.y - safeRadius;
-            int maxY = playerPosition.y + safeRadius;
+            List<Asteroid> asteroids = asteroidsPool.SpawnAsteroids(quantity, playerPosition, safeRadius);
 
-            // spawn asteroids around the player not crossing safe zone
-            for (int i = 0; i < quantity; i++)
+            foreach (Asteroid asteroid in asteroids)
             {
-                var positionX = random.GetRandomExclude(-Screen.width / 2,
-                    Screen.width / 2,
-                    minX,
-                    maxX);
-                var positionY = random.GetRandomExclude(-Screen.height / 2,
-                    Screen.height / 2,
-                    minY,
-                    maxY);
-                var position = new Vector3(positionX, positionY);
-
-                var directionX = positionX > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
-                var directionY = positionY > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
-                
-                var direction = new Vector3(directionX, directionY);
-                
-                Asteroid asteroid = SpawnAsteroid(AsteroidType.Huge, position);
-                asteroid.OverrideDirection(direction);
+                asteroid.Destroyed += Asteroid_Destroyed;
+                asteroid.Init(soundManager, vfxManager);
             }
         }
 
-
-        public int GetActiveAsteroidsCount() => GetActiveAsteroids().Count;
+       
+        public int GetActiveAsteroidsCount() => asteroidsPool.GetActiveAsteroidsCount();
 
         
         public List<SpawnAsteroidData> GetActiveAsteroidsData()
         {
-            List<SpawnAsteroidData> result = new List<SpawnAsteroidData>();
-            
-            List<GameObject> activeAsteroids = GetActiveAsteroids();
-
-            foreach (GameObject activeAsteroid in activeAsteroids)
-            {
-                BoxCollider2D collider = activeAsteroid.GetComponent<BoxCollider2D>();
-                Vector2 colliderSize = new Vector2(collider.size.x + PlayerConstants.AsteroidBorderGap,
-                    collider.size.y + PlayerConstants.AsteroidBorderGap);
-                
-                SpawnAsteroidData data = new SpawnAsteroidData(activeAsteroid.transform.localPosition, colliderSize);
-                result.Add(data);
-            }
-
-            return result;
+            return asteroidsPool.GetActiveAsteroidsData();
         }
 
             
         public void Reset()
         {
-            foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
-            {
-                foreach (GameObject asteroid in pair.Value)
-                {
-                    Asteroid asteroidComponent = asteroid.GetComponent<Asteroid>();
-                    asteroidComponent.Destroyed -= Asteroid_Destroyed;
-                    UnityEngine.Object.Destroy(asteroid);
-                }
-            }
+            asteroidsPool.Reset();
 
-            asteroidsPool.Clear();
+            //TODO: unsubscribe from Destroyed
         }
 
 
@@ -107,87 +60,53 @@ namespace Asteroids.Managers
             vfxManager = hub.GetManager<VFXManager>();
             gameObjectsManager = hub.GetManager<GameObjectsManager>();
             
-            random = new Random();
+            asteroidsPool = new AsteroidsPool(gameObjectsManager);
         }
-               
+
         #endregion
 
 
 
         #region Private methods
-        
-        private Asteroid SpawnAsteroid(AsteroidType type, Vector3 position)
+
+        private bool TrySpawnSubAsteroids(Asteroid asteroid)
         {
-            Asteroid asteroid = TryReuseAsteroid(type);
-            if (asteroid == null)
+            AsteroidType nextType = asteroid.Type.Next();
+
+            if (nextType != AsteroidType.None)
             {
-                asteroid = SpawnNewAsteroid(type);
+                SpawnSubAsteroids(asteroid.CurrentMoveDirection,
+                    nextType,
+                    asteroid.transform.localPosition);
+
+                return true;
             }
-            
-            asteroid.transform.localPosition = position;
+
+            return false;
+        }
+
+
+        private void SpawnSubAsteroids(Vector3 direction, AsteroidType nextType, Vector3 parentLocalPosition)
+        {
+            Asteroid leftAsteroid = CreateChildAsteroid(nextType, parentLocalPosition);
+            Asteroid rightAsteroid = CreateChildAsteroid(nextType, parentLocalPosition);
+
+            (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(30f);
+
+            leftAsteroid.OverrideDirection(leftVector);
+            rightAsteroid.OverrideDirection(rightVector);
+        }
+
+
+        private Asteroid CreateChildAsteroid(AsteroidType nextType, Vector3 position)
+        {
+            Asteroid asteroid = asteroidsPool.SpawnAsteroid(nextType, position);
+            asteroid.Destroyed += Asteroid_Destroyed;
+            asteroid.Init(soundManager, vfxManager);
+
             return asteroid;
         }
-        
-        
-        private Asteroid SpawnNewAsteroid(AsteroidType type)
-        {
-            Asteroid[] asteroids = DataContainer.GamePreset.Asteroids;
-            List<Asteroid> selectedAsteroid = asteroids.Where(a => a.Type == type).ToList();
 
-            int index = random.Next(0, selectedAsteroid.Count);
-
-            GameObject asteroid = gameObjectsManager.CreateAsteroid(selectedAsteroid[index].gameObject);
-
-            if (asteroidsPool.ContainsKey(type))
-            {
-                List<GameObject> asteroidsList = asteroidsPool[type];
-                asteroidsList.Add(asteroid);
-                asteroidsPool[type] = asteroidsList;
-            }
-            else
-            {
-                asteroidsPool.Add(type, new List<GameObject>(){asteroid});
-            }
-
-            Asteroid asteroidComponent = asteroid.GetComponent<Asteroid>();
-            asteroidComponent.Destroyed += Asteroid_Destroyed;
-            
-            return asteroidComponent;
-        }
-
-        
-        private Asteroid TryReuseAsteroid(AsteroidType type)
-        {
-            if (!asteroidsPool.ContainsKey(type))
-            {
-                return null;
-            }
-            
-            List<GameObject> spawnedAsteroids = asteroidsPool[type];
-            GameObject reusableAsteroid = spawnedAsteroids.Find(asteroid => !asteroid.activeSelf);
-
-            if (reusableAsteroid == null)
-            {
-                return null;
-            }
-            
-            reusableAsteroid.SetActive(true);
-            return reusableAsteroid.GetComponent<Asteroid>();
-        }
-        
-        
-        private List<GameObject> GetActiveAsteroids()
-        {
-            List<GameObject> asteroids = new List<GameObject>();
-            foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
-            {
-                IEnumerable<GameObject> activeAsteroids = pair.Value.Where(x => x.activeSelf);
-                asteroids.AddRange(activeAsteroids);
-            }
-
-            return asteroids;
-        }
-        
         #endregion
 
 
@@ -197,40 +116,14 @@ namespace Asteroids.Managers
         private void Asteroid_Destroyed(Asteroid asteroid)
         {
             asteroid.Destroyed -= Asteroid_Destroyed;
-            
-            soundManager.PlaySound(SoundType.Explosion);
-            vfxManager.SpawnVFX(VFXType.Explosion, asteroid.transform.localPosition);
-            
-            // Spawn two smaller asteroids
-            Vector3 direction = asteroid.CurrentMoveDirection;
-            AsteroidType nextType = asteroid.Type.Next();
-            Vector3 parentLocalPosition = asteroid.transform.localPosition;
-            
-            if (nextType != AsteroidType.None)
-            {
-                Asteroid leftAsteroid = CreateChildAsteroid(nextType, parentLocalPosition);
-                Asteroid rightAsteroid = CreateChildAsteroid(nextType, parentLocalPosition);
-                
-                (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(30f);
-                
-                leftAsteroid.OverrideDirection(leftVector);
-                rightAsteroid.OverrideDirection(rightVector);
-            }
-            else if (GetActiveAsteroidsCount() == 0)
+
+            bool spawned = TrySpawnSubAsteroids(asteroid);
+            if (!spawned && GetActiveAsteroidsCount() == 0)
             {
                 OnAllAsteroidsDestroyed?.Invoke();
             }
         }
 
-
-        private Asteroid CreateChildAsteroid(AsteroidType nextType, Vector3 position)
-        {
-            Asteroid asteroid = SpawnAsteroid(nextType, position);
-            asteroid.Destroyed += Asteroid_Destroyed;
-
-            return asteroid;
-        }
-        
         #endregion
     }
 }

@@ -8,7 +8,9 @@ namespace Asteroids.Managers
     public class BoundsManager : IManager, IUnloadableManager
     {
         #region Fields
-        
+
+        private const string ObjectName = "BoundsController";
+
         private int playerProjectilesLayer;
         private int enemyProjectilesLayer;
         private int playerLayer;
@@ -26,22 +28,8 @@ namespace Asteroids.Managers
         public void Initialize(IManagersHub hub)
         {
             InitLayers();
-            
-            GameObject boundsControllerGameObject = new GameObject("BoundsController");
-            
-            boundsControllerGameObject.transform.parent = GameSceneReferences.MainCanvas.transform;
-            boundsControllerGameObject.AddComponent<RectTransform>();
-            
-            BoxCollider2D boxCollider = boundsControllerGameObject.AddComponent<BoxCollider2D>();
-            boxCollider.isTrigger = true;
 
-            Vector2 size = GameSceneReferences.MainCanvas.pixelRect.max;
-            Vector2 scale = GameSceneReferences.MainCanvas.GetComponent<RectTransform>().localScale;
-            boxCollider.size = size * scale + new Vector2(20f, 20f);
-            boxCollider.offset = Vector3.zero;
-                    
-            Rigidbody2D rigidBody = boundsControllerGameObject.gameObject.AddComponent<Rigidbody2D>();
-            rigidBody.bodyType = RigidbodyType2D.Kinematic;
+            GameObject boundsControllerGameObject = InitManagersObject();
 
             boundsController = boundsControllerGameObject.AddComponent<BoundsController>();
             boundsController.OnCollisionExit += BoundsController_OnCollisionExit;
@@ -95,7 +83,29 @@ namespace Asteroids.Managers
             asteroidLayer = LayerMasksHandler.Asteroid;
             enemyLayer = LayerMasksHandler.Enemy;
         }
-        
+
+
+        private GameObject InitManagersObject()
+        {
+            GameObject go = new GameObject(ObjectName);
+
+            go.transform.parent = GameSceneReferences.MainCanvas.transform;
+            go.AddComponent<RectTransform>();
+
+            BoxCollider2D boxCollider = go.AddComponent<BoxCollider2D>();
+            boxCollider.isTrigger = true;
+
+            Vector2 size = GameSceneReferences.MainCanvas.pixelRect.max;
+            Vector2 scale = GameSceneReferences.MainCanvas.GetComponent<RectTransform>().localScale;
+            boxCollider.size = size * scale + new Vector2(20f, 20f);
+            boxCollider.offset = Vector3.zero;
+
+            Rigidbody2D rigidBody = go.gameObject.AddComponent<Rigidbody2D>();
+            rigidBody.bodyType = RigidbodyType2D.Kinematic;
+
+            return go;
+        }
+
         #endregion
 
         

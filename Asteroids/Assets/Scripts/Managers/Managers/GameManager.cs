@@ -11,8 +11,6 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action<GameState> OnGameStateChanged;
-
         private int currentLevelPresetIndex = -1;
 
         private LevelsPreset.LevelPreset currentLevelPreset;
@@ -166,7 +164,7 @@ namespace Asteroids.Managers
             }
             else
             {
-                playerShipsManager.RespawnPlayer(2f, 1f, 2f);
+                playerShipsManager.RespawnPlayer(1f, 1f, 2f);
             }
         }
 
