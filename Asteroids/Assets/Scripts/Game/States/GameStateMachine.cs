@@ -23,9 +23,12 @@ namespace Asteroids.Game
             states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootState)] = new BootState(this),
-                [typeof(MainMenuState)] = new MainMenuState(this),
-                [typeof(StartGameState)] = new StartGameState(this),
-                [typeof(GameplayState)] = new GameplayState(this)
+                [typeof(MainMenuState)] = new MainMenuState(this, managersHub.GetManager<UIManager>()),
+                [typeof(StartGameState)] = new StartGameState(this, managersHub.GetManager<UIManager>(),
+                    managersHub.GetManager<GameManager>()),
+                [typeof(GameplayState)] = new GameplayState(this, managersHub.GetManager<GameManager>(),
+                    managersHub.GetManager<UIManager>()),
+                [typeof(InterState)] = new InterState(this, managersHub.GetManager<UIManager>())
             };
         }
 
@@ -65,7 +68,7 @@ namespace Asteroids.Game
 
             TState newState = GetState<TState>();
             currentState = newState;
-
+            
             return newState;
         }
 

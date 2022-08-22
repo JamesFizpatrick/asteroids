@@ -12,7 +12,7 @@ namespace Asteroids
 
         private void Start()
         {
-            stateMachine = new GameStateMachine();
+            stateMachine = new GameStateMachine(ManagersHub.Instance);
             stateMachine.EnterState<BootState>();
         }
 

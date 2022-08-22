@@ -1,4 +1,5 @@
 ﻿using Asteroids.Managers;
+using Asteroids.UI;
 
 namespace Asteroids.Game
 {
@@ -7,7 +8,8 @@ namespace Asteroids.Game
         #region Fields
 
         private GameStateMachine gameStateMachine;
-        private IManagersHub managersHub;
+        private GameManager gameManager;
+        private UIManager uiManager;
 
         #endregion
 
@@ -15,10 +17,11 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public GameplayState(GameStateMachine gameStateMachine, IManagersHub managersHub)
+        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
-            this.managersHub = managersHub;
+            this.gameManager = gameManager;
+            this.uiManager = uiManager;
         }
 
         #endregion
@@ -29,11 +32,35 @@ namespace Asteroids.Game
 
         public void Enter()
         {
-            // Subscribe to events
+            gameManager.OnPlayerWin += GameManager_OnPLayerWin;
+            gameManager.OnPlayerLose += GameManager_OnPlayerLose;
         }
 
-        public void Exit() { }
 
+        public void Exit()
+        {
+            gameManager.OnPlayerWin -= GameManager_OnPLayerWin;
+            gameManager.OnPlayerLose -= GameManager_OnPlayerLose;
+        }
+
+        #endregion
+
+
+        #region Event handlers
+
+        private void GameManager_OnPLayerWin()
+        {
+            gameManager.StopGame();
+            gameStateMachine.EnterState<InterState>();
+        }
+        
+        
+        private void GameManager_OnPlayerLose()
+        {
+            gameManager.StopGame();
+            uiManager.ShowScreen<LoseScreen>();
+        }
+        
         #endregion
     }
 }

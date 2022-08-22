@@ -31,7 +31,7 @@ namespace Asteroids.UI
         private void StartButton_OnClick()
         {
             GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
-            gameManager.ResetGame();
+            gameManager.Reset();
 
             CloseScreen();
         }

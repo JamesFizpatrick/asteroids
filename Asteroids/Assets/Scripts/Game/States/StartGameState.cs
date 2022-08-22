@@ -9,6 +9,8 @@ namespace Asteroids.Game
         #region Fields
 
         private GameStateMachine gameStateMachine;
+        private UIManager uiManager;
+        private GameManager gameManager;
 
         #endregion
 
@@ -16,8 +18,12 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public StartGameState(GameStateMachine gameStateMachine) =>
+        public StartGameState(GameStateMachine gameStateMachine, UIManager uiManager, GameManager gameManager)
+        {            
             this.gameStateMachine = gameStateMachine;
+            this.uiManager = uiManager;
+            this.gameManager = gameManager;
+        }
 
         #endregion
 
@@ -27,12 +33,8 @@ namespace Asteroids.Game
 
         public void Enter()
         {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
             uiManager.ShowScreen<GameScreen>();
-
-            GameManager gameManager = ManagersHub.Instance.GetManager<GameManager>();
             gameManager.StartGame();
-
             gameStateMachine.EnterState<GameplayState>();
         }
 

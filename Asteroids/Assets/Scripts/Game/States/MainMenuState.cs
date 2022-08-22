@@ -9,6 +9,7 @@ namespace Asteroids.Game
         #region Fields
 
         private GameStateMachine gameStateMachine;
+        private UIManager uiManager;
 
         #endregion
 
@@ -16,9 +17,10 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public MainMenuState(GameStateMachine gameStateMachine)
+        public MainMenuState(GameStateMachine gameStateMachine, UIManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
+            this.uiManager = uiManager;
         }
 
         #endregion
@@ -29,7 +31,6 @@ namespace Asteroids.Game
 
         public void Enter()
         {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
             uiManager.ShowScreen<MenuScreen>(gameStateMachine);
         }
 

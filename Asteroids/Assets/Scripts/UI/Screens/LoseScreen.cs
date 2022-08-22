@@ -40,7 +40,7 @@ namespace Asteroids.UI
         private void ResetButton_OnClick()
         {
             GameManager gameManager = managersHub.GetManager<GameManager>();
-            gameManager.ResetGame();
+            gameManager.Reset();
 
             CloseScreen();
         }

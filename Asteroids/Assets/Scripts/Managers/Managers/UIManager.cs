@@ -22,7 +22,7 @@ namespace Asteroids.Managers
         public void Initialize(IManagersHub hub) => managersHub = hub;
 
 
-        public void ShowScreen<TScreenType>(object parameter = null)
+        public BaseScreen ShowScreen<TScreenType>(object parameter = null)
         {
             if (currentScreen != null)
             {
@@ -34,6 +34,8 @@ namespace Asteroids.Managers
                 GameSceneReferences.MainCanvas.transform);
 
             currentScreen.Init(managersHub, parameter);
+
+            return currentScreen;
         }
 
 

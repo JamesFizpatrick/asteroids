@@ -25,7 +25,6 @@ namespace Asteroids.UI
 
         public void OnDestroy()
         {
-            gameManager.OnGameStateChanged -= GameManager_OnGameStateChanged;
             playerShipsManager.OnPlayerHealthValueChanged -= GameManager_OnPlayerHealthValueChanged;
         }
 
@@ -40,7 +39,6 @@ namespace Asteroids.UI
             gameManager = hub.GetManager<GameManager>();
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
 
-            gameManager.OnGameStateChanged += GameManager_OnGameStateChanged;
             playerShipsManager.OnPlayerHealthValueChanged += GameManager_OnPlayerHealthValueChanged;
 
             SetHealth(DataContainer.GamePreset.PlayerLivesQuantity);
@@ -85,16 +83,7 @@ namespace Asteroids.UI
         #region Event handlers
 
         private void GameManager_OnPlayerHealthValueChanged(int healthValue) => SetHealth(healthValue);
-
-
-        private void GameManager_OnGameStateChanged(GameState state)
-        {
-            if (state == GameState.InGame)
-            {
-                SetHealth(DataContainer.GamePreset.PlayerLivesQuantity);
-            }
-        }
-            
+        
         #endregion
     }
 }
