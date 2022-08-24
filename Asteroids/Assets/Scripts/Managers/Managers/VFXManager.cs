@@ -5,13 +5,15 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class VFXManager : IManager
+    public class VFXManager : IManager, IUnloadableManager
     {
         #region Fields
     
         private GameObjectsManager gameObjectsManager;
-        private List<VFX.VFX> currentVFXes = new List<VFX.VFX>();
+        private GameManager gameManager;
         
+        private List<VFX.VFX> currentVFXes = new List<VFX.VFX>();
+
         #endregion
 
         
@@ -29,17 +31,35 @@ namespace Asteroids.Managers
             
             currentVFXes.Add(vfx);
         }
-    
-    
-        public void Initialize(IManagersHub hub) =>
+
+
+        public void Initialize(IManagersHub hub)
+        {
             gameObjectsManager = hub.GetManager<GameObjectsManager>();
+            gameManager = hub.GetManager<GameManager>();
 
+            gameManager.OnPlayerLose += GameManager_OnPlayerLose;
+            gameManager.OnPlayerWin += GameManager_OnPlayerWin;
+        }
 
+        
         public void Reset()
         {
             foreach (VFX.VFX vfx in currentVFXes)
             {
                 Object.Destroy(vfx.gameObject);
+            }
+        }
+        
+        
+        public void Unload()
+        {
+            Reset();
+
+            if (gameManager != null)
+            {
+                gameManager.OnPlayerLose += GameManager_OnPlayerLose;
+                gameManager.OnPlayerWin += GameManager_OnPlayerWin;
             }
         }
         
@@ -54,6 +74,17 @@ namespace Asteroids.Managers
             currentVFXes.Remove(vfx);
             vfx.Destroyed -= VFX_Destroyed;
         }
+
+        #endregion
+
+
+        
+        #region Event handlers
+
+        private void GameManager_OnPlayerWin() => Reset();
+
+        
+        private void GameManager_OnPlayerLose() => Reset();
 
         #endregion
     }

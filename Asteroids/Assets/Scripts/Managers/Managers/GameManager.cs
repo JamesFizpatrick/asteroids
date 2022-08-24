@@ -20,7 +20,6 @@ namespace Asteroids.Managers
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
-        private VFXManager vfxManager;
 
         #endregion
 
@@ -33,7 +32,6 @@ namespace Asteroids.Managers
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
             asteroidsManager = hub.GetManager<AsteroidsManager>();
             enemiesManager = hub.GetManager<EnemiesManager>();
-            vfxManager = hub.GetManager<VFXManager>();
         }
 
         #endregion
@@ -89,7 +87,6 @@ namespace Asteroids.Managers
             playerShipsManager.Reset();
             asteroidsManager.Reset();
             enemiesManager.Reset();
-            vfxManager.Reset();
 
             UnsubscribeFromEvents();
         }
