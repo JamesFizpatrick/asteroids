@@ -1,5 +1,5 @@
 ﻿using Asteroids.Managers;
-using Asteroids.UI;
+
 
 namespace Asteroids.Game
 {
@@ -51,14 +51,14 @@ namespace Asteroids.Game
         private void GameManager_OnPLayerWin()
         {
             gameManager.StopGame();
-            gameStateMachine.EnterState<InterState>();
+            gameStateMachine.EnterState<InterWinState>();
         }
         
         
         private void GameManager_OnPlayerLose()
         {
             gameManager.StopGame();
-            uiManager.ShowScreen<LoseScreen>();
+            gameStateMachine.EnterState<InterLoseState>();
         }
         
         #endregion

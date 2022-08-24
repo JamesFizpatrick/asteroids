@@ -1,7 +1,6 @@
 using System;
 using Asteroids.Data;
 using Asteroids.Handlers;
-using Asteroids.UI;
 using UnityEngine;
 
 
@@ -21,7 +20,6 @@ namespace Asteroids.Managers
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
-        private UIManager uiManager;
         private VFXManager vfxManager;
 
         #endregion
@@ -35,7 +33,6 @@ namespace Asteroids.Managers
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
             asteroidsManager = hub.GetManager<AsteroidsManager>();
             enemiesManager = hub.GetManager<EnemiesManager>();
-            uiManager = hub.GetManager<UIManager>();
             vfxManager = hub.GetManager<VFXManager>();
         }
 

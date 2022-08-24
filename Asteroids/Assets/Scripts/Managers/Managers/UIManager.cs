@@ -1,4 +1,3 @@
-using System;
 using Asteroids.Handlers;
 using Asteroids.UI;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace Asteroids.Managers
         public void Initialize(IManagersHub hub) => managersHub = hub;
 
 
-        public BaseScreen ShowScreen<TScreenType>(object parameter = null)
+        public BaseScreen ShowScreen<TScreenType>(object parameter = null) where TScreenType : BaseScreen
         {
             if (currentScreen != null)
             {
@@ -37,23 +36,7 @@ namespace Asteroids.Managers
 
             return currentScreen;
         }
-
-
-        // TODO: Remove callback
-        public void ShowScreen<TScreenType>(Action onClose, object parameter = null)
-        {
-            if (currentScreen != null)
-            {
-                currentScreen.CloseScreen();
-            }
-
-            BaseScreen screenGO = DataContainer.UiPreset.GetScreen<TScreenType>();
-            currentScreen = GameObject.Instantiate(screenGO,
-                GameSceneReferences.MainCanvas.transform);
-
-            currentScreen.OnClose += () => onClose?.Invoke();
-        }
-
+        
         #endregion
     }
 }

@@ -28,7 +28,9 @@ namespace Asteroids.Game
                     managersHub.GetManager<GameManager>()),
                 [typeof(GameplayState)] = new GameplayState(this, managersHub.GetManager<GameManager>(),
                     managersHub.GetManager<UIManager>()),
-                [typeof(InterState)] = new InterState(this, managersHub.GetManager<UIManager>())
+                [typeof(InterWinState)] = new InterWinState(this, managersHub.GetManager<UIManager>()),
+                [typeof(InterLoseState)] = new InterLoseState(this, managersHub.GetManager<UIManager>(),
+                    managersHub.GetManager<GameManager>())
             };
         }
 

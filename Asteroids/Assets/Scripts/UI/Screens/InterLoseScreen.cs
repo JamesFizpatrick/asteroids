@@ -1,23 +1,26 @@
-using Asteroids.Managers;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 
 namespace Asteroids.UI
 {
-    public class LoseScreen : BaseScreen
+    public class InterLoseScreen : BaseScreen
     {
         #region Fields
 
+        public Action OnReset;
+        public Action OnExitToMainMenu;
+        
         [SerializeField] private Button resetButton;
         [SerializeField] private Button mainMenuButton;
-
+        
         #endregion
 
 
 
         #region Unity lifecycle
-
+        
         private void OnEnable()
         {           
             resetButton.onClick.AddListener(ResetButton_OnClick);
@@ -39,18 +42,15 @@ namespace Asteroids.UI
 
         private void ResetButton_OnClick()
         {
-            GameManager gameManager = managersHub.GetManager<GameManager>();
-            gameManager.Reset();
-
+            OnReset?.Invoke();
             CloseScreen();
         }
     
-
-
+        
         private void MainMenuButton_OnClick()
         {
-            UIManager uiManager = managersHub.GetManager<UIManager>();
-            uiManager.ShowScreen<MenuScreen>();
+            OnExitToMainMenu?.Invoke();
+            CloseScreen();
         }
 
         #endregion

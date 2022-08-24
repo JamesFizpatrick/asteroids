@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Asteroids.UI
 {
-    public class InterScreen : BaseScreen
+    public class InterWinScreen : BaseScreen
     {
         #region Fields
 
@@ -28,7 +28,7 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void ActionButton_OnClick() => Destroy(gameObject);
+        private void ActionButton_OnClick() => CloseScreen();
 
         #endregion
     }
