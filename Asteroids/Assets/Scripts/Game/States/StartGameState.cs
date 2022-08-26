@@ -33,8 +33,6 @@ namespace Asteroids.Game
 
         public void Enter(GameType parameter)
         {
-            uiManager.ShowScreen<GameScreen>();
-            
             gameManager.SetGameplayType(parameter);
             gameManager.StartGame();
             

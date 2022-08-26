@@ -11,8 +11,8 @@ namespace Asteroids.UI
 
         public Action OnClose;
 
-        protected IManagersHub managersHub;
-        protected object parameter;
+        protected IManagersHub ManagersHub;
+        protected object Parameter;
 
         #endregion
 
@@ -20,10 +20,12 @@ namespace Asteroids.UI
 
         #region Public methods
 
-        public virtual void Init(IManagersHub hub, object parameter = null)
+        public void Init(IManagersHub hub, object parameter = null)
         {
-            managersHub = hub;
-            this.parameter = parameter;
+            ManagersHub = hub;
+            Parameter = parameter;
+            
+            Init();
         }
 
 
@@ -32,6 +34,14 @@ namespace Asteroids.UI
             OnClose?.Invoke();
             Destroy(gameObject);
         }
+
+        #endregion
+
+        
+
+        #region Protected methods
+
+        protected virtual void Init() { }
 
         #endregion
     }

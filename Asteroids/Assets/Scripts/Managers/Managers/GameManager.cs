@@ -1,5 +1,6 @@
 using System;
 using Asteroids.Game;
+using UnityEngine;
 
 
 namespace Asteroids.Managers
@@ -18,7 +19,7 @@ namespace Asteroids.Managers
         
         
 
-        #region Protected methods
+        #region Public methods
 
         public void Initialize(IManagersHub hub) => this.hub = hub;
 
@@ -28,6 +29,9 @@ namespace Asteroids.Managers
             gameplayController.OnPlayerLose -= GameplayController_OnPlayerLose;
             gameplayController.OnPlayerWin -= GameplayController_OnPlayerWin;
         }
+        
+        
+        public BaseGameplayController CurrentGameplayController() => gameplayController;
         
         #endregion
 

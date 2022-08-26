@@ -41,12 +41,12 @@ namespace Asteroids.UI
 
         private void Start()
         {
-            uiManager = managersHub.GetManager<UIManager>();
+            uiManager = ManagersHub.GetManager<UIManager>();
 
-            if (parameter != null)
+            if (Parameter != null)
             {
                 // TODO: Should be more clear
-                stateMachine = parameter as GameStateMachine;
+                stateMachine = Parameter as GameStateMachine;
             }
         }
 

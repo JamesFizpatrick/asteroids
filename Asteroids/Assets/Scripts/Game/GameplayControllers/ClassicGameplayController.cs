@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Data;
 using Asteroids.Handlers;
 using Asteroids.Managers;
@@ -8,6 +9,8 @@ namespace Asteroids.Game
 {
     public class ClassicGameplayController : BaseGameplayController
     {
+        public Action<int> OnLevelIndexChanged;
+        
         private PlayerShipsManager playerShipsManager;
         private EnemiesManager enemiesManager;
         private AsteroidsManager asteroidsManager;
@@ -15,8 +18,8 @@ namespace Asteroids.Game
         private LevelsPreset.LevelPreset currentLevelPreset;
 
         
-        public ClassicGameplayController(PlayerShipsManager playerShipsManager,
-            EnemiesManager enemiesManager, AsteroidsManager asteroidsManager)
+        public ClassicGameplayController(PlayerShipsManager playerShipsManager, EnemiesManager enemiesManager,
+            AsteroidsManager asteroidsManager)
         {
             this.playerShipsManager = playerShipsManager;
             this.enemiesManager = enemiesManager;
@@ -27,6 +30,7 @@ namespace Asteroids.Game
         public override void StartGame()
         {
             CurrentLevelIndex++;
+            OnLevelIndexChanged?.Invoke(CurrentLevelIndex);
             
             LevelsPreset gamePreset = DataContainer.LevelsPreset;
             currentLevelPreset = gamePreset.GetLevelPreset(CurrentLevelIndex);
@@ -47,6 +51,7 @@ namespace Asteroids.Game
         {
             StopGame();
             CurrentLevelIndex = -1;
+            OnLevelIndexChanged?.Invoke(CurrentLevelIndex);
         }
         
         

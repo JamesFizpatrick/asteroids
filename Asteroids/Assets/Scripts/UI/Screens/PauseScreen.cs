@@ -20,7 +20,7 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
 
-        private void Start() => uiManager = ManagersHub.Instance.GetManager<UIManager>();
+        private void Start() => uiManager = Managers.ManagersHub.Instance.GetManager<UIManager>();
 
 
         private void OnEnable()
@@ -42,7 +42,7 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void ResumeButton_OnClick() => uiManager.ShowScreen<GameScreen>();
+        private void ResumeButton_OnClick() => uiManager.ShowScreen<ClassicGameScreen>();
 
 
         private void MainMenuButton_OnClick() => uiManager.ShowScreen<MenuScreen>();

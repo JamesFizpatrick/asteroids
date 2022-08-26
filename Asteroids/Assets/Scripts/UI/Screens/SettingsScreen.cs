@@ -39,7 +39,7 @@ namespace Asteroids.UI
 
         private void CloseButton_OnClick()
         {
-            UIManager uiManager = ManagersHub.Instance.GetManager<UIManager>();
+            UIManager uiManager = Managers.ManagersHub.Instance.GetManager<UIManager>();
             uiManager.ShowScreen<MenuScreen>();
         }
 

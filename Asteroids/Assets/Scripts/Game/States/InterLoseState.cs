@@ -66,10 +66,11 @@ namespace Asteroids.Game
             screen.OnExitToMainMenu -= Screen_OnExitToMainMenu;
         }
 
+        
         private void RestartGame()
         {
             gameManager.Reset();
-            uiManager.ShowScreen<GameScreen>();
+            uiManager.ShowScreen<ClassicGameScreen>();
             gameManager.StartGame();
             gameStateMachine.EnterState<GameplayState, GameType>(gameType);
         }

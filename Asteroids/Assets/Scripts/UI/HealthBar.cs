@@ -14,7 +14,6 @@ namespace Asteroids.UI
 
         private List<GameObject> pool = new List<GameObject>();
 
-        private GameManager gameManager;
         private PlayerShipsManager playerShipsManager;
 
         #endregion
@@ -34,10 +33,9 @@ namespace Asteroids.UI
 
         #region Public methods
 
-        public void Init(IManagersHub hub)
+        public void Init(PlayerShipsManager playerShipsManager)
         {
-            gameManager = hub.GetManager<GameManager>();
-            playerShipsManager = hub.GetManager<PlayerShipsManager>();
+            this.playerShipsManager = playerShipsManager;
 
             playerShipsManager.OnPlayerHealthValueChanged += GameManager_OnPlayerHealthValueChanged;
 

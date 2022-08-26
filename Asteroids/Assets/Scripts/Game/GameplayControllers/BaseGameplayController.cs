@@ -9,8 +9,12 @@ namespace Asteroids.Game
         
         public Action OnPlayerLose;
         
+        
         protected int CurrentLevelIndex = -1;
 
+        
+        public int GetCurrentLevelIndex() => CurrentLevelIndex;
+        
         
         public abstract void StartGame();
 

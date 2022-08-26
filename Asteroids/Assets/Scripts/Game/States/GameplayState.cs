@@ -1,4 +1,5 @@
 ﻿using Asteroids.Managers;
+using Asteroids.UI;
 
 
 namespace Asteroids.Game
@@ -9,6 +10,7 @@ namespace Asteroids.Game
 
         private GameStateMachine gameStateMachine;
         private GameManager gameManager;
+        private UIManager uiManager;
         
         private GameType gameType;
 
@@ -18,10 +20,11 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager)
+        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;
+            this.uiManager = uiManager;
         }
 
         #endregion
@@ -29,17 +32,23 @@ namespace Asteroids.Game
 
 
         #region Public methods
-
-        public void Enter()
-        {
-            gameManager.OnPlayerWin += GameManager_OnPLayerWin;
-            gameManager.OnPlayerLose += GameManager_OnPlayerLose;
-        }
-
-
+        
         public void Enter(GameType parameter)
         {
+            switch (parameter)
+            {
+                case GameType.Classic:
+                    uiManager.ShowScreen<ClassicGameScreen>(gameManager.CurrentGameplayController() as ClassicGameplayController);
+                    break;
+                case GameType.Survival:
+                    uiManager.ShowScreen<SurvivalGameScreen>(gameManager.CurrentGameplayController() as SurvivalGameplayController);
+                    break;
+            }
+            
             gameType = parameter;
+            
+            gameManager.OnPlayerWin += GameManager_OnPLayerWin;
+            gameManager.OnPlayerLose += GameManager_OnPlayerLose;
         }
 
         public void Exit()
