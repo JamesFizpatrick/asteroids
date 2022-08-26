@@ -24,12 +24,14 @@ namespace Asteroids.Game
             {
                 [typeof(BootState)] = new BootState(this),
                 [typeof(MainMenuState)] = new MainMenuState(this, managersHub.GetManager<UIManager>()),
-                [typeof(StartGameState)] = new StartGameState(this, managersHub.GetManager<UIManager>(),
-                    managersHub.GetManager<GameManager>()),
-                [typeof(GameplayState)] = new GameplayState(this, managersHub.GetManager<GameManager>(), managersHub.GetManager<UIManager>()),
+                [typeof(StartGameState)] = new StartGameState(this, managersHub.GetManager<GameManager>()),
+                [typeof(GameplayState)] = new GameplayState(this, managersHub.GetManager<GameManager>(),
+                    managersHub.GetManager<UIManager>()),
                 [typeof(InterWinState)] = new InterWinState(this, managersHub.GetManager<UIManager>()),
                 [typeof(InterLoseState)] = new InterLoseState(this, managersHub.GetManager<UIManager>(),
-                    managersHub.GetManager<GameManager>())
+                    managersHub.GetManager<GameManager>()),
+                [typeof(PauseState)] = new PauseState(this, managersHub.GetManager<GameManager>(),
+                    managersHub.GetManager<UIManager>())
             };
         }
 

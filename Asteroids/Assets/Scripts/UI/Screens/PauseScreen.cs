@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,9 @@ namespace Asteroids.UI
     {
         #region Fields
 
+        public Action OnResumeButtonPressed;
+        public Action OnMainMenuButtonPressed;
+        
         [SerializeField] private Button resumeButton;
         [SerializeField] private Button mainMenuButton;
 
@@ -42,10 +46,10 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void ResumeButton_OnClick() => uiManager.ShowScreen<ClassicGameScreen>();
+        private void ResumeButton_OnClick() => OnResumeButtonPressed?.Invoke();
 
 
-        private void MainMenuButton_OnClick() => uiManager.ShowScreen<MenuScreen>();
+        private void MainMenuButton_OnClick() => OnMainMenuButtonPressed?.Invoke();
 
         #endregion
     }

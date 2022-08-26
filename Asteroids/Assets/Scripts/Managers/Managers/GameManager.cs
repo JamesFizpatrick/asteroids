@@ -54,6 +54,9 @@ namespace Asteroids.Managers
         public void StopGame() => gameplayController.StopGame();
 
 
+        public void SetPause(bool isActive) => Time.timeScale = isActive ? 0f : 1f;
+
+
         public void Reset() => gameplayController.Reset();
         
         #endregion

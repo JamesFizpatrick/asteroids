@@ -1,5 +1,4 @@
 ﻿using Asteroids.Managers;
-using Asteroids.UI;
 
 
 namespace Asteroids.Game
@@ -9,7 +8,6 @@ namespace Asteroids.Game
         #region Fields
 
         private GameStateMachine gameStateMachine;
-        private UIManager uiManager;
         private GameManager gameManager;
 
         #endregion
@@ -18,10 +16,9 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public StartGameState(GameStateMachine gameStateMachine, UIManager uiManager, GameManager gameManager)
+        public StartGameState(GameStateMachine gameStateMachine, GameManager gameManager)
         {            
             this.gameStateMachine = gameStateMachine;
-            this.uiManager = uiManager;
             this.gameManager = gameManager;
         }
 
