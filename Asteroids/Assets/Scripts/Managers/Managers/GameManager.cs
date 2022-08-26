@@ -1,159 +1,68 @@
 using System;
-using Asteroids.Data;
-using Asteroids.Handlers;
-using UnityEngine;
+using Asteroids.Game;
 
 
 namespace Asteroids.Managers
 {
-    public class GameManager : IManager
+    public class GameManager : IManager, IUnloadableManager
     {
         #region Fields
 
         public Action OnPlayerWin;
         public Action OnPlayerLose;
         
-        private int currentLevelIndex = -1;
-
-        private LevelsPreset.LevelPreset currentLevelPreset;
-
-        private PlayerShipsManager playerShipsManager;
-        private EnemiesManager enemiesManager;
-        private AsteroidsManager asteroidsManager;
-
+        private BaseGameplayController gameplayController;
+        private IManagersHub hub;
+        
         #endregion
-
-
+        
+        
 
         #region Protected methods
 
-        public void Initialize(IManagersHub hub)
-        {
-            playerShipsManager = hub.GetManager<PlayerShipsManager>();
-            asteroidsManager = hub.GetManager<AsteroidsManager>();
-            enemiesManager = hub.GetManager<EnemiesManager>();
-        }
+        public void Initialize(IManagersHub hub) => this.hub = hub;
 
+
+        public void Unload()
+        {
+            gameplayController.OnPlayerLose -= GameplayController_OnPlayerLose;
+            gameplayController.OnPlayerWin -= GameplayController_OnPlayerWin;
+        }
+        
         #endregion
 
 
 
         #region Public methods
 
-        public void StartGame()
+        public void SetGameplayType(GameType gameType)
         {
-            currentLevelIndex++;
-            
-            LevelsPreset gamePreset = DataContainer.LevelsPreset;
-            currentLevelPreset = gamePreset.GetLevelPreset(currentLevelIndex);
-            
-            SpawnEntities();
-            SubscribeToEvents();
-        }
+            gameplayController = GameplayControllerFactory.CreateGameplayController(gameType, hub);
 
-
-        public void StopGame()
-        {
-            ResetManagers();
-            UnsubscribeFromEvents();
-        }
-
-        
-        public void Reset()
-        {
-            StopGame();
-            currentLevelIndex = -1;
-        }
-
-        #endregion
-
-
-
-        #region Private methods
-        
-        private void SpawnEntities()
-        {
-            playerShipsManager.SpawnPlayer();
-            enemiesManager.StartSpawnCoroutine(currentLevelPreset.EnemiesDelay);
-
-            asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
-                Vector3Int.FloorToInt(playerShipsManager.Player.transform.localPosition),
-                PlayerConstants.InitialPlayerSafeRadius);
-        }
-
-
-        private void ResetManagers()
-        {
-            playerShipsManager.Reset();
-            asteroidsManager.Reset();
-            enemiesManager.Reset();
-
-            UnsubscribeFromEvents();
-        }
-
-        
-        private void SubscribeToEvents()
-        {
-            playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
-            playerShipsManager.OnPlayerHealthValueChanged += PlayerShipManager_OnPlayerHealthValueChanged;
-            asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
+            gameplayController.OnPlayerLose += GameplayController_OnPlayerLose;
+            gameplayController.OnPlayerWin += GameplayController_OnPlayerWin;
         }
         
-        
-        private void UnsubscribeFromEvents()
-        {
-            playerShipsManager.OnPlayerKilled -= PlayerShipsManager_OnPlayerKilled;
-            playerShipsManager.OnPlayerHealthValueChanged -= PlayerShipManager_OnPlayerHealthValueChanged;
-            asteroidsManager.OnAllAsteroidsDestroyed -= AsteroidsManager_OnAllAsteroidsDestroyed;
-            enemiesManager.OnEnemyKilled -= EnemiesManager_OnEnemyKilled;
-        }
 
+        public void StartGame() => gameplayController.StartGame();
+
+
+        public void StopGame() => gameplayController.StopGame();
+
+
+        public void Reset() => gameplayController.Reset();
+        
         #endregion
 
 
         
         #region Event handlers
 
-        private void PlayerShipsManager_OnPlayerKilled()
-        {
-            ResetManagers();
-            OnPlayerLose?.Invoke();
-        }
+        private void GameplayController_OnPlayerWin() => OnPlayerWin?.Invoke();
 
 
-        private void PlayerShipManager_OnPlayerHealthValueChanged(int newValue)
-        {
-            if (asteroidsManager.GetActiveAsteroidsCount() == 0 &&
-                !enemiesManager.HasActiveEnemy())
-            {
-                OnPlayerWin?.Invoke();
-            }
-            else
-            {
-                playerShipsManager.RespawnPlayer(1f, 1f, 2f);
-            }
-        }
+        private void GameplayController_OnPlayerLose() => OnPlayerLose?.Invoke();
 
-
-        private void AsteroidsManager_OnAllAsteroidsDestroyed()
-        {
-            if (!enemiesManager.HasActiveEnemy())
-            {
-                ResetManagers();
-                OnPlayerWin?.Invoke();
-            }
-        }
-
-
-        private void EnemiesManager_OnEnemyKilled()
-        {
-            if (asteroidsManager.GetActiveAsteroidsCount() == 0)
-            {
-                ResetManagers();
-                OnPlayerWin?.Invoke();
-            }
-        }
-        
         #endregion
     }
 }

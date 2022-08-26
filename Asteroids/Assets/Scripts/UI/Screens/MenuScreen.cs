@@ -56,7 +56,7 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void StartButton_OnClick() => stateMachine?.EnterState<StartGameState>();
+        private void StartButton_OnClick() => stateMachine?.EnterState<StartGameState, GameType>(GameType.Classic);
 
 
         private void SettingsButton_OnClick() => uiManager.ShowScreen<SettingsScreen>();

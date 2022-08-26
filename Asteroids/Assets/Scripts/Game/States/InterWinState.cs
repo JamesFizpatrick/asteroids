@@ -4,7 +4,7 @@ using Asteroids.UI;
 
 namespace Asteroids.Game
 {
-    public class InterWinState : IState
+    public class InterWinState : IParametricState<GameType>
     {
         #region Fields
 
@@ -12,6 +12,8 @@ namespace Asteroids.Game
         private readonly GameStateMachine gameStateMachine;
         
         private BaseScreen interScreen;
+
+        private GameType gameType;
         
         #endregion
         
@@ -30,12 +32,13 @@ namespace Asteroids.Game
         
         #region Public methods
 
-        public void Enter()
+        public void Enter(GameType parameter)
         {
+            gameType = parameter;
             interScreen = uiManager.ShowScreen<InterWinScreen>();
             interScreen.OnClose += Screen_OnClose;
         }
-        
+
         
         public void Exit()
         {
@@ -49,7 +52,7 @@ namespace Asteroids.Game
         private void Screen_OnClose()
         {
             interScreen.OnClose -= Screen_OnClose;
-            gameStateMachine.EnterState<StartGameState>();
+            gameStateMachine.EnterState<StartGameState, GameType>(gameType);
         }
 
         #endregion

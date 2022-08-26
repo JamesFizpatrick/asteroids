@@ -3,13 +3,14 @@
 
 namespace Asteroids.Game
 {
-    public class GameplayState : IState
+    public class GameplayState : IParametricState<GameType>
     {
         #region Fields
 
         private GameStateMachine gameStateMachine;
         private GameManager gameManager;
-        private UIManager uiManager;
+        
+        private GameType gameType;
 
         #endregion
 
@@ -17,11 +18,10 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager)
+        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;
-            this.uiManager = uiManager;
         }
 
         #endregion
@@ -37,6 +37,11 @@ namespace Asteroids.Game
         }
 
 
+        public void Enter(GameType parameter)
+        {
+            gameType = parameter;
+        }
+
         public void Exit()
         {
             gameManager.OnPlayerWin -= GameManager_OnPLayerWin;
@@ -51,14 +56,14 @@ namespace Asteroids.Game
         private void GameManager_OnPLayerWin()
         {
             gameManager.StopGame();
-            gameStateMachine.EnterState<InterWinState>();
+            gameStateMachine.EnterState<InterWinState, GameType>(gameType);
         }
         
         
         private void GameManager_OnPlayerLose()
         {
             gameManager.StopGame();
-            gameStateMachine.EnterState<InterLoseState>();
+            gameStateMachine.EnterState<InterLoseState, GameType>(gameType);
         }
         
         #endregion

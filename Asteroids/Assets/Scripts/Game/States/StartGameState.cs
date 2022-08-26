@@ -4,7 +4,7 @@ using Asteroids.UI;
 
 namespace Asteroids.Game
 {
-    public class StartGameState : IState
+    public class StartGameState : IParametricState<GameType>
     {
         #region Fields
 
@@ -31,14 +31,17 @@ namespace Asteroids.Game
 
         #region Public methods
 
-        public void Enter()
+        public void Enter(GameType parameter)
         {
             uiManager.ShowScreen<GameScreen>();
+            
+            gameManager.SetGameplayType(parameter);
             gameManager.StartGame();
-            gameStateMachine.EnterState<GameplayState>();
+            
+            gameStateMachine.EnterState<GameplayState, GameType>(parameter);
         }
 
-
+        
         public void Exit() { }
 
         #endregion
