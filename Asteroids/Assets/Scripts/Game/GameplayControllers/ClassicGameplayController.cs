@@ -1,4 +1,3 @@
-using System;
 using Asteroids.Data;
 using Asteroids.Handlers;
 using Asteroids.Managers;
@@ -9,31 +8,29 @@ namespace Asteroids.Game
 {
     public class ClassicGameplayController : BaseGameplayController
     {
-        public Action<int> OnLevelIndexChanged;
-        
-        private PlayerShipsManager playerShipsManager;
-        private EnemiesManager enemiesManager;
-        private AsteroidsManager asteroidsManager;
+        private readonly PlayerShipsManager playerShipsManager;
+        private readonly EnemiesManager enemiesManager;
+        private readonly AsteroidsManager asteroidsManager;
+        private readonly PlayerProgressManager progressManager;
         
         private LevelsPreset.LevelPreset currentLevelPreset;
-
         
         public ClassicGameplayController(PlayerShipsManager playerShipsManager, EnemiesManager enemiesManager,
-            AsteroidsManager asteroidsManager)
+            AsteroidsManager asteroidsManager, PlayerProgressManager progressManager)
         {
             this.playerShipsManager = playerShipsManager;
             this.enemiesManager = enemiesManager;
             this.asteroidsManager = asteroidsManager;
+            this.progressManager = progressManager;
 
         }
 
         public override void StartGame()
         {
-            CurrentLevelIndex++;
-            OnLevelIndexChanged?.Invoke(CurrentLevelIndex);
+            int nexIndex = progressManager.IncreaseLevelIndex(1);
             
             LevelsPreset gamePreset = DataContainer.LevelsPreset;
-            currentLevelPreset = gamePreset.GetLevelPreset(CurrentLevelIndex);
+            currentLevelPreset = gamePreset.GetLevelPreset(nexIndex);
             
             SpawnEntities();
             SubscribeToEvents();
@@ -50,8 +47,7 @@ namespace Asteroids.Game
         public override void Reset()
         {
             StopGame();
-            CurrentLevelIndex = -1;
-            OnLevelIndexChanged?.Invoke(CurrentLevelIndex);
+            progressManager.SetLevelIndex(-1);
         }
         
         

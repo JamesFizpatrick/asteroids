@@ -6,7 +6,7 @@ namespace Asteroids.Game
     public class SurvivalGameplayController : BaseGameplayController
     {
         public SurvivalGameplayController(PlayerShipsManager playerShipsManager, EnemiesManager enemiesManager,
-            AsteroidsManager asteroidsManager)
+            AsteroidsManager asteroidsManager, PlayerProgressManager progressManager)
         {
         }
 

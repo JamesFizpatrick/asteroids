@@ -8,25 +8,28 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private GameStateMachine gameStateMachine;
-        private GameManager gameManager;
-        private UIManager uiManager;
-        
+        private readonly GameStateMachine gameStateMachine;
+        private readonly GameManager gameManager;
+        private readonly UIManager uiManager;
+        private readonly PlayerProgressManager progressManager;
+
         private GameType gameType;
 
         private BaseGameScreen gameScreen;
-        
+
         #endregion
 
 
 
         #region Class lifecycle
 
-        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager)
+        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager,
+            PlayerProgressManager progressManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;
             this.uiManager = uiManager;
+            this.progressManager = progressManager;
         }
 
         #endregion
@@ -40,10 +43,10 @@ namespace Asteroids.Game
             switch (parameter)
             {
                 case GameType.Classic:
-                    gameScreen = CreateScreen<ClassicGameScreen, ClassicGameplayController>();
+                    gameScreen = CreateScreen<ClassicGameScreen>();
                     break;
                 case GameType.Survival:
-                    gameScreen = CreateScreen<SurvivalGameScreen, SurvivalGameplayController>();
+                    gameScreen = CreateScreen<SurvivalGameScreen>();
                     break;
             }
 
@@ -73,12 +76,10 @@ namespace Asteroids.Game
         
         #region MyRegion
 
-        private BaseGameScreen CreateScreen<TGameScreen, TGameplayController>()
+        private BaseGameScreen CreateScreen<TGameScreen>()
             where TGameScreen : BaseGameScreen
-            where TGameplayController : BaseGameplayController
         {
-            TGameplayController gameplayController = gameManager.CurrentGameplayController() as TGameplayController;
-            BaseScreen screen = uiManager.ShowScreen<TGameScreen>(gameplayController);
+            BaseScreen screen = uiManager.ShowScreen<TGameScreen>(progressManager);
             return (BaseGameScreen)screen;
         }
 
@@ -108,7 +109,5 @@ namespace Asteroids.Game
         }
 
         #endregion
-
-    
     }
 }

@@ -90,5 +90,11 @@ namespace Asteroids.Handlers
 
             return new Vector3(newX, newY, 0f);
         }
+
+
+        public static TObjectType ToDeserialized<TObjectType>(this String json) => JsonUtility.FromJson<TObjectType>(json);
+
+        
+        public static string ToSerialized<TObjectType>(this TObjectType target) => JsonUtility.ToJson(target);
     }
 }

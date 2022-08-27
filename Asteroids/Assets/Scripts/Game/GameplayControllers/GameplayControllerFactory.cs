@@ -13,11 +13,13 @@ namespace Asteroids.Game
                 case GameType.Classic:
                     return new ClassicGameplayController(hub.GetManager<PlayerShipsManager>(),
                         hub.GetManager<EnemiesManager>(),
-                        hub.GetManager<AsteroidsManager>());
+                        hub.GetManager<AsteroidsManager>(),
+                        hub.GetManager<PlayerProgressManager>());
                 case GameType.Survival:
                     return new SurvivalGameplayController(hub.GetManager<PlayerShipsManager>(),
                         hub.GetManager<EnemiesManager>(),
-                        hub.GetManager<AsteroidsManager>());
+                        hub.GetManager<AsteroidsManager>(),
+                        hub.GetManager<PlayerProgressManager>());
                 case GameType.None:
                     throw new InvalidOperationException("GameType not specified!");
             }

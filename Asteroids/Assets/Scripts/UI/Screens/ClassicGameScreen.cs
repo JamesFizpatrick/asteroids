@@ -1,4 +1,3 @@
-using Asteroids.Game;
 using Asteroids.Managers;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace Asteroids.UI
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private TMPro.TextMeshProUGUI levelNumber;
 
-        private ClassicGameplayController gameplayController;
+        private PlayerProgressManager playerProgressManager;
         
         #endregion
 
@@ -20,7 +19,7 @@ namespace Asteroids.UI
 
         #region Unity lifecycle
         
-        private void OnDestroy() => gameplayController.OnLevelIndexChanged -= GameplayController_OnLevelIndexChanged;
+        private void OnDestroy() => playerProgressManager.OnLevelIndexChanged -= GameplayController_OnLevelIndexChanged;
 
         #endregion
 
@@ -32,10 +31,10 @@ namespace Asteroids.UI
         {
             healthBar.Init(ManagersHub.GetManager<PlayerShipsManager>());
             
-            gameplayController = (ClassicGameplayController)Parameter;
+            playerProgressManager = (PlayerProgressManager)Parameter;
             
-            SetLevelNumber(gameplayController.GetCurrentLevelIndex() + 1);
-            gameplayController.OnLevelIndexChanged += GameplayController_OnLevelIndexChanged;
+            SetLevelNumber(playerProgressManager.GetLevelIndex() + 1);
+            playerProgressManager.OnLevelIndexChanged += GameplayController_OnLevelIndexChanged;
         }
 
         #endregion
