@@ -11,14 +11,15 @@ namespace Asteroids.Game
         private readonly GameStateMachine gameStateMachine;
         private readonly UIManager uiManager;
         private readonly GameManager gameManager;
-        
+        private readonly PlayerProgressManager progressManager;
+
         private InterLoseScreen screen;
-        
         private GameType gameType;
 
         #endregion
 
 
+        
         #region Class lifecycle
 
         public InterLoseState(GameStateMachine gameStateMachine, UIManager uiManager, GameManager gameManager)
@@ -38,7 +39,7 @@ namespace Asteroids.Game
         {
             gameType = parameter;
             
-            screen = (InterLoseScreen)uiManager.ShowScreen<InterLoseScreen>();
+            screen = uiManager.ShowScreen<InterLoseScreen>();
             
             screen.OnReset += Screen_OnReset;
             screen.OnExitToMainMenu += Screen_OnExitToMainMenu;

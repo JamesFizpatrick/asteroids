@@ -32,17 +32,11 @@ namespace Asteroids.Managers
                 playerProgress = NewPlayerProgress();
             }
         }
-
-
-        public bool HasPreviousProgress() => hasPreviousProgress;
-
+        
         
         public void Unload() => SaveProgress();
         
         
-        public void ResetProgress() => playerProgress = NewPlayerProgress();
-
-
         public void SetLevelIndex(int index)
         {
             playerProgress.LevelIndex = index;
@@ -85,9 +79,9 @@ namespace Asteroids.Managers
 
         private Highscore[] CreateShiftedArray(Highscore[] source, int startIndex)
         {
-            Highscore[] result = new Highscore[source.Length];
+            Highscore[] result = source;
 
-            for (int i = startIndex; i < source.Length - 1; i++)
+            for (int i = source.Length - 2; i >= startIndex; i--)
             {
                 result[i + 1] = source[i];
             }

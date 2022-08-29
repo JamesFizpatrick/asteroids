@@ -132,6 +132,7 @@ namespace Asteroids.Game
         private void PlayerShipsManager_OnPlayerKilled()
         {
             ResetManagers();
+            progressManager.SetLevelIndex(-1);
             OnPlayerLose?.Invoke();
         }
 
