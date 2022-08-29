@@ -1,3 +1,4 @@
+using System;
 using Asteroids.Data;
 using Asteroids.Handlers;
 using Asteroids.Managers;
@@ -8,13 +9,25 @@ namespace Asteroids.Game
 {
     public class ClassicGameplayController : BaseGameplayController
     {
+        #region Fields
+
+        public Action<int> OnLevelIndexChanged;
+        
         private readonly PlayerShipsManager playerShipsManager;
         private readonly EnemiesManager enemiesManager;
         private readonly AsteroidsManager asteroidsManager;
         private readonly PlayerProgressManager progressManager;
         
         private LevelsPreset.LevelPreset currentLevelPreset;
-        
+
+        private int currentLevelIndex = 0;
+
+        #endregion
+
+
+
+        #region Class lifecycle
+
         public ClassicGameplayController(PlayerShipsManager playerShipsManager, EnemiesManager enemiesManager,
             AsteroidsManager asteroidsManager, PlayerProgressManager progressManager)
         {
@@ -25,19 +38,27 @@ namespace Asteroids.Game
 
         }
 
-        
+        #endregion
+
+
+
+        #region Public methods
+
         public override void StartGame()
         {
-            int nexIndex = progressManager.IncreaseLevelIndex(1);
+            currentLevelIndex = progressManager.GetLevelIndex() + 1;
             
             LevelsPreset gamePreset = DataContainer.LevelsPreset;
-            currentLevelPreset = gamePreset.GetLevelPreset(nexIndex);
+            currentLevelPreset = gamePreset.GetLevelPreset(currentLevelIndex);
             
             SpawnEntities();
             SubscribeToEvents();
         }
 
 
+        public int GetCurrentLevelIndex() => currentLevelIndex;
+
+        
         public override void StopGame()
         {
             ResetManagers();
@@ -48,11 +69,14 @@ namespace Asteroids.Game
         public override void Reset()
         {
             StopGame();
-            progressManager.SetLevelIndex(-1);
+            currentLevelIndex = -1;
         }
+
+        #endregion
+
         
         
-         #region Private methods
+        #region Private methods
         
         private void SpawnEntities()
         {
@@ -80,6 +104,7 @@ namespace Asteroids.Game
             playerShipsManager.OnPlayerKilled += PlayerShipsManager_OnPlayerKilled;
             playerShipsManager.OnPlayerHealthValueChanged += PlayerShipManager_OnPlayerHealthValueChanged;
             asteroidsManager.OnAllAsteroidsDestroyed += AsteroidsManager_OnAllAsteroidsDestroyed;
+            enemiesManager.OnEnemyKilled += EnemiesManager_OnEnemyKilled;
         }
         
         
@@ -91,6 +116,13 @@ namespace Asteroids.Game
             enemiesManager.OnEnemyKilled -= EnemiesManager_OnEnemyKilled;
         }
 
+
+        private void ProcessPlayerWin()
+        {
+            OnPlayerWin?.Invoke();
+            progressManager.SetLevelIndex(currentLevelIndex);
+        }
+        
         #endregion
 
 
@@ -109,7 +141,7 @@ namespace Asteroids.Game
             if (asteroidsManager.GetActiveAsteroidsCount() == 0 &&
                 !enemiesManager.HasActiveEnemy())
             {
-                OnPlayerWin?.Invoke();
+                ProcessPlayerWin();
             }
             else
             {
@@ -123,7 +155,7 @@ namespace Asteroids.Game
             if (!enemiesManager.HasActiveEnemy())
             {
                 ResetManagers();
-                OnPlayerWin?.Invoke();
+                ProcessPlayerWin();
             }
         }
 
@@ -133,7 +165,7 @@ namespace Asteroids.Game
             if (asteroidsManager.GetActiveAsteroidsCount() == 0)
             {
                 ResetManagers();
-                OnPlayerWin?.Invoke();
+                ProcessPlayerWin();
             }
         }
         

@@ -79,7 +79,7 @@ namespace Asteroids.Game
         private BaseGameScreen CreateScreen<TGameScreen>()
             where TGameScreen : BaseGameScreen
         {
-            BaseScreen screen = uiManager.ShowScreen<TGameScreen>(progressManager);
+            BaseScreen screen = uiManager.ShowScreen<TGameScreen>(gameManager.GetCurrentGameplayController());
             return (BaseGameScreen)screen;
         }
 

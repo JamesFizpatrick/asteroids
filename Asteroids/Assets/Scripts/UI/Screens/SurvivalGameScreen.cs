@@ -12,8 +12,48 @@ namespace Asteroids.Game
         [SerializeField] private HealthBar healthBar;
         [SerializeField] private TMPro.TextMeshProUGUI scoreLabel;
 
-        private PlayerProgressManager playerProgressManager;
+        private SurvivalGameplayController gameplayController;
         
+        #endregion
+        
+        
+        
+        #region Unity lifecycle
+        
+        private void OnDestroy() => gameplayController.OnScoreChanged -= GameplayController_OnScoreChanged;
+        
+        #endregion
+        
+        
+        
+        #region Protected methods
+
+        protected override void Init()
+        {
+            healthBar.Init(ManagersHub.GetManager<PlayerShipsManager>());
+            
+            gameplayController = (SurvivalGameplayController)Parameter;
+            
+            SetScoreLabel(0.ToString());
+            gameplayController.OnScoreChanged += GameplayController_OnScoreChanged;
+        }
+        
+        #endregion
+
+
+        
+        #region Private methods
+        
+        private void SetScoreLabel(string score) => scoreLabel.text = "SCORE: " + score;
+        
+        #endregion
+
+
+        
+        #region Event handlers
+
+        private void GameplayController_OnScoreChanged(ulong score) => SetScoreLabel(score.ToString());
+
         #endregion
     }
 }

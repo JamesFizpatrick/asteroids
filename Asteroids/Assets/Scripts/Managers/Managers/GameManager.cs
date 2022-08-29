@@ -29,6 +29,9 @@ namespace Asteroids.Managers
             gameplayController.OnPlayerLose -= GameplayController_OnPlayerLose;
             gameplayController.OnPlayerWin -= GameplayController_OnPlayerWin;
         }
+
+
+        public BaseGameplayController GetCurrentGameplayController() => gameplayController;
         
         #endregion
 

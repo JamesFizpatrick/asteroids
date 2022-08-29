@@ -10,29 +10,23 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action<int> OnLevelIndexChanged;
-
         private const string ProgressKey = "Progress";
-
-        private IManagersHub hub;
         private PlayerProgress playerProgress;
-
         private bool hasPreviousProgress = true;
         
         #endregion
 
+        
 
         #region Public methods
 
         public void Initialize(IManagersHub hub)
         {
-            this.hub = hub;
             playerProgress = LoadProgress();
 
             if (playerProgress == null)
             {
                 playerProgress = NewPlayerProgress();
-                hasPreviousProgress = false;
             }
         }
 
@@ -41,31 +35,27 @@ namespace Asteroids.Managers
 
         
         public void Unload() => SaveProgress();
+        
+        
+        public void ResetProgress() => playerProgress = NewPlayerProgress();
 
 
         public void SetLevelIndex(int index)
         {
             playerProgress.LevelIndex = index;
-            OnLevelIndexChanged?.Invoke(index);
+            hasPreviousProgress = true;
         }
 
-        
-        public int IncreaseLevelIndex(int by)
-        {
-            playerProgress.LevelIndex += by;
-            OnLevelIndexChanged?.Invoke(playerProgress.LevelIndex);
-            return playerProgress.LevelIndex;
-        }
 
-        
         public int GetLevelIndex() => playerProgress.LevelIndex;
 
-        
-        public void ResetProgress() => playerProgress = NewPlayerProgress();
 
+        public void SetSurvivalHighScore(ulong score)
+        {
+            playerProgress.SurvivalHighscore = score;
+            hasPreviousProgress = true;
+        }
         
-        public void SetSurvivalHighScore(ulong score) => playerProgress.SurvivalHighscore = score;
-
         #endregion
 
 
@@ -76,8 +66,11 @@ namespace Asteroids.Managers
         {
             PlayerProgress progress = new PlayerProgress
             {
-                LevelIndex = -1
+                LevelIndex = -1,
+                SurvivalHighscore = 0
             };
+
+            hasPreviousProgress = false;
 
             return progress;
         }
