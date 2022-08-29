@@ -1,5 +1,5 @@
+using System;
 using Asteroids.Game;
-using Asteroids.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,15 +10,16 @@ namespace Asteroids.UI
     {
         #region Fields
 
+        public Action<Type> OnSwitchToScreen;
+        public Action<GameType> OnStartGame;
+        public Action OnContinueGame;
+        
         [SerializeField] private Button continueButton;
         [SerializeField] private NewGameButton newGameButton;
         [SerializeField] private Button controlsButton;
         [SerializeField] private Button settingsButton;
-
-        private UIManager uiManager;
-        private PlayerProgressManager progressManager;
-        private GameStateMachine stateMachine;
-
+        [SerializeField] private Button leaderboardButton;
+        
         #endregion
 
 
@@ -32,8 +33,9 @@ namespace Asteroids.UI
             controlsButton.onClick.AddListener(ControlsButton_OnClick);
             settingsButton.onClick.AddListener(SettingsButton_OnClick);
             continueButton.onClick.AddListener(ContinueButton_OnClick);
+            leaderboardButton.onClick.AddListener(LeaderboardButton_OnClick);
         }
-        
+
         
         private void OnDisable()
         {
@@ -42,21 +44,19 @@ namespace Asteroids.UI
             controlsButton.onClick.RemoveListener(ControlsButton_OnClick);
             settingsButton.onClick.RemoveListener(SettingsButton_OnClick);
             continueButton.onClick.RemoveListener(ContinueButton_OnClick);
+            leaderboardButton.onClick.RemoveListener(LeaderboardButton_OnClick);
         }
+        
+        #endregion
 
 
-        private void Start()
+        
+        #region Protected methods
+
+        protected override void Init()
         {
-            uiManager = ManagersHub.GetManager<UIManager>();
-            progressManager = ManagersHub.GetManager<PlayerProgressManager>();
-
-            if (Parameter != null)
-            {
-                // TODO: Should be more clear
-                stateMachine = Parameter as GameStateMachine;
-            }
-
-            continueButton.gameObject.SetActive(progressManager.HasPreviousProgress());
+            bool showContinueButton = (bool)Parameter;
+            continueButton.gameObject.SetActive(showContinueButton);
         }
 
         #endregion
@@ -65,20 +65,19 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void NewGameButton_OnStartNewGame(GameType gameType)
-        {
-            progressManager.ResetProgress();
-            stateMachine?.EnterState<StartGameState, GameType>(gameType);
-        }
-        
-
-        private void SettingsButton_OnClick() => uiManager.ShowScreen<SettingsScreen>();
-
-
-        private void ControlsButton_OnClick() => uiManager.ShowScreen<ControlsScreen>();
+        private void NewGameButton_OnStartNewGame(GameType gameType) => OnStartGame?.Invoke(gameType);
 
         
-        private void ContinueButton_OnClick() => stateMachine?.EnterState<StartGameState, GameType>(GameType.Classic);
+        private void ContinueButton_OnClick() => OnContinueGame?.Invoke();
+
+        
+        private void SettingsButton_OnClick() => OnSwitchToScreen?.Invoke(typeof(SettingsScreen));
+
+
+        private void ControlsButton_OnClick() => OnSwitchToScreen?.Invoke(typeof(ControlsScreen));
+
+        
+        private void LeaderboardButton_OnClick() => OnSwitchToScreen?.Invoke(typeof(HighscoreScreen));
 
         #endregion
     }

@@ -32,7 +32,9 @@ namespace Asteroids.Game
                 [typeof(InterLoseState)] = new InterLoseState(this, managersHub.GetManager<UIManager>(),
                     managersHub.GetManager<GameManager>()),
                 [typeof(PauseState)] = new PauseState(this, managersHub.GetManager<GameManager>(),
-                    managersHub.GetManager<UIManager>())
+                    managersHub.GetManager<UIManager>()),
+                [typeof(SurvivalWinState)] = new SurvivalWinState(this, managersHub.GetManager<UIManager>(),
+                    managersHub.GetManager<PlayerProgressManager>())
             };
         }
 
@@ -54,8 +56,7 @@ namespace Asteroids.Game
             IParametricState<TParameter> newState = ChangeState<TState>();
             newState.Enter(parameter);
         }
-
-
+        
         #endregion
 
 

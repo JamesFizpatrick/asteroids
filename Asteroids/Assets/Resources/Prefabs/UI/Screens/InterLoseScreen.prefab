@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8761564790187415476}
   - component: {fileID: 4632109438456026978}
   m_Layer: 5
-  m_Name: LoseScreen
+  m_Name: InterLoseScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -10,11 +10,10 @@ namespace Asteroids.Game
 
         private readonly UIManager uiManager;
         private readonly GameStateMachine gameStateMachine;
-        
-        private BaseScreen interScreen;
 
+        private BaseScreen interScreen;
         private GameType gameType;
-        
+
         #endregion
         
         
@@ -35,18 +34,18 @@ namespace Asteroids.Game
         public void Enter(GameType parameter)
         {
             gameType = parameter;
+
             interScreen = uiManager.ShowScreen<InterWinScreen>();
             interScreen.OnClose += Screen_OnClose;
         }
 
         
-        public void Exit()
-        {
-        }
+        public void Exit() { }
         
         #endregion
 
 
+        
         #region Events handler
 
         private void Screen_OnClose()

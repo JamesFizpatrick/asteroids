@@ -1,5 +1,4 @@
 using System;
-using Asteroids.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,17 +14,12 @@ namespace Asteroids.UI
         
         [SerializeField] private Button resumeButton;
         [SerializeField] private Button mainMenuButton;
-
-        private UIManager uiManager;
-
+        
         #endregion
 
 
 
         #region Unity lifecycle
-
-        private void Start() => uiManager = Managers.ManagersHub.Instance.GetManager<UIManager>();
-
 
         private void OnEnable()
         {

@@ -139,6 +139,13 @@ namespace Asteroids.Game
             score += (ulong)scoreToAdd;
             OnScoreChanged?.Invoke(score);
         }
+
+
+        private void ProcessPlayerWin()
+        {
+            OnPlayerWin?.Invoke();
+            progressManager.SetCurrentSurvivalHighScore(score);
+        }
         
         #endregion
 
@@ -151,8 +158,7 @@ namespace Asteroids.Game
             ResetManagers();
             
             // While in survival mode a player cannot lose due to the idea of survival mode
-            OnPlayerWin?.Invoke();
-            progressManager.SetSurvivalHighScore(score);
+            ProcessPlayerWin();
         }
 
 
@@ -160,8 +166,7 @@ namespace Asteroids.Game
         {
             if (asteroidsManager.GetActiveAsteroidsCount() == 0 && !enemiesManager.HasActiveEnemy())
             {
-                OnPlayerWin?.Invoke();
-                progressManager.SetSurvivalHighScore(score);
+                ProcessPlayerWin();
             }
             else
             {

@@ -92,7 +92,16 @@ namespace Asteroids.Game
         private void GameManager_OnPLayerWin()
         {
             gameManager.StopGame();
-            gameStateMachine.EnterState<InterWinState, GameType>(gameType);
+
+            switch (gameType)
+            {
+                case GameType.Classic:
+                    gameStateMachine.EnterState<InterWinState, GameType>(gameType);
+                    break;
+                case GameType.Survival:
+                    gameStateMachine.EnterState<SurvivalWinState>();
+                    break;
+            }
         }
         
         

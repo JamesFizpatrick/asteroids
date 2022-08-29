@@ -1,4 +1,3 @@
-using Asteroids.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,11 +36,7 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void CloseButton_OnClick()
-        {
-            UIManager uiManager = Managers.ManagersHub.Instance.GetManager<UIManager>();
-            uiManager.ShowScreen<MenuScreen>();
-        }
+        private void CloseButton_OnClick() => CloseScreen();
 
 
         private void MuteButton_OnClick()

@@ -11,6 +11,8 @@ namespace Asteroids.Handlers
 
         public const float InertiaIncreaseSpeed = 0.02f;
         public const float InertiaDecreaseSpeed = 0.005f;
+        
+        public const int MaxHigscoreRecords = 10;
 
 
         // Asteroids

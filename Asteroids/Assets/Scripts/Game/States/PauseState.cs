@@ -64,7 +64,7 @@ namespace Asteroids.Game
         private void PauseScreen_OnMainMenuButtonPressed()
         {
             gameManager.StopGame();
-            gameStateMachine.EnterState<MainMenuState>();
+            gameStateMachine.EnterState<MainMenuState, GameType>(gameType);
         }
 
         

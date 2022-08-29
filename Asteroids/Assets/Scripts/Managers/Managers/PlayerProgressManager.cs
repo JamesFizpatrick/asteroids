@@ -11,8 +11,11 @@ namespace Asteroids.Managers
         #region Fields
 
         private const string ProgressKey = "Progress";
+        
         private PlayerProgress playerProgress;
         private bool hasPreviousProgress = true;
+
+        private ulong currentHighscore = 0;
         
         #endregion
 
@@ -50,29 +53,53 @@ namespace Asteroids.Managers
         public int GetLevelIndex() => playerProgress.LevelIndex;
 
 
-        public void SetSurvivalHighScore(ulong score)
+        public void SaveCurrentSurvivalHighScore(string name)
         {
-            playerProgress.SurvivalHighscore = score;
+            Highscore[] highscores = playerProgress.SurvivalHighscores;
+            
+            for (int i = 0; i < highscores.Length; i++)
+            {
+                if (highscores[i].score <= currentHighscore)
+                {
+                    highscores = CreateShiftedArray(highscores, i);
+                    highscores[i] = new Highscore(name, currentHighscore);
+                    break;
+                }
+            }
+
+            playerProgress.SurvivalHighscores = highscores;
             hasPreviousProgress = true;
         }
+
         
+        public void SetCurrentSurvivalHighScore(ulong score) => currentHighscore = score;
+
+
+        public Highscore[] GetHighscores() => playerProgress.SurvivalHighscores;
+
         #endregion
 
 
 
         #region Private methods
 
+        private Highscore[] CreateShiftedArray(Highscore[] source, int startIndex)
+        {
+            Highscore[] result = new Highscore[source.Length];
+
+            for (int i = startIndex; i < source.Length - 1; i++)
+            {
+                result[i + 1] = source[i];
+            }
+
+            return result;
+        }
+        
+        
         private PlayerProgress NewPlayerProgress()
         {
-            PlayerProgress progress = new PlayerProgress
-            {
-                LevelIndex = -1,
-                SurvivalHighscore = 0
-            };
-
             hasPreviousProgress = false;
-
-            return progress;
+            return new PlayerProgress();
         }
         
         
@@ -88,7 +115,7 @@ namespace Asteroids.Managers
             string json = playerProgress.ToSerialized();
             PlayerPrefs.SetString(ProgressKey, json);
         }
-
+        
         #endregion
     }
 }

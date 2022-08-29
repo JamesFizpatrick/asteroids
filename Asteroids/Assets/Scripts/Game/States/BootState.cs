@@ -1,7 +1,4 @@
-﻿using Asteroids.Managers;
-
-
-namespace Asteroids.Game
+﻿namespace Asteroids.Game
 {
     public class BootState : IState
     {
@@ -28,7 +25,7 @@ namespace Asteroids.Game
 
         public void Enter()
         {
-            gameStateMachine.EnterState<MainMenuState>();
+            gameStateMachine.EnterState<MainMenuState, GameType>(GameType.None);
         }
 
         public void Exit() { }

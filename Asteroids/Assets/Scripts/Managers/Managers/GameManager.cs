@@ -26,8 +26,11 @@ namespace Asteroids.Managers
 
         public void Unload()
         {
-            gameplayController.OnPlayerLose -= GameplayController_OnPlayerLose;
-            gameplayController.OnPlayerWin -= GameplayController_OnPlayerWin;
+            if (gameplayController != null)
+            {
+                gameplayController.OnPlayerLose -= GameplayController_OnPlayerLose;
+                gameplayController.OnPlayerWin -= GameplayController_OnPlayerWin;
+            }
         }
 
 

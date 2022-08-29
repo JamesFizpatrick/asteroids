@@ -78,8 +78,7 @@ namespace Asteroids.Game
 
         private void ReturnToMainMenu()
         {
-            uiManager.ShowScreen<MenuScreen>();
-            gameStateMachine.EnterState<MainMenuState>();
+            gameStateMachine.EnterState<MainMenuState, GameType>(GameType.None);
         }
         
         #endregion
