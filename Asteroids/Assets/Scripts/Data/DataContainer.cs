@@ -32,6 +32,9 @@ namespace Asteroids.Managers
 
 
         public static UiPreset UiPreset => GetData<UiPreset>("Data/UiPreset");
+        
+        
+        public static ScorePreset ScorePreset => GetData<ScorePreset>("Data/ScorePreset");
 
         #endregion
 

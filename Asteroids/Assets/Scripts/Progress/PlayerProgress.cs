@@ -7,6 +7,7 @@ namespace Asteroids.Data
     public class PlayerProgress
     {
         public int LevelIndex;
+        public ulong SurvivalHighscore;
     }
 }
 

@@ -23,6 +23,7 @@ namespace Asteroids.Data
         #region Fields
 
         [SerializeField] private LevelPreset[] levelPresets;
+        [SerializeField] private LevelPreset survivalModePreset;
         
         #endregion
 
@@ -34,6 +35,9 @@ namespace Asteroids.Data
 
         
         public LevelPreset[] GetLevelPresets() => levelPresets;
+
+
+        public LevelPreset GetSurvivalModePreset => survivalModePreset;
 
         #endregion
     }

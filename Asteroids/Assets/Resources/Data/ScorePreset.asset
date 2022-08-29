@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7a1cb61f048d4816af48dbc780a7c4f, type: 3}
+  m_Name: ScorePreset
+  m_EditorClassIdentifier: 
+  asteroids:
+  - Type: 1
+    Points: 50
+  - Type: 2
+    Points: 25
+  - Type: 3
+    Points: 10
+  enemyPoints: 100

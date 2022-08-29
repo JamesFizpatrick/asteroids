@@ -11,7 +11,7 @@ namespace Asteroids.UI
         #region Fields
 
         [SerializeField] private Button continueButton;
-        [SerializeField] private Button newGameButton;
+        [SerializeField] private NewGameButton newGameButton;
         [SerializeField] private Button controlsButton;
         [SerializeField] private Button settingsButton;
 
@@ -27,7 +27,8 @@ namespace Asteroids.UI
 
         private void OnEnable()
         {
-            newGameButton.onClick.AddListener(NewGameButton_OnClick);
+            newGameButton.OnStartNewGame += NewGameButton_OnStartNewGame;
+            
             controlsButton.onClick.AddListener(ControlsButton_OnClick);
             settingsButton.onClick.AddListener(SettingsButton_OnClick);
             continueButton.onClick.AddListener(ContinueButton_OnClick);
@@ -36,7 +37,8 @@ namespace Asteroids.UI
         
         private void OnDisable()
         {
-            newGameButton.onClick.RemoveListener(NewGameButton_OnClick);
+            newGameButton.OnStartNewGame -= NewGameButton_OnStartNewGame;
+            
             controlsButton.onClick.RemoveListener(ControlsButton_OnClick);
             settingsButton.onClick.RemoveListener(SettingsButton_OnClick);
             continueButton.onClick.RemoveListener(ContinueButton_OnClick);
@@ -63,13 +65,12 @@ namespace Asteroids.UI
 
         #region Event handlers
 
-        private void NewGameButton_OnClick()
+        private void NewGameButton_OnStartNewGame(GameType gameType)
         {
-            //TODO: Reset progress
             progressManager.ResetProgress();
-            stateMachine?.EnterState<StartGameState, GameType>(GameType.Classic);
+            stateMachine?.EnterState<StartGameState, GameType>(gameType);
         }
-
+        
 
         private void SettingsButton_OnClick() => uiManager.ShowScreen<SettingsScreen>();
 

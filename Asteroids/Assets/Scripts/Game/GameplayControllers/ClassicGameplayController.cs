@@ -25,6 +25,7 @@ namespace Asteroids.Game
 
         }
 
+        
         public override void StartGame()
         {
             int nexIndex = progressManager.IncreaseLevelIndex(1);

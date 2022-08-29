@@ -63,6 +63,9 @@ namespace Asteroids.Managers
         
         public void ResetProgress() => playerProgress = NewPlayerProgress();
 
+        
+        public void SetSurvivalHighScore(ulong score) => playerProgress.SurvivalHighscore = score;
+
         #endregion
 
 

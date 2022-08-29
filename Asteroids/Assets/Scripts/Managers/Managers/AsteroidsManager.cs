@@ -10,14 +10,20 @@ namespace Asteroids.Managers
     public class AsteroidsManager : IManager
     {                             
         #region Fields
-        
+
+        public Action OnFracturesDestroyed;
         public Action OnAllAsteroidsDestroyed;
+        public Action<Asteroid> OnAsteroidDestroyed;
+        
+        private const int FracturesPerAsteroid = 8;
         
         private SoundManager soundManager;
         private VFXManager vfxManager;
         private GameObjectsManager gameObjectsManager;
 
         private AsteroidsPool asteroidsPool;
+
+        private int currentFracturesCount = 0;
         
         #endregion
         
@@ -40,12 +46,9 @@ namespace Asteroids.Managers
         public int GetActiveAsteroidsCount() => asteroidsPool.GetActiveAsteroidsCount();
 
         
-        public List<SpawnAsteroidData> GetActiveAsteroidsData()
-        {
-            return asteroidsPool.GetActiveAsteroidsData();
-        }
+        public List<SpawnAsteroidData> GetActiveAsteroidsData() => asteroidsPool.GetActiveAsteroidsData();
 
-            
+
         public void Reset()
         {
             asteroidsPool.Reset();
@@ -75,14 +78,25 @@ namespace Asteroids.Managers
 
             if (nextType != AsteroidType.None)
             {
-                SpawnSubAsteroids(asteroid.CurrentMoveDirection,
-                    nextType,
-                    asteroid.transform.localPosition);
-
+                SpawnSubAsteroids(asteroid.CurrentMoveDirection, nextType, asteroid.transform.localPosition);
                 return true;
             }
 
+            CheckFractures();
             return false;
+        }
+
+        
+        private void CheckFractures()
+        {
+            currentFracturesCount++;
+
+            if (currentFracturesCount >= FracturesPerAsteroid)
+            {
+                OnFracturesDestroyed?.Invoke();
+            }
+
+            currentFracturesCount = 0;
         }
 
 
@@ -115,6 +129,8 @@ namespace Asteroids.Managers
 
         private void Asteroid_Destroyed(Asteroid asteroid)
         {
+            OnAsteroidDestroyed?.Invoke(asteroid);
+            
             asteroid.Destroyed -= Asteroid_Destroyed;
 
             bool spawned = TrySpawnSubAsteroids(asteroid);

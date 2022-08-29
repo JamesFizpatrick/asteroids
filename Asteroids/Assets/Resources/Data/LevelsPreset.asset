@@ -21,3 +21,6 @@ MonoBehaviour:
     EnemiesDelay: 25
   - AsteroidsCount: 8
     EnemiesDelay: 20
+  survivalModePreset:
+    AsteroidsCount: 4
+    EnemiesDelay: 20
