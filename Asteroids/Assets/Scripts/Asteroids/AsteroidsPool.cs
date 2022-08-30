@@ -14,10 +14,9 @@ namespace Asteroids.Asteroids
         private readonly System.Random random;
         private readonly GameObjectsManager gameObjectsManager;
         
-        private Dictionary<AsteroidType, List<GameObject>> asteroidsPool =
-            new Dictionary<AsteroidType, List<GameObject>>();
-        
         private Vector2Int screenHalfDimensions;
+        private Dictionary<AsteroidType, List<GameObject>> asteroidsPool 
+            = new Dictionary<AsteroidType, List<GameObject>>();
         
         #endregion
 
@@ -27,9 +26,9 @@ namespace Asteroids.Asteroids
 
         public AsteroidsPool(GameObjectsManager gameObjectsManager)
         {
-            random = new System.Random();
             this.gameObjectsManager = gameObjectsManager;
 
+            random = new System.Random();
             screenHalfDimensions = new Vector2Int(Screen.width / 2, Screen.height / 2);
         }
 
@@ -41,19 +40,8 @@ namespace Asteroids.Asteroids
 
         public List<Asteroid> GetAllAsteroids(bool includeDeactivated)
         {
-            List<Asteroid> result = new List<Asteroid>();
-            
-            foreach (List<GameObject> gameObjects in asteroidsPool.Values)
-            {
-                List<GameObject> asteroids = includeDeactivated ?
-                    gameObjects :
-                    gameObjects.Where(x => x.activeSelf).ToList();
-                
-                List<Asteroid> components = asteroids.Select(x => x.GetComponent<Asteroid>()).ToList();
-                result.AddRange(components);
-            }
-            
-            return result;
+            List<GameObject> objects = GetAllAsteroidObjects(includeDeactivated);
+            return objects.Select(x => x.GetComponent<Asteroid>()).ToList();
         }
         
         
@@ -76,7 +64,6 @@ namespace Asteroids.Asteroids
         public Asteroid SpawnAsteroidOutOfFOV(AsteroidType type)
         {
             AsteroidData data = CreateAsteroidData(GetOutOfFOVCoordinates());
-            
             Asteroid asteroid = SpawnAsteroid(type, data.Position);
             asteroid.OverrideDirection(data.Direction);
 
@@ -84,13 +71,13 @@ namespace Asteroids.Asteroids
         }
         
 
-        public int GetActiveAsteroidsCount() => GetActiveAsteroids().Count;
+        public int GetActiveAsteroidsCount() => GetAllAsteroidObjects(false).Count;
 
 
         public List<SpawnAsteroidData> GetActiveAsteroidsData()
         {
             List<SpawnAsteroidData> result = new List<SpawnAsteroidData>();
-            List<GameObject> activeAsteroids = GetActiveAsteroids();
+            List<GameObject> activeAsteroids = GetAllAsteroidObjects(false);
 
             foreach (GameObject activeAsteroid in activeAsteroids)
             {
@@ -184,12 +171,12 @@ namespace Asteroids.Asteroids
         }
 
 
-        private List<GameObject> GetActiveAsteroids()
+        private List<GameObject> GetAllAsteroidObjects(bool includeInactive)
         {
             List<GameObject> asteroids = new List<GameObject>();
             foreach (KeyValuePair<AsteroidType, List<GameObject>> pair in asteroidsPool)
             {
-                IEnumerable<GameObject> activeAsteroids = pair.Value.Where(x => x.activeSelf);
+                IEnumerable<GameObject> activeAsteroids = includeInactive? pair.Value : pair.Value.Where(x => x.activeSelf);
                 asteroids.AddRange(activeAsteroids);
             }
 
@@ -199,6 +186,8 @@ namespace Asteroids.Asteroids
 
         private List<AsteroidData> CreateAsteroidsData(int quantity, Vector3Int playerPosition, int safeRadius)
         {
+            // spawn asteroids around the player not crossing safe zone
+            
             int minX = playerPosition.x - safeRadius;
             int maxX = playerPosition.x + safeRadius;
             int minY = playerPosition.y - safeRadius;
@@ -206,7 +195,6 @@ namespace Asteroids.Asteroids
 
             List<AsteroidData> result = new List<AsteroidData>();
 
-            // spawn asteroids around the player not crossing safe zone
             for (int i = 0; i < quantity; i++)
             {
                 AsteroidData data = CreateAsteroidData(minX, minY, maxX, maxY);

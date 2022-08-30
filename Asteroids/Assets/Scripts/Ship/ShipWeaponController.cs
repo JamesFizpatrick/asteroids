@@ -1,4 +1,5 @@
 using Asteroids.Managers;
+using UnityEngine;
 
 
 namespace Asteroids.Game
@@ -10,28 +11,27 @@ namespace Asteroids.Game
         private InputManager inputManager;
 
         #endregion
-        
-        
-        
-        #region Unity lifecycle
 
-        protected override void Awake()
+
+
+        #region Class lifecycle
+
+        public ShipWeaponController(SoundManager soundManager, GameObjectsManager gameObjectsManager, GameObject owner, InputManager inputManager) :
+            base(soundManager, gameObjectsManager, owner)
         {
-            currentWeaponType = WeaponType.Player;
-            inputManager = ManagersHub.Instance.GetManager<InputManager>();
-
-            base.Awake();
-        }
-        
-
-        private void OnEnable()
-        {
+            this.inputManager = inputManager;
+            SetCurrentWeaponType(WeaponType.Player);
             SubscribeToFireInputs();
             inputManager.OnSwitchWeapon += InputManager_OnSwitchWeapon;
         }
 
+        #endregion
         
-        private void OnDisable()
+        
+        
+        #region Protected methods
+        
+        protected override void ImplicitDispose()
         {
             UnsubscribeFromFireInputs();
             inputManager.OnSwitchWeapon -= InputManager_OnSwitchWeapon;

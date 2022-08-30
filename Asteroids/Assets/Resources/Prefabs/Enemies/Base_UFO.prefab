@@ -239,7 +239,6 @@ GameObject:
   - component: {fileID: 3243752188765389209}
   - component: {fileID: 8175570867554040803}
   - component: {fileID: 5829468191842642580}
-  - component: {fileID: -7835788860310672910}
   m_Layer: 10
   m_Name: Base_UFO
   m_TagString: Untagged
@@ -319,15 +318,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 0.5
---- !u!114 &-7835788860310672910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5281908878541741313}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dde437f99fca844cb8b7d9db80921f52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

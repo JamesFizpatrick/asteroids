@@ -1,5 +1,6 @@
 using System;
 using Asteroids.Handlers;
+using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -7,7 +8,6 @@ namespace Asteroids.Game
 {
     [RequireComponent(typeof(ShipMovementController))]
     [RequireComponent(typeof(ShipVisualAppearanceController))]
-
     public class Ship : MonoBehaviour
     {
         #region Fields
@@ -56,7 +56,11 @@ namespace Asteroids.Game
         }
 
         
-        public void OnDestroy() => shipMovementController.OnPositionChanged -= ShipMovementController_OnPositionChanged;
+        public void OnDestroy()
+        {
+            shipMovementController.OnPositionChanged -= ShipMovementController_OnPositionChanged;
+            shipWeaponController.Dispose();
+        }
 
         #endregion
 
@@ -99,8 +103,15 @@ namespace Asteroids.Game
         private void InitControllers()
         {
             shipMovementController = GetComponent<ShipMovementController>();
+            shipMovementController.Init(ManagersHub.Instance.GetManager<InputManager>());
+            
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
-            shipWeaponController = GetComponent<ShipWeaponController>();
+
+            shipWeaponController = new ShipWeaponController(
+                ManagersHub.Instance.GetManager<SoundManager>(),
+                ManagersHub.Instance.GetManager<GameObjectsManager>(),
+                gameObject,
+                ManagersHub.Instance.GetManager<InputManager>());
         }
         
         #endregion

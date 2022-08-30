@@ -55,14 +55,7 @@ namespace Asteroids.Game
             inputManager.OnStopRotating -= InputManager_OnStopRotating;
         }
 
-
-        private void Awake()
-        {
-            inputManager = ManagersHub.Instance.GetManager<InputManager>();
-            currentAimDirection = Vector3.up;
-        }
         
-
         private void FixedUpdate()
         {
             if (!canMove)
@@ -81,6 +74,13 @@ namespace Asteroids.Game
         
         #region Public methods
 
+        public void Init(InputManager inputManager)
+        {
+            this.inputManager = inputManager;
+            currentAimDirection = Vector3.up;
+        }
+        
+        
         public void Move() => canMove = true;
         
         

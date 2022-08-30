@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    public class UnitWeaponController : MonoBehaviour
+    public class UnitWeaponController
     {
         #region Fields
 
-        protected float FireCooldown = 0.0f;
-        protected WeaponType currentWeaponType = WeaponType.None;
+        protected float FireCooldown;
+        protected WeaponType CurrentWeaponType { get; private set; }
                 
         private SoundManager soundManager;
         private GameObjectsManager gameObjectsManager;
@@ -26,66 +26,63 @@ namespace Asteroids.Game
         private Weapon currentWeapon;
         private int currentWeaponIndex;
 
+        protected GameObject Owner;
+
         #endregion
 
 
+        
+        #region Class lifecycle
 
-        #region Unity lifecycle
-
-        protected virtual void Awake()
+        public UnitWeaponController(SoundManager soundManager, GameObjectsManager gameObjectsManager, GameObject owner)
         {
-            soundManager = ManagersHub.Instance.GetManager<SoundManager>();
-            gameObjectsManager = ManagersHub.Instance.GetManager<GameObjectsManager>();
-
-            switch (currentWeaponType)
-            {
-                case WeaponType.Player:
-                    weapons.Add(new Weapon(DataContainer.GamePreset.PlayerProjectiles));
-                    weapons.Add(new Weapon(DataContainer.GamePreset.PlayerAltProjectiles));
-                    break;
-                case WeaponType.Enemy:
-                    weapons.Add(new Weapon(DataContainer.GamePreset.EnemyProjectiles));
-                    break;
-                case WeaponType.None:
-                    throw new Exception($"Weapon type was not initialized for {GetType()}");
-            }
-
-            currentWeaponIndex = 0;
-            currentWeapon = weapons[currentWeaponIndex];
-            FireCooldown = currentWeapon.ShotPrefab.GetComponent<ShotBase>().FireCooldown;
+            this.soundManager = soundManager;
+            this.gameObjectsManager = gameObjectsManager;
+            Owner = owner;
         }
 
+        #endregion
         
-        private void OnDestroy()
+        
+        
+        #region Public methods
+        
+        public void Dispose()
         {
             if (attackCoroutine != null)
             {
-                StopCoroutine(attackCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(attackCoroutine);
             }
 
             foreach (Weapon weapon in weapons)
             {
                 foreach (ShotBase bullet in weapon.Pool)
                 {
-                    Destroy(bullet.gameObject);
+                    GameObject.Destroy(bullet.gameObject);
                 }
             }
+
+            ImplicitDispose();
         }
         
         #endregion
-
+        
         
         
         #region Protected methods
+
+
+        protected virtual void ImplicitDispose() { }
         
-        protected void StartFire() => attackCoroutine = StartCoroutine(ProcessFire());
+        
+        protected void StartFire() => attackCoroutine = CoroutinesHandler.Instance.StartCoroutine(ProcessFire());
 
 
         protected void StopFire()
         {
             if (attackCoroutine != null)
             {
-                StopCoroutine(attackCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(attackCoroutine);
             }
         }
 
@@ -106,20 +103,15 @@ namespace Asteroids.Game
 
         protected void FireSingleShot(Vector3 direction)
         {
-            ShotBase bullet = FireSingleShot();
+            Quaternion rotation = Quaternion.FromToRotation(Vector3.up, direction);
+            FireSingleShot(Owner.transform.position, rotation);
+        }
 
-            if (bullet == null)
-            {
-                Debug.LogError("Cannot spawn bullets!");
-            }
-            else
-            {
-                Quaternion rotation = Quaternion.FromToRotation(Vector3.up, direction);
-                bullet.transform.SetPositionAndRotation(transform.position, rotation);
-                bullet.gameObject.SetActive(true);
-                
-                soundManager.PlaySound(bullet.SoundType);
-            }
+
+        protected void SetCurrentWeaponType(WeaponType weaponType)
+        {
+            CurrentWeaponType = weaponType;
+            PrepareWeapons();
         }
         
         #endregion
@@ -128,31 +120,65 @@ namespace Asteroids.Game
 
         #region Private methods
 
+        private void PrepareWeapons()
+        {
+            switch (CurrentWeaponType)
+            {
+                case WeaponType.Player:
+                    weapons.Add(new Weapon(DataContainer.GamePreset.PlayerProjectiles));
+                    weapons.Add(new Weapon(DataContainer.GamePreset.PlayerAltProjectiles));
+                    break;
+                case WeaponType.Enemy:
+                    weapons.Add(new Weapon(DataContainer.GamePreset.EnemyProjectiles));
+                    break;
+                case WeaponType.None:
+                    throw new Exception($"Weapon type was not initialized for {GetType()}");
+            }
+
+            currentWeaponIndex = 0;
+            currentWeapon = weapons[currentWeaponIndex];
+            FireCooldown = currentWeapon.ShotPrefab.GetComponent<ShotBase>().FireCooldown;
+        }
+        
+        
         private IEnumerator ProcessFire()
         {
             while (true)
             {
-                ShotBase bullet = FireSingleShot();
-
-                if (bullet == null)
+                ShotBase bullet = FireSingleShot(Owner.transform.position, Owner.transform.rotation);
+                
+                if (bullet)
                 {
-                    Debug.LogError("Cannot spawn bullets!");
-                    yield return null;
+                    yield return new WaitForSeconds(bullet.FireCooldown);
                 }
                 else
                 {
-                    bullet.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                    bullet.gameObject.SetActive(true);
-                    
-                    soundManager.PlaySound(bullet.SoundType);
-                    
-                    yield return new WaitForSeconds(bullet.FireCooldown);
+                    yield return null;
                 }
             }
         }
 
 
-        private ShotBase FireSingleShot()
+        private ShotBase FireSingleShot(Vector3 fromPosition, Quaternion fromRotation)
+        {
+            ShotBase bullet = TryCreateSingleShot();
+
+            if (bullet == null)
+            {
+                Debug.LogError("Cannot spawn bullet!");
+                return null;
+            }
+            
+            bullet.transform.SetPositionAndRotation(fromPosition, fromRotation);
+            bullet.gameObject.SetActive(true);
+            
+            soundManager.PlaySound(bullet.SoundType);
+
+            return bullet;
+        }
+        
+        
+        private ShotBase TryCreateSingleShot()
         {
             ShotBase bullet;
 

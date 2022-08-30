@@ -8,8 +8,7 @@ namespace Asteroids.Game
     {
         public GameObject ShotPrefab;
         public List<ShotBase> Pool;
-
-
+        
         public Weapon(GameObject prefab)
         {
             ShotPrefab = prefab;

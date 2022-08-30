@@ -47,6 +47,7 @@ namespace Asteroids.Game
         public override void StartGame()
         {
             currentLevelIndex = progressManager.GetLevelIndex() + 1;
+            OnLevelIndexChanged?.Invoke(currentLevelIndex);
             
             LevelsPreset gamePreset = DataContainer.LevelsPreset;
             currentLevelPreset = gamePreset.GetLevelPreset(currentLevelIndex);
@@ -82,7 +83,6 @@ namespace Asteroids.Game
         {
             playerShipsManager.SpawnPlayer();
             enemiesManager.StartSpawnCoroutine(currentLevelPreset.EnemiesDelay);
-
             asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
                 Vector3Int.FloorToInt(playerShipsManager.Player.transform.localPosition),
                 PlayerConstants.InitialPlayerSafeRadius);
@@ -121,6 +121,7 @@ namespace Asteroids.Game
         {
             OnPlayerWin?.Invoke();
             progressManager.SetLevelIndex(currentLevelIndex);
+            OnLevelIndexChanged?.Invoke(currentLevelIndex);
         }
         
         #endregion
@@ -133,6 +134,7 @@ namespace Asteroids.Game
         {
             ResetManagers();
             progressManager.SetLevelIndex(-1);
+            OnLevelIndexChanged?.Invoke(-1);
             OnPlayerLose?.Invoke();
         }
 

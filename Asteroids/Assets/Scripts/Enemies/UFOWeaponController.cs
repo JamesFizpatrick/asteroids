@@ -1,6 +1,7 @@
 using System.Collections;
 using Asteroids.Game;
 using Asteroids.Handlers;
+using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -18,22 +19,29 @@ namespace Asteroids.UFO
         #endregion
 
 
-        
-        #region Unity lifecycle
 
-        protected override void Awake()
+        #region Class lifecycle
+
+        public UFOWeaponController(SoundManager soundManager, GameObjectsManager gameObjectsManager, GameObject owner, Ship player) :
+            base(soundManager, gameObjectsManager, owner)
         {
-            currentWeaponType = WeaponType.Enemy;
+            SetCurrentWeaponType(WeaponType.Enemy);
             random = new System.Random();
-            base.Awake();
+            this.player = player;
+            Fire();
         }
 
+        #endregion
+
         
-        private void OnDisable()
+        
+        #region Protected methods
+        
+        protected override void ImplicitDispose()
         {
             if (fireCoroutine != null)
             {
-                StopCoroutine(fireCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(fireCoroutine);
             }
             
             StopFire();
@@ -41,26 +49,18 @@ namespace Asteroids.UFO
 
         #endregion
 
-
-
-        #region Public methods
-
-        public void Initialize(Ship player) => this.player = player;
-
-
-        public void Fire() => fireCoroutine = StartCoroutine(Shoot());
-
-        #endregion
-
-
-
+        
+        
         #region Private methods
 
+        private void Fire() => fireCoroutine = CoroutinesHandler.Instance.StartCoroutine(Shoot());
+        
+        
         private IEnumerator Shoot()
         {
             while (true)
             {
-                Vector3 direction = player.transform.localPosition - transform.localPosition;
+                Vector3 direction = player.transform.localPosition - Owner.transform.localPosition;
 
                 (Vector3 leftVector, Vector3 rightVector) = direction.GetBreakVectors(5f);
                 Vector3 newDirection = Vector3.Lerp(leftVector, rightVector, random.GetRandomFloat(0f, 1f));

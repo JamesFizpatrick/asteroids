@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Asteroids.Handlers;
+using Asteroids.VFX;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = System.Random;
@@ -18,6 +19,8 @@ namespace Asteroids.Managers
 
         private GameObjectsManager gameObjectsManager;
         private PlayerShipsManager playerShipsManager;
+        private SoundManager soundManager;
+        private VFXManager vfxManager;
         
         private Random random;
         private Coroutine spawnCoroutine;
@@ -62,6 +65,8 @@ namespace Asteroids.Managers
             
             gameObjectsManager = hub.GetManager<GameObjectsManager>();
             playerShipsManager = hub.GetManager<PlayerShipsManager>();
+            soundManager = hub.GetManager<SoundManager>();
+            vfxManager = hub.GetManager<VFXManager>();
             
             random = new Random();
         }
@@ -87,8 +92,7 @@ namespace Asteroids.Managers
                 Screen.height / 2);
 
             enemy = ufo.GetComponent<UFO.UFO>();
-
-            enemy.Initialize(playerShipsManager.Player, hub);
+            enemy.Initialize(playerShipsManager.Player);
             enemy.Killed += Enemy_Killed;
         }
         
@@ -137,9 +141,12 @@ namespace Asteroids.Managers
         
         #region Event handlers
 
-        private void Enemy_Killed()
+        private void Enemy_Killed(UFO.UFO ufo)
         {
             OnEnemyKilled?.Invoke();
+            
+            soundManager.PlaySound(SoundType.Explosion);
+            vfxManager.SpawnVFX(VFXType.Explosion, ufo.transform.localPosition);
             
             spawnCoroutine = CoroutinesHandler.Instance.StartCoroutine(SpawnWithDelay(currentSpawnDelay));
         }

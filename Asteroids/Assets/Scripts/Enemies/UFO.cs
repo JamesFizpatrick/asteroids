@@ -2,26 +2,20 @@ using System;
 using Asteroids.Game;
 using Asteroids.Handlers;
 using Asteroids.Managers;
-using Asteroids.VFX;
 using UnityEngine;
 
 
 namespace Asteroids.UFO
 {
     [RequireComponent(typeof(UFOMoveController))]
-    [RequireComponent(typeof(UFOWeaponController))]
-
     public class UFO : MonoBehaviour
     {
         #region Fields
 
-        public Action Killed;
+        public Action<UFO> Killed;
         
         private UFOMoveController moveController;
         private UFOWeaponController weaponController;
-
-        private SoundManager soundManager;
-        private VFXManager vfxManager;
         
         private int weaponLayerMask;
 
@@ -30,17 +24,11 @@ namespace Asteroids.UFO
 
 
         #region Unity lifecycle
-
-        private void Awake()
-        {
-            weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
-
-            moveController = GetComponent<UFOMoveController>();
-            weaponController = GetComponent<UFOWeaponController>();
-        }
-        
         
         private void OnTriggerEnter2D(Collider2D col) => ProcessOnTriggerEnter(col);
+
+
+        private void OnDestroy() => weaponController.Dispose();
 
         #endregion
 
@@ -48,15 +36,16 @@ namespace Asteroids.UFO
 
         #region Public methods
 
-        public void Initialize(Ship player, IManagersHub hub)
+        public void Initialize(Ship player)
         {
-            soundManager = hub.GetManager<SoundManager>();
-            vfxManager = hub.GetManager<VFXManager>();
-            
+            weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
+
+            moveController = GetComponent<UFOMoveController>();
             moveController.Initialize(player);
-            weaponController.Initialize(player);
             
-            weaponController.Fire();
+            weaponController = new UFOWeaponController(ManagersHub.Instance.GetManager<SoundManager>(),
+                ManagersHub.Instance.GetManager<GameObjectsManager>(),
+                gameObject, player);
         }
 
         #endregion
@@ -69,11 +58,8 @@ namespace Asteroids.UFO
         {
             if (col.gameObject.layer == weaponLayerMask)
             {
-                Killed?.Invoke();
+                Killed?.Invoke(this);
                 gameObject.SetActive(false);
-                
-                soundManager.PlaySound(SoundType.Explosion);
-                vfxManager.SpawnVFX(VFXType.Explosion, transform.localPosition);
             }
         }
 

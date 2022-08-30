@@ -95,7 +95,7 @@ namespace Asteroids.Handlers
                 while (y <= maxY)
                 {
                     Vector2Int xRange = new Vector2Int(x, x + xStep);
-                    Vector2Int yRange = new Vector2Int(y, y + yStep); ;
+                    Vector2Int yRange = new Vector2Int(y, y + yStep);
 
                     FieldSegment segment = new FieldSegment(xRange, yRange, false);
 

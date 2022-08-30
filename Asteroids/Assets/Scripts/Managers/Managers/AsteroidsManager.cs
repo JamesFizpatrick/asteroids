@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Asteroids.Asteroids;
 using Asteroids.Handlers;
+using Asteroids.VFX;
 using UnityEngine;
 
 
@@ -83,7 +84,7 @@ namespace Asteroids.Managers
         private void InitAsteroid(Asteroid asteroid)
         {
             asteroid.Destroyed += Asteroid_Destroyed;
-            asteroid.Init(soundManager, vfxManager);
+            asteroid.Init();
         }
         
         
@@ -129,8 +130,7 @@ namespace Asteroids.Managers
         private Asteroid CreateChildAsteroid(AsteroidType nextType, Vector3 position)
         {
             Asteroid asteroid = asteroidsPool.SpawnAsteroid(nextType, position);
-            asteroid.Destroyed += Asteroid_Destroyed;
-            asteroid.Init(soundManager, vfxManager);
+            InitAsteroid(asteroid);
 
             return asteroid;
         }
@@ -145,6 +145,9 @@ namespace Asteroids.Managers
         {
             OnAsteroidDestroyed?.Invoke(asteroid);
             asteroid.Destroyed -= Asteroid_Destroyed;
+            
+            soundManager.PlaySound(SoundType.Explosion);
+            vfxManager.SpawnVFX(VFXType.Explosion, asteroid.transform.localPosition);
 
             bool spawned = TrySpawnSubAsteroids(asteroid);
             if (!spawned && GetActiveAsteroidsCount() == 0)

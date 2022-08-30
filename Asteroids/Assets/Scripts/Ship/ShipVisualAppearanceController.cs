@@ -11,7 +11,6 @@ namespace Asteroids.Game
         #region Fields
 
         [SerializeField] private Image image;
-      
         private Coroutine blinkingCoroutine;
 
         #endregion
