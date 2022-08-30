@@ -4,30 +4,29 @@ using UnityEngine;
 
 namespace Asteroids.UFO
 {
-    public class UFOMoveController : MonoBehaviour
+    public class UFOMoveController
     {
         #region Fields
 
-        [SerializeField] private float Speed = 0.5f;
+        private readonly GameObject owner;
+        private readonly Ship player;
+        private readonly float speed;
         
         private Vector3 currentDirection;
-        private Ship playerPlayer;
         
         #endregion
 
 
-        
-        #region Unity lifecycle
-        
-        private void FixedUpdate() => transform.Translate(currentDirection * Speed);
+        #region Class lifecycle
 
-
-        private void OnDestroy()
+        public UFOMoveController(GameObject owner, Ship player, float speed)
         {
-            if (playerPlayer)
-            {
-                playerPlayer.OnPositionChanged -= PlayerShip_OnPositionChanged;
-            }
+            this.owner = owner;
+            this.speed = speed;
+            this.player = player;
+            
+            player.OnPositionChanged += PlayerShip_OnPositionChanged;
+            currentDirection = (this.player.transform.localPosition - owner.transform.localPosition).normalized;
         }
 
         #endregion
@@ -35,14 +34,18 @@ namespace Asteroids.UFO
 
         
         #region Public methods
+        
+        public void Update() => owner.transform.Translate(currentDirection * speed);
 
-        public void Initialize(Ship player)
+
+        public void Dispose()
         {
-            playerPlayer = player;
-            player.OnPositionChanged += PlayerShip_OnPositionChanged;
-            currentDirection = (playerPlayer.transform.localPosition - gameObject.transform.localPosition).normalized;
+            if (player)
+            {
+                player.OnPositionChanged -= PlayerShip_OnPositionChanged;
+            }
         }
-
+        
         #endregion
 
 
@@ -50,7 +53,7 @@ namespace Asteroids.UFO
         #region Event handlers
 
         private void PlayerShip_OnPositionChanged(Vector3 localPosition) =>
-            currentDirection = (localPosition - transform.localPosition).normalized;
+            currentDirection = (localPosition - owner.transform.localPosition).normalized;
 
         #endregion
     }

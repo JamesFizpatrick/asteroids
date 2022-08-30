@@ -7,16 +7,18 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace Asteroids.Game
 { 
-    public class ShipMovementController : MonoBehaviour
+    public class ShipMovementController
     {
         #region Fields
 
         public Action<Vector3> OnPositionChanged;
 
-        [SerializeField] private float moveSpeed = 3f;
-        [SerializeField] private float maxInertia = 1;
-        [SerializeField] private float rotationSpeed = 5f;
-                
+        private readonly InputManager inputManager;
+        private readonly GameObject owner;
+        private readonly float moveSpeed;
+        private readonly float maxInertia;
+        private readonly float rotationSpeed;
+        
         private float currentInertia;
         private float currentRotationAngle;
 
@@ -26,37 +28,35 @@ namespace Asteroids.Game
         private InputRotationType currentRotationType = InputRotationType.None;
         private InputMovementType currentMoveType = InputMovementType.None;
         
-        private InputManager inputManager;
-
         private bool canMove = true;
         
+        #endregion
+
+
+        
+        #region Class lifecycle
+
+        public ShipMovementController(InputManager inputManager, GameObject owner, float moveSpeed, float maxInertia,
+            float rotationSpeed)
+        {
+            this.inputManager = inputManager;
+            this.owner = owner;
+            this.moveSpeed = moveSpeed;
+            this.maxInertia = maxInertia;
+            this.rotationSpeed = rotationSpeed;
+            
+            currentAimDirection = Vector3.up;
+
+            Subscribe();
+        }
+
         #endregion
         
         
         
-        #region Unity lifecycle
-        
-        private void OnEnable()
-        {
-            inputManager.OnStartMoving += InputManager_OnStartMoving;
-            inputManager.OnStopMoving += InputManager_OnStopMoving;
-            
-            inputManager.OnStartRotating += InputManager_OnStartRotating;
-            inputManager.OnStopRotating += InputManager_OnStopRotating;
-        }
+        #region Public methods
 
-        
-        private void OnDisable()
-        {
-            inputManager.OnStartMoving -= InputManager_OnStartMoving;
-            inputManager.OnStopMoving -= InputManager_OnStopMoving;
-            
-            inputManager.OnStartRotating -= InputManager_OnStartRotating;
-            inputManager.OnStopRotating -= InputManager_OnStopRotating;
-        }
-
-        
-        private void FixedUpdate()
+        public void Update()
         {
             if (!canMove)
             {
@@ -67,20 +67,11 @@ namespace Asteroids.Game
             ProcessInertia();
             ProcessMovement();
         }
-        
-        #endregion
-
 
         
-        #region Public methods
+        public void Dispose() => Unsubscribe();
 
-        public void Init(InputManager inputManager)
-        {
-            this.inputManager = inputManager;
-            currentAimDirection = Vector3.up;
-        }
-        
-        
+
         public void Move() => canMove = true;
         
         
@@ -157,7 +148,7 @@ namespace Asteroids.Game
         {
             if (currentRotationType != InputRotationType.None)
             {
-                transform.Rotate(-Vector3.back, currentRotationAngle);
+                owner.transform.Rotate(-Vector3.back, currentRotationAngle);
             }
         }
 
@@ -174,20 +165,40 @@ namespace Asteroids.Game
             }
             else
             {
-                translateAmount = (transform.TransformDirection(currentAimDirection) + currentMoveDirection).normalized * speed;
+                translateAmount = (owner.transform.TransformDirection(currentAimDirection) + currentMoveDirection).normalized * speed;
             }
 
-            Vector3 prevPos = transform.position;
+            Vector3 prevPos = owner.transform.position;
 
             if (translateAmount != Vector3.zero)
             {
-                transform.Translate(translateAmount, Space.World);
-                OnPositionChanged?.Invoke(transform.localPosition);
+                owner.transform.Translate(translateAmount, Space.World);
+                OnPositionChanged?.Invoke(owner.transform.localPosition);
             }
 
-            currentMoveDirection = (transform.position - prevPos).normalized;
+            currentMoveDirection = (owner.transform.position - prevPos).normalized;
         }
 
+
+        private void Subscribe()
+        {
+            inputManager.OnStartMoving += InputManager_OnStartMoving;
+            inputManager.OnStopMoving += InputManager_OnStopMoving;
+            
+            inputManager.OnStartRotating += InputManager_OnStartRotating;
+            inputManager.OnStopRotating += InputManager_OnStopRotating;
+        }
+
+
+        private void Unsubscribe()
+        {
+            inputManager.OnStartMoving -= InputManager_OnStartMoving;
+            inputManager.OnStopMoving -= InputManager_OnStopMoving;
+            
+            inputManager.OnStartRotating -= InputManager_OnStartRotating;
+            inputManager.OnStopRotating -= InputManager_OnStopRotating;
+        }
+        
         #endregion
     
     

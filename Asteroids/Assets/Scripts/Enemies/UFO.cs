@@ -7,11 +7,12 @@ using UnityEngine;
 
 namespace Asteroids.UFO
 {
-    [RequireComponent(typeof(UFOMoveController))]
     public class UFO : MonoBehaviour
     {
         #region Fields
 
+        [SerializeField] private float speed = 0.5f;
+        
         public Action<UFO> Killed;
         
         private UFOMoveController moveController;
@@ -28,7 +29,14 @@ namespace Asteroids.UFO
         private void OnTriggerEnter2D(Collider2D col) => ProcessOnTriggerEnter(col);
 
 
-        private void OnDestroy() => weaponController.Dispose();
+        private void FixedUpdate() => moveController.Update();
+
+
+        private void OnDestroy()
+        {
+            moveController.Dispose();
+            weaponController.Dispose();
+        }
 
         #endregion
 
@@ -40,12 +48,13 @@ namespace Asteroids.UFO
         {
             weaponLayerMask = LayerMasksHandler.PlayerProjectiles;
 
-            moveController = GetComponent<UFOMoveController>();
-            moveController.Initialize(player);
+            moveController = new UFOMoveController(gameObject, player, speed);
             
-            weaponController = new UFOWeaponController(ManagersHub.Instance.GetManager<SoundManager>(),
+            weaponController = new UFOWeaponController(
+                ManagersHub.Instance.GetManager<SoundManager>(),
                 ManagersHub.Instance.GetManager<GameObjectsManager>(),
-                gameObject, player);
+                gameObject, 
+                player);
         }
 
         #endregion

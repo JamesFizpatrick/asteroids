@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace Asteroids.Game
 {
-    [RequireComponent(typeof(ShipMovementController))]
     [RequireComponent(typeof(ShipVisualAppearanceController))]
     public class Ship : MonoBehaviour
     {
@@ -14,9 +13,14 @@ namespace Asteroids.Game
 
         public Action<Vector3> OnPositionChanged;
         public Action OnPlayerDamaged;
+
+        [SerializeField] private float moveSpeed = 1f;
+        [SerializeField] private float maxInertia = 1;
+        [SerializeField] private float rotationSpeed = 3f;
         
-        private ShipMovementController shipMovementController;
         private ShipVisualAppearanceController shipVisualAppearanceController;
+
+        private ShipMovementController shipMovementController;
         private ShipWeaponController shipWeaponController;
 
         private int enemyProjectilesLayer;
@@ -31,7 +35,7 @@ namespace Asteroids.Game
 
         #region Unity lifecycle
 
-        public void Awake()
+        private void Awake()
         {
             enemyProjectilesLayer = LayerMasksHandler.EnemyProjectiles;
             asteroidsLayer = LayerMasksHandler.Asteroid;
@@ -42,8 +46,11 @@ namespace Asteroids.Game
 
             collider = GetComponent<Collider2D>();
         }
-        
-        
+
+
+        private void FixedUpdate() => shipMovementController.Update();
+
+
         private void OnTriggerEnter2D(Collider2D col)
         {
             int layer = col.gameObject.layer;
@@ -59,6 +66,7 @@ namespace Asteroids.Game
         public void OnDestroy()
         {
             shipMovementController.OnPositionChanged -= ShipMovementController_OnPositionChanged;
+            shipMovementController.Dispose();
             shipWeaponController.Dispose();
         }
 
@@ -102,10 +110,14 @@ namespace Asteroids.Game
 
         private void InitControllers()
         {
-            shipMovementController = GetComponent<ShipMovementController>();
-            shipMovementController.Init(ManagersHub.Instance.GetManager<InputManager>());
-            
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
+
+            shipMovementController = new ShipMovementController(
+                ManagersHub.Instance.GetManager<InputManager>(),
+                gameObject,
+                moveSpeed,
+                maxInertia,
+                rotationSpeed);
 
             shipWeaponController = new ShipWeaponController(
                 ManagersHub.Instance.GetManager<SoundManager>(),
