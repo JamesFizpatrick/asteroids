@@ -26,24 +26,61 @@ namespace Asteroids.Game
 
         private void OnEnable()
         {
-            inputManager.OnStartFiring += InputManager_OnStartFiring;
-            inputManager.OnStopFiring += InputManager_OnStopFiring;
+            SubscribeToFireInputs();
             inputManager.OnSwitchWeapon += InputManager_OnSwitchWeapon;
         }
 
         
         private void OnDisable()
         {
-            inputManager.OnStartFiring -= InputManager_OnStartFiring;
-            inputManager.OnStopFiring -= InputManager_OnStopFiring;
+            UnsubscribeFromFireInputs();
             inputManager.OnSwitchWeapon -= InputManager_OnSwitchWeapon;
         }
         
         #endregion
 
 
+        
+        #region Public methods
+
+        public void SetWeaponActivity(bool isActive)
+        {
+            if (isActive)
+            {
+                SubscribeToFireInputs();
+            }
+            else
+            {
+                UnsubscribeFromFireInputs();
+            }
+        }
+
+        #endregion
+
+
 
         #region Private methods
+
+        private void SubscribeToFireInputs()
+        {
+            inputManager.OnStartFiring += InputManager_OnStartFiring;
+            inputManager.OnStopFiring += InputManager_OnStopFiring;
+        }
+
+        
+        private void UnsubscribeFromFireInputs()
+        {
+            StopFire();
+            
+            inputManager.OnStartFiring -= InputManager_OnStartFiring;
+            inputManager.OnStopFiring -= InputManager_OnStopFiring;
+        }
+
+        #endregion
+        
+        
+
+        #region Event handlers
         
         private void InputManager_OnStartFiring() => StartFire();
 

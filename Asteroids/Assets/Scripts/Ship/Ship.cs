@@ -17,6 +17,7 @@ namespace Asteroids.Game
         
         private ShipMovementController shipMovementController;
         private ShipVisualAppearanceController shipVisualAppearanceController;
+        private ShipWeaponController shipWeaponController;
 
         private int enemyProjectilesLayer;
         private int asteroidsLayer;
@@ -63,6 +64,9 @@ namespace Asteroids.Game
 
         #region Public methods
 
+        public void SetWeaponActivity(bool isActive) => shipWeaponController.SetWeaponActivity(isActive);
+
+
         public void EnableIFrames(bool canMove)
         {
             shipVisualAppearanceController.StartToBlink();
@@ -96,6 +100,7 @@ namespace Asteroids.Game
         {
             shipMovementController = GetComponent<ShipMovementController>();
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
+            shipWeaponController = GetComponent<ShipWeaponController>();
         }
         
         #endregion

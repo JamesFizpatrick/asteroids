@@ -47,7 +47,7 @@ namespace Asteroids.Game
                     weapons.Add(new Weapon(DataContainer.GamePreset.EnemyProjectiles));
                     break;
                 case WeaponType.None:
-                    throw new Exception($"Weapon type was no inited for {GetType()}");
+                    throw new Exception($"Weapon type was not initialized for {GetType()}");
             }
 
             currentWeaponIndex = 0;

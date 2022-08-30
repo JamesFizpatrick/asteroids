@@ -123,15 +123,20 @@ namespace Asteroids.Managers
         private IEnumerator RespawnCoroutine(float preDelay, float respawnDelay, float iFramesDelay)
         {
             Player.EnableIFrames(false);
+            Player.SetWeaponActivity(false);
 
             yield return new WaitForSeconds(preDelay);
+            
             Player.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(respawnDelay);
+            
             RespawnPlayer();
             Player.EnableIFrames(true);
+            Player.SetWeaponActivity(true);
 
             yield return new WaitForSeconds(iFramesDelay);
+            
             Player.DisableIFrames();
         }
                      
