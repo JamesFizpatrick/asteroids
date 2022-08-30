@@ -12,6 +12,7 @@ namespace Asteroids.Data
 
         [Header("UI elements")]
         [SerializeField] private HealthBar healthBar;
+        [SerializeField] private GameObject starryBackground;
 
         [Header("Screens")]
         [SerializeField] private BaseScreen[] screenPrefabs;
@@ -23,6 +24,9 @@ namespace Asteroids.Data
         #region Properties
 
         public HealthBar HealthBar => healthBar;
+
+
+        public GameObject StarryBackground => starryBackground;
 
 
         public BaseScreen GetScreen<TScreenType>() =>

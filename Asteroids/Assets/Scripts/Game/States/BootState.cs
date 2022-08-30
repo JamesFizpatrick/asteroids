@@ -1,4 +1,9 @@
-﻿namespace Asteroids.Game
+﻿using Asteroids.Handlers;
+using Asteroids.Managers;
+using UnityEngine;
+
+
+namespace Asteroids.Game
 {
     public class BootState : IState
     {
@@ -25,7 +30,9 @@
 
         public void Enter()
         {
+            GameObject.Instantiate(DataContainer.UiPreset.StarryBackground, GameSceneReferences.MainCanvas.transform);
             gameStateMachine.EnterState<MainMenuState, GameType>(GameType.None);
+            
         }
 
         public void Exit() { }

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: UiPreset
   m_EditorClassIdentifier: Assembly-CSharp:Asteroids.Data:UiPreset
   healthBar: {fileID: 4450341179350108976, guid: fca3367560f2245b5b2e27fab8965e3c, type: 3}
+  starryBackground: {fileID: 8011652346778327838, guid: c54891e2fab0a4a41967a2067d6199c9, type: 3}
   screenPrefabs:
   - {fileID: 635603496491297206, guid: 843a6e1317e7248c08ece9de0ccfba1b, type: 3}
   - {fileID: 518761362302313059, guid: ec38f3757408546e7933f617d660f893, type: 3}
