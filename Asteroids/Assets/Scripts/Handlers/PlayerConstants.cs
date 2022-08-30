@@ -4,6 +4,7 @@ namespace Asteroids.Handlers
     {
         // Player
         public const int InitialPlayerSafeRadius = 200;
+        
         public const float IFramesBlinkingFrequency = 0.25f;
 
         public const int RespawnDistanceFromBorders = 100;
@@ -18,6 +19,7 @@ namespace Asteroids.Handlers
         // Asteroids
         public const float AsteroidRotationSpeed = 0.7f;
         public const int AsteroidBorderGap = 60;
+        public const int SurvivalAsteroidSpawnDistance = 20;
 
 
         // UFO

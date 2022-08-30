@@ -81,7 +81,9 @@ namespace Asteroids.Game
             playerShipsManager.SpawnPlayer();
             enemiesManager.StartSpawnCoroutine(currentLevelPreset.EnemiesDelay);
             
-            SpawnAsteroids(currentLevelPreset.AsteroidsCount);
+            asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
+                Vector3Int.FloorToInt(playerShipsManager.Player.transform.localPosition),
+                PlayerConstants.InitialPlayerSafeRadius);
         }
 
 
@@ -119,14 +121,6 @@ namespace Asteroids.Game
         }
         
         
-        private void SpawnAsteroids(int quantity)
-        {
-            asteroidsManager.SpawnAsteroids(quantity,
-                Vector3Int.FloorToInt(playerShipsManager.Player.transform.localPosition),
-                PlayerConstants.InitialPlayerSafeRadius);
-        }
-
-
         private void SetScore(int to)
         {
             score = (ulong)to;
@@ -178,7 +172,7 @@ namespace Asteroids.Game
         private void EnemiesManager_OnEnemyKilled() => AddScore(scorePreset.GetEnemyPoints());
 
 
-        private void AsteroidsManager_OnFracturesDestroyed() => SpawnAsteroids(1);
+        private void AsteroidsManager_OnFracturesDestroyed() => asteroidsManager.SpawnNewAsteroidOutOfFOV();
 
         
         private void AsteroidsManager_OnAsteroidDestroyed(Asteroid asteroid) => 

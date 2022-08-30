@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Asteroids.Handlers;
 using Asteroids.Managers;
@@ -10,35 +9,16 @@ namespace Asteroids.Asteroids
 {
     public class AsteroidsPool
     {
-        #region Nested types
-
-        private struct AsteroidData
-        {
-            public Vector3 position;
-            public Vector3 direction;
-
-
-            public AsteroidData(Vector3 position, Vector3 direction)
-            {
-                this.position = position;
-                this.direction = direction;
-            }
-        }
-
-        #endregion
-
-
-
         #region Fields
 
-        public Action OnAllAsteroidsDestroyed;
-
-        public Dictionary<AsteroidType, List<GameObject>> asteroidsPool =
+        private readonly System.Random random;
+        private readonly GameObjectsManager gameObjectsManager;
+        
+        private Dictionary<AsteroidType, List<GameObject>> asteroidsPool =
             new Dictionary<AsteroidType, List<GameObject>>();
-
-        private System.Random random;
-        private GameObjectsManager gameObjectsManager;
-
+        
+        private Vector2Int screenHalfDimensions;
+        
         #endregion
 
 
@@ -49,6 +29,8 @@ namespace Asteroids.Asteroids
         {
             random = new System.Random();
             this.gameObjectsManager = gameObjectsManager;
+
+            screenHalfDimensions = new Vector2Int(Screen.width / 2, Screen.height / 2);
         }
 
         #endregion
@@ -57,6 +39,24 @@ namespace Asteroids.Asteroids
 
         #region Public methods
 
+        public List<Asteroid> GetAllAsteroids(bool includeDeactivated)
+        {
+            List<Asteroid> result = new List<Asteroid>();
+            
+            foreach (List<GameObject> gameObjects in asteroidsPool.Values)
+            {
+                List<GameObject> asteroids = includeDeactivated ?
+                    gameObjects :
+                    gameObjects.Where(x => x.activeSelf).ToList();
+                
+                List<Asteroid> components = asteroids.Select(x => x.GetComponent<Asteroid>()).ToList();
+                result.AddRange(components);
+            }
+            
+            return result;
+        }
+        
+        
         public List<Asteroid> SpawnAsteroids(int quantity, Vector3Int playerPosition, int safeRadius)
         {
             List<Asteroid> result = new List<Asteroid>();
@@ -64,29 +64,41 @@ namespace Asteroids.Asteroids
 
             foreach(AsteroidData info in data)
             {
-                Asteroid asteroid = SpawnAsteroid(AsteroidType.Huge, info.position);
-                asteroid.OverrideDirection(info.direction);
+                Asteroid asteroid = SpawnAsteroid(AsteroidType.Huge, info.Position);
+                asteroid.OverrideDirection(info.Direction);
                 result.Add(asteroid);
             }
 
             return result;
         }
 
-      
+
+        public Asteroid SpawnAsteroidOutOfFOV(AsteroidType type)
+        {
+            AsteroidData data = CreateAsteroidData(GetOutOfFOVCoordinates());
+            
+            Asteroid asteroid = SpawnAsteroid(type, data.Position);
+            asteroid.OverrideDirection(data.Direction);
+
+            return asteroid;
+        }
+        
+
         public int GetActiveAsteroidsCount() => GetActiveAsteroids().Count;
 
 
         public List<SpawnAsteroidData> GetActiveAsteroidsData()
         {
             List<SpawnAsteroidData> result = new List<SpawnAsteroidData>();
-
             List<GameObject> activeAsteroids = GetActiveAsteroids();
 
             foreach (GameObject activeAsteroid in activeAsteroids)
             {
                 BoxCollider2D collider = activeAsteroid.GetComponent<BoxCollider2D>();
-                Vector2 colliderSize = new Vector2(collider.size.x + PlayerConstants.AsteroidBorderGap,
-                    collider.size.y + PlayerConstants.AsteroidBorderGap);
+
+                Vector2 colliderSize = collider.size;
+                colliderSize.x += PlayerConstants.AsteroidBorderGap;
+                colliderSize.y += PlayerConstants.AsteroidBorderGap;
 
                 SpawnAsteroidData data = new SpawnAsteroidData(activeAsteroid.transform.localPosition, colliderSize);
                 result.Add(data);
@@ -102,7 +114,6 @@ namespace Asteroids.Asteroids
             {
                 foreach (GameObject asteroid in pair.Value)
                 {
-                    Asteroid asteroidComponent = asteroid.GetComponent<Asteroid>();
                     GameObject.Destroy(asteroid);
                 }
             }
@@ -208,33 +219,68 @@ namespace Asteroids.Asteroids
 
         private AsteroidData CreateAsteroidData(int minX, int minY, int maxX, int maxY)
         {
-            int positionX = random.GetRandomExclude(
-                -Screen.width / 2,
-                Screen.width / 2,
-                minX,
-                maxX);
-
-            int positionY = random.GetRandomExclude(
-                -Screen.height / 2,
-                Screen.height / 2,
-                minY,
-                maxY);
-
-            Vector3 position = new Vector3(positionX, positionY);
-
-            float directionX = positionX > 0 ?
-                random.GetRandomFloat(-1f, 0f) :
-                random.GetRandomFloat(0f, 1f);
-
-            float directionY = positionY > 0 ?
-                random.GetRandomFloat(-1f, 0f) :
-                random.GetRandomFloat(0f, 1f);
-
-            var direction = new Vector3(directionX, directionY);
-
+            Vector3 position = GetRandomPosition(minX, minY, maxX, maxY);
+            Vector3 direction = GetRandomDirection(position);
             return new AsteroidData(position, direction);
         }
-      
+
+
+        private AsteroidData CreateAsteroidData(Vector3Int position)
+        {
+            Vector3 direction = GetRandomDirection(position);
+            return new AsteroidData(position, direction);
+        }
+
+
+        private Vector3 GetRandomDirection(Vector3 position)
+        {
+            float directionX = position.x > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
+            float directionY = position.y > 0 ? random.GetRandomFloat(-1f, 0f) : random.GetRandomFloat(0f, 1f);
+            return new Vector3(directionX, directionY);
+        }
+
+
+        private Vector3 GetRandomPosition(int minX, int minY, int maxX, int maxY)
+        {
+            int positionX = random.GetRandomExclude(-screenHalfDimensions.x, screenHalfDimensions.x, minX, maxX);
+            int positionY = random.GetRandomExclude(-screenHalfDimensions.y, screenHalfDimensions.y, minY, maxY);
+            return new Vector3(positionX, positionY);
+        }
+
+
+        private Vector3Int GetOutOfFOVCoordinates()
+        {
+            int minX = -screenHalfDimensions.x;
+            int minY = -screenHalfDimensions.y;
+            int maxX = screenHalfDimensions.x;
+            int maxY = screenHalfDimensions.y;
+                    
+            Vector3Int result = Vector3Int.zero;
+            
+            int divider = random.Next(0, 2);
+
+            if (divider == 0)
+            {
+                result.y = random.Next(minY, maxY);
+                result.x = random.GetRandomExclude(
+                    minX - PlayerConstants.SurvivalAsteroidSpawnDistance,
+                    maxX + PlayerConstants.SurvivalAsteroidSpawnDistance,
+                    minX,
+                    maxX);
+            }
+            else
+            {
+                result.x = random.Next(minX, maxX);
+                result.y = random.GetRandomExclude(
+                    minY - PlayerConstants.SurvivalAsteroidSpawnDistance,
+                    maxY + PlayerConstants.SurvivalAsteroidSpawnDistance,
+                    minY,
+                    maxY);
+            }
+
+            return result;
+        }
+        
         #endregion
     }
 }

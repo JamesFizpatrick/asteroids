@@ -15,7 +15,7 @@ namespace Asteroids.Managers
         public Action OnAllAsteroidsDestroyed;
         public Action<Asteroid> OnAsteroidDestroyed;
         
-        private const int FracturesPerAsteroid = 8;
+        private const int FracturesPerAsteroid = 4;
         
         private SoundManager soundManager;
         private VFXManager vfxManager;
@@ -31,32 +31,6 @@ namespace Asteroids.Managers
         
         #region Public methods
         
-        public void SpawnAsteroids(int quantity, Vector3Int playerPosition, int safeRadius)
-        {
-            List<Asteroid> asteroids = asteroidsPool.SpawnAsteroids(quantity, playerPosition, safeRadius);
-
-            foreach (Asteroid asteroid in asteroids)
-            {
-                asteroid.Destroyed += Asteroid_Destroyed;
-                asteroid.Init(soundManager, vfxManager);
-            }
-        }
-
-       
-        public int GetActiveAsteroidsCount() => asteroidsPool.GetActiveAsteroidsCount();
-
-        
-        public List<SpawnAsteroidData> GetActiveAsteroidsData() => asteroidsPool.GetActiveAsteroidsData();
-
-
-        public void Reset()
-        {
-            asteroidsPool.Reset();
-
-            //TODO: unsubscribe from Destroyed
-        }
-
-
         public void Initialize(IManagersHub hub)
         {
             soundManager = hub.GetManager<SoundManager>();
@@ -65,13 +39,54 @@ namespace Asteroids.Managers
             
             asteroidsPool = new AsteroidsPool(gameObjectsManager);
         }
+        
+        
+        public void SpawnAsteroids(int quantity, Vector3Int playerPosition, int safeRadius)
+        {
+            List<Asteroid> asteroids = asteroidsPool.SpawnAsteroids(quantity, playerPosition, safeRadius);
+            foreach (Asteroid asteroid in asteroids)
+            {
+                InitAsteroid(asteroid);
+            }
+        }
 
+
+        public void SpawnNewAsteroidOutOfFOV()
+        {
+            Asteroid asteroid = asteroidsPool.SpawnAsteroidOutOfFOV(AsteroidType.Huge);
+            InitAsteroid(asteroid);
+        }
+        
+        
+        public int GetActiveAsteroidsCount() => asteroidsPool.GetActiveAsteroidsCount();
+
+        
+        public List<SpawnAsteroidData> GetActiveAsteroidsData() => asteroidsPool.GetActiveAsteroidsData();
+
+
+        public void Reset()
+        {
+            foreach (Asteroid asteroid in asteroidsPool.GetAllAsteroids(false))
+            {
+                asteroid.Destroyed -= Asteroid_Destroyed;
+            }
+            
+            asteroidsPool.Reset();
+        }
+        
         #endregion
 
 
 
         #region Private methods
 
+        private void InitAsteroid(Asteroid asteroid)
+        {
+            asteroid.Destroyed += Asteroid_Destroyed;
+            asteroid.Init(soundManager, vfxManager);
+        }
+        
+        
         private bool TrySpawnSubAsteroids(Asteroid asteroid)
         {
             AsteroidType nextType = asteroid.Type.Next();
@@ -90,13 +105,12 @@ namespace Asteroids.Managers
         private void CheckFractures()
         {
             currentFracturesCount++;
-
+            
             if (currentFracturesCount >= FracturesPerAsteroid)
             {
                 OnFracturesDestroyed?.Invoke();
+                currentFracturesCount = 0;
             }
-
-            currentFracturesCount = 0;
         }
 
 
@@ -130,7 +144,6 @@ namespace Asteroids.Managers
         private void Asteroid_Destroyed(Asteroid asteroid)
         {
             OnAsteroidDestroyed?.Invoke(asteroid);
-            
             asteroid.Destroyed -= Asteroid_Destroyed;
 
             bool spawned = TrySpawnSubAsteroids(asteroid);
