@@ -2,7 +2,7 @@ using Asteroids.Handlers;
 using UnityEngine;
 
 
-namespace Asteroids.Game
+namespace Asteroids.Weapons
 {
     public class PlayerShot : ShotBase
     {

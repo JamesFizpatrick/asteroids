@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Asteroids.Game
+namespace Asteroids.Weapons
 {
     public struct Weapon
     {

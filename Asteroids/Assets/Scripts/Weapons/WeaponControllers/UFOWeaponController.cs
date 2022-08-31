@@ -1,11 +1,11 @@
 using System.Collections;
-using Asteroids.Game;
 using Asteroids.Handlers;
 using Asteroids.Managers;
+using Asteroids.Ships;
 using UnityEngine;
 
 
-namespace Asteroids.UFO
+namespace Asteroids.Weapons
 {
     public class UFOWeaponController : UnitWeaponController
     {

@@ -1,17 +1,19 @@
-using Asteroids.UI;
+using Asteroids.Game;
 using UnityEngine;
 
 
-namespace Asteroids.Game
+namespace Asteroids.UI
 {
     public class SurvivalGameScreen : BaseGameScreen
     {
         #region Fields
-        
+
+        private const string ScoreText = "SCORE: ";
+
         [SerializeField] private TMPro.TextMeshProUGUI scoreLabel;
 
         private SurvivalGameplayController gameplayController;
-        
+
         #endregion
         
         
@@ -40,7 +42,7 @@ namespace Asteroids.Game
         
         #region Private methods
         
-        private void SetScoreLabel(string score) => scoreLabel.text = "SCORE: " + score;
+        private void SetScoreLabel(string score) => scoreLabel.text = ScoreText + score;
         
         #endregion
 

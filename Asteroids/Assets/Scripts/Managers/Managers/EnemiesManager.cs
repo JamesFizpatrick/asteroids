@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Asteroids.Enemies;
 using Asteroids.Handlers;
 using Asteroids.VFX;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace Asteroids.Managers
         
         private Random random;
         private Coroutine spawnCoroutine;
-        private UFO.UFO enemy;
+        private UFO enemy;
         
         #endregion
         
@@ -87,7 +88,7 @@ namespace Asteroids.Managers
                 Screen.width / 2,
                 Screen.height / 2);
 
-            enemy = ufo.GetComponent<UFO.UFO>();
+            enemy = ufo.GetComponent<UFO>();
             enemy.Initialize(playerShipsManager.GetPlayer());
             enemy.Killed += Enemy_Killed;
         }
@@ -137,7 +138,7 @@ namespace Asteroids.Managers
         
         #region Event handlers
 
-        private void Enemy_Killed(UFO.UFO ufo)
+        private void Enemy_Killed(UFO ufo)
         {
             OnEnemyKilled?.Invoke();
             

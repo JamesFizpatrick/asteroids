@@ -1,4 +1,4 @@
-namespace Asteroids.Game
+namespace Asteroids.Weapons
 {
     public enum WeaponType
     {

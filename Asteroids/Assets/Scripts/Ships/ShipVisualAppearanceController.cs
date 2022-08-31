@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Asteroids.Game
+namespace Asteroids.Ships
 {
     public class ShipVisualAppearanceController : MonoBehaviour
     {

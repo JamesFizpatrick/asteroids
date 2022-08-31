@@ -1,5 +1,5 @@
 using System;
-using Asteroids.Game;
+using Asteroids.Ships;
 
 
 namespace Asteroids.Managers

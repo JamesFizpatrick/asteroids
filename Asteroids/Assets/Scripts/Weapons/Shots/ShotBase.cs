@@ -2,7 +2,7 @@ using Asteroids.Managers;
 using UnityEngine;
 
 
-namespace Asteroids.Game
+namespace Asteroids.Weapons
 {
     public class ShotBase : MonoBehaviour
     {

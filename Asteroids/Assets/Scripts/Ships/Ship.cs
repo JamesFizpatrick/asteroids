@@ -1,10 +1,11 @@
 using System;
 using Asteroids.Handlers;
 using Asteroids.Managers;
+using Asteroids.Weapons;
 using UnityEngine;
 
 
-namespace Asteroids.Game
+namespace Asteroids.Ships
 {
     [RequireComponent(typeof(ShipVisualAppearanceController))]
     public class Ship : MonoBehaviour

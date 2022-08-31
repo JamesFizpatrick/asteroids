@@ -1,11 +1,12 @@
 using System;
-using Asteroids.Game;
 using Asteroids.Handlers;
 using Asteroids.Managers;
+using Asteroids.Ships;
+using Asteroids.Weapons;
 using UnityEngine;
 
 
-namespace Asteroids.UFO
+namespace Asteroids.Enemies
 {
     public class UFO : MonoBehaviour
     {

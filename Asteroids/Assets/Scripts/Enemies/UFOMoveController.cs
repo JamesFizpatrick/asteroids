@@ -1,8 +1,8 @@
-using Asteroids.Game;
+using Asteroids.Ships;
 using UnityEngine;
 
 
-namespace Asteroids.UFO
+namespace Asteroids.Enemies
 {
     public class UFOMoveController
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 
-namespace Asteroids.Game
+namespace Asteroids.Ships
 { 
     public class ShipMovementController
     {

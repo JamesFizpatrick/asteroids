@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Asteroids.Data;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 
-namespace Asteroids.Managers
+namespace Asteroids.Data
 {
     public class DataContainer
     {

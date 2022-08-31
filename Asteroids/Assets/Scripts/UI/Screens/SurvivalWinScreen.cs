@@ -1,11 +1,10 @@
 using Asteroids.Managers;
-using Asteroids.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace Asteroids.Game
+namespace Asteroids.UI
 {
     public class SurvivalWinScreen : BaseScreen
     {

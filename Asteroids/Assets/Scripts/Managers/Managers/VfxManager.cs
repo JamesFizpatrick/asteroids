@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Asteroids.Data;
 using Asteroids.VFX;
 using UnityEngine;
 

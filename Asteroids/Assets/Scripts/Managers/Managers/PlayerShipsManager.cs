@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Asteroids.Game;
+using Asteroids.Data;
 using Asteroids.Handlers;
+using Asteroids.Ships;
 using UnityEngine;
 
 

@@ -1,3 +1,4 @@
+using Asteroids.Data;
 using Asteroids.Handlers;
 using UnityEngine;
 
@@ -8,6 +9,11 @@ namespace Asteroids.Managers
     {
         #region Fields
 
+        private const string BulletsRootObjectName = "===BULLETS===";
+        private const string AsteroidsRootObjectName = "===ASTEROIDS===";
+        private const string PlayerShipsRootObjectName = "===SHIPS===";
+        private const string EnemiesRootObjectName = "===ENEMIES===";
+        
         private GameObject bulletsRoot;
         private GameObject asteroidsRoot;
         private GameObject playerShipsRoot;
@@ -36,10 +42,10 @@ namespace Asteroids.Managers
         
         public void Initialize(IManagersHub hub)
         {
-            bulletsRoot = CreateRootObject("===BULLETS===");
-            asteroidsRoot = CreateRootObject("===ASTEROIDS===");
-            playerShipsRoot = CreateRootObject("===SHIPS===");
-            enemiesRoot = CreateRootObject("===ENEMIES===");
+            bulletsRoot = CreateRootObject(BulletsRootObjectName);
+            asteroidsRoot = CreateRootObject(AsteroidsRootObjectName);
+            playerShipsRoot = CreateRootObject(PlayerShipsRootObjectName);
+            enemiesRoot = CreateRootObject(EnemiesRootObjectName);
         }
               
         #endregion
