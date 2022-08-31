@@ -14,7 +14,6 @@ namespace Asteroids.Game
         #region Fields
 
         protected float FireCooldown;
-        protected WeaponType CurrentWeaponType { get; private set; }
                 
         private readonly ISoundManager soundManager;
         private readonly IGameObjectsManager gameObjectsManager;
@@ -23,11 +22,13 @@ namespace Asteroids.Game
 
         private List<Weapon> weapons = new List<Weapon>();
 
+        private WeaponType currentWeaponType;
         private Weapon currentWeapon;
+        
         private int currentWeaponIndex;
 
         protected GameObject Owner;
-
+        
         #endregion
 
 
@@ -110,7 +111,7 @@ namespace Asteroids.Game
 
         protected void SetCurrentWeaponType(WeaponType weaponType)
         {
-            CurrentWeaponType = weaponType;
+            currentWeaponType = weaponType;
             PrepareWeapons();
         }
         
@@ -122,7 +123,7 @@ namespace Asteroids.Game
 
         private void PrepareWeapons()
         {
-            switch (CurrentWeaponType)
+            switch (currentWeaponType)
             {
                 case WeaponType.Player:
                     weapons.Add(new Weapon(DataContainer.GamePreset.PlayerProjectiles));
@@ -165,7 +166,7 @@ namespace Asteroids.Game
 
             if (bullet == null)
             {
-                Debug.LogError("Cannot spawn bullet!");
+                Debug.LogError("Cannot spawn a bullet!");
                 return null;
             }
             

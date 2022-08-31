@@ -1,5 +1,4 @@
 using System;
-using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -10,8 +9,7 @@ namespace Asteroids.UI
         #region Fields
 
         public Action OnClose;
-
-        protected IManagersHub ManagersHub;
+        
         protected object Parameter;
 
         #endregion
@@ -20,11 +18,9 @@ namespace Asteroids.UI
 
         #region Public methods
 
-        public void Init(IManagersHub hub, object parameter = null)
+        public void Init(object parameter = null)
         {
-            ManagersHub = hub;
             Parameter = parameter;
-            
             Init();
         }
 

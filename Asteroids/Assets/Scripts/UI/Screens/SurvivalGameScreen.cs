@@ -1,4 +1,3 @@
-using Asteroids.Managers;
 using Asteroids.UI;
 using UnityEngine;
 
@@ -9,7 +8,6 @@ namespace Asteroids.Game
     {
         #region Fields
         
-        [SerializeField] private HealthBar healthBar;
         [SerializeField] private TMPro.TextMeshProUGUI scoreLabel;
 
         private SurvivalGameplayController gameplayController;
@@ -30,8 +28,6 @@ namespace Asteroids.Game
 
         protected override void Init()
         {
-            healthBar.Init(ManagersHub.GetManager<IPlayerShipsManager>());
-            
             gameplayController = (SurvivalGameplayController)Parameter;
             
             SetScoreLabel(0.ToString());

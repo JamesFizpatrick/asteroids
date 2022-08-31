@@ -11,6 +11,7 @@ namespace Asteroids.Game
         private readonly GameStateMachine gameStateMachine;
         private readonly IGameManager gameManager;
         private readonly IUiManager uiManager;
+        private readonly IPlayerShipsManager playerShipsManager;
 
         private GameType gameType;
         private BaseGameScreen gameScreen;
@@ -21,10 +22,12 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public GameplayState(GameStateMachine gameStateMachine, IGameManager gameManager, IUiManager uiManager)
+        public GameplayState(GameStateMachine gameStateMachine, IGameManager gameManager, IUiManager uiManager,
+            IPlayerShipsManager playerShipsManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;
+            this.playerShipsManager = playerShipsManager;
             this.uiManager = uiManager;
         }
 
@@ -46,6 +49,7 @@ namespace Asteroids.Game
                     break;
             }
 
+            gameScreen.InitHealthBar(playerShipsManager);
             gameScreen.OnPauseButtonClick += GameScreen_OnPauseButtonClick;
             
             gameType = parameter;

@@ -10,7 +10,6 @@ namespace Asteroids.Managers
         #region Fields
 
         private BaseScreen currentScreen;
-        private IManagersHub managersHub;
 
         #endregion
 
@@ -18,7 +17,7 @@ namespace Asteroids.Managers
 
         #region Public methods
 
-        public void Initialize(IManagersHub hub) => managersHub = hub;
+        public void Initialize(IManagersHub hub) { }
 
 
         public TScreenType ShowScreen<TScreenType>(object parameter = null) where TScreenType : BaseScreen
@@ -32,7 +31,7 @@ namespace Asteroids.Managers
             currentScreen = GameObject.Instantiate(screenGO,
                 GameSceneReferences.MainCanvas.transform);
 
-            currentScreen.Init(managersHub, parameter);
+            currentScreen.Init(parameter);
 
             return (TScreenType)currentScreen;
         }

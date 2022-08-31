@@ -1,5 +1,4 @@
 using Asteroids.Game;
-using Asteroids.Managers;
 using UnityEngine;
 
 
@@ -9,7 +8,6 @@ namespace Asteroids.UI
     {
         #region Fields
         
-        [SerializeField] private HealthBar healthBar;
         [SerializeField] private TMPro.TextMeshProUGUI levelNumber;
 
         private ClassicGameplayController gameplayController;
@@ -30,8 +28,6 @@ namespace Asteroids.UI
 
         protected override void Init()
         {
-            healthBar.Init(ManagersHub.GetManager<IPlayerShipsManager>());
-            
             gameplayController = (ClassicGameplayController)Parameter;
             gameplayController.OnLevelIndexChanged += GameplayController_OnLevelIndexChanged;
             
