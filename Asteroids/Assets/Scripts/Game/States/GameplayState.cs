@@ -9,12 +9,10 @@ namespace Asteroids.Game
         #region Fields
 
         private readonly GameStateMachine gameStateMachine;
-        private readonly GameManager gameManager;
-        private readonly UIManager uiManager;
-        private readonly PlayerProgressManager progressManager;
+        private readonly IGameManager gameManager;
+        private readonly IUiManager uiManager;
 
         private GameType gameType;
-
         private BaseGameScreen gameScreen;
 
         #endregion
@@ -23,13 +21,11 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public GameplayState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager,
-            PlayerProgressManager progressManager)
+        public GameplayState(GameStateMachine gameStateMachine, IGameManager gameManager, IUiManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;
             this.uiManager = uiManager;
-            this.progressManager = progressManager;
         }
 
         #endregion
@@ -112,10 +108,7 @@ namespace Asteroids.Game
         }
 
 
-        private void GameScreen_OnPauseButtonClick()
-        {
-            gameStateMachine.EnterState<PauseState, GameType>(gameType);
-        }
+        private void GameScreen_OnPauseButtonClick() => gameStateMachine.EnterState<PauseState, GameType>(gameType);
 
         #endregion
     }

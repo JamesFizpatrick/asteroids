@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class VFXManager : IManager, IUnloadableManager
+    public class VfxManager : IVfxManager
     {
         #region Fields
     
-        private GameObjectsManager gameObjectsManager;
-        private GameManager gameManager;
+        private IGameObjectsManager gameObjectsManager;
+        private IGameManager gameManager;
         
         private List<VFX.VFX> currentVFXes = new List<VFX.VFX>();
 
@@ -35,8 +35,8 @@ namespace Asteroids.Managers
 
         public void Initialize(IManagersHub hub)
         {
-            gameObjectsManager = hub.GetManager<GameObjectsManager>();
-            gameManager = hub.GetManager<GameManager>();
+            gameObjectsManager = hub.GetManager<IGameObjectsManager>();
+            gameManager = hub.GetManager<IGameManager>();
 
             gameManager.OnPlayerLose += GameManager_OnPlayerLose;
             gameManager.OnPlayerWin += GameManager_OnPlayerWin;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class GameObjectsManager : IManager
+    public class GameObjectsManager : IGameObjectsManager
     {
         #region Fields
 

@@ -8,19 +8,19 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class AsteroidsManager : IManager
+    public class AsteroidsManager : IAsteroidsManager
     {                             
         #region Fields
 
-        public Action OnFracturesDestroyed;
-        public Action OnAllAsteroidsDestroyed;
-        public Action<Asteroid> OnAsteroidDestroyed;
+        public Action OnFracturesDestroyed { get; set; }
+        public Action OnAllAsteroidsDestroyed { get; set; }
+        public Action<Asteroid> OnAsteroidDestroyed { get; set; }
         
         private const int FracturesPerAsteroid = 4;
         
-        private SoundManager soundManager;
-        private VFXManager vfxManager;
-        private GameObjectsManager gameObjectsManager;
+        private ISoundManager soundManager;
+        private IVfxManager vfxManager;
+        private IGameObjectsManager gameObjectsManager;
 
         private AsteroidsPool asteroidsPool;
 
@@ -34,9 +34,9 @@ namespace Asteroids.Managers
         
         public void Initialize(IManagersHub hub)
         {
-            soundManager = hub.GetManager<SoundManager>();
-            vfxManager = hub.GetManager<VFXManager>();
-            gameObjectsManager = hub.GetManager<GameObjectsManager>();
+            soundManager = hub.GetManager<ISoundManager>();
+            vfxManager = hub.GetManager<IVfxManager>();
+            gameObjectsManager = hub.GetManager<IGameObjectsManager>();
             
             asteroidsPool = new AsteroidsPool(gameObjectsManager);
         }

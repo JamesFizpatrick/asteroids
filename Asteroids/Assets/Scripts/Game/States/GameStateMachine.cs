@@ -9,7 +9,7 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private Dictionary<Type, IExitableState> states;
+        private readonly Dictionary<Type, IExitableState> states;
         private IExitableState currentState;
 
         #endregion
@@ -23,18 +23,17 @@ namespace Asteroids.Game
             states = new Dictionary<Type, IExitableState>
             {
                 [typeof(BootState)] = new BootState(this),
-                [typeof(MainMenuState)] = new MainMenuState(this, managersHub.GetManager<UIManager>()),
-                [typeof(StartGameState)] = new StartGameState(this, managersHub.GetManager<GameManager>()),
-                [typeof(GameplayState)] = new GameplayState(this, managersHub.GetManager<GameManager>(),
-                    managersHub.GetManager<UIManager>(),
-                    managersHub.GetManager<PlayerProgressManager>()),
-                [typeof(InterWinState)] = new InterWinState(this, managersHub.GetManager<UIManager>()),
-                [typeof(InterLoseState)] = new InterLoseState(this, managersHub.GetManager<UIManager>(),
-                    managersHub.GetManager<GameManager>()),
-                [typeof(PauseState)] = new PauseState(this, managersHub.GetManager<GameManager>(),
-                    managersHub.GetManager<UIManager>()),
-                [typeof(SurvivalWinState)] = new SurvivalWinState(this, managersHub.GetManager<UIManager>(),
-                    managersHub.GetManager<PlayerProgressManager>())
+                [typeof(MainMenuState)] = new MainMenuState(this, managersHub.GetManager<IUiManager>()),
+                [typeof(StartGameState)] = new StartGameState(this, managersHub.GetManager<IGameManager>()),
+                [typeof(GameplayState)] = new GameplayState(this, managersHub.GetManager<IGameManager>(),
+                    managersHub.GetManager<IUiManager>()),
+                [typeof(InterWinState)] = new InterWinState(this, managersHub.GetManager<IUiManager>()),
+                [typeof(InterLoseState)] = new InterLoseState(this, managersHub.GetManager<IUiManager>(),
+                    managersHub.GetManager<IGameManager>()),
+                [typeof(PauseState)] = new PauseState(this, managersHub.GetManager<IGameManager>(),
+                    managersHub.GetManager<IUiManager>()),
+                [typeof(SurvivalWinState)] = new SurvivalWinState(this, managersHub.GetManager<IUiManager>(),
+                    managersHub.GetManager<IPlayerProgressManager>())
             };
         }
 

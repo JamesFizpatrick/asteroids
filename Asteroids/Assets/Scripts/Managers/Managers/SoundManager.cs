@@ -3,12 +3,13 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class SoundManager : IManager
+    public class SoundManager : ISoundManager
     {
         #region Fields
         
+        private const string AudiosourceName = "AudioSource";
         private AudioSource audioSource;
-        
+
         #endregion
         
         
@@ -26,7 +27,7 @@ namespace Asteroids.Managers
         
         public void Initialize(IManagersHub hub)
         {
-            GameObject audioSourceObject = new GameObject("AudioSource");
+            GameObject audioSourceObject = new GameObject(AudiosourceName);
             
             audioSource = audioSourceObject.AddComponent<AudioSource>();
             audioSource.playOnAwake = false;

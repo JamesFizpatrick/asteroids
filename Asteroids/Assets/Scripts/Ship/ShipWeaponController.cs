@@ -8,7 +8,7 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private InputManager inputManager;
+        private readonly IInputManager inputManager;
 
         #endregion
 
@@ -16,7 +16,7 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public ShipWeaponController(SoundManager soundManager, GameObjectsManager gameObjectsManager, GameObject owner, InputManager inputManager) :
+        public ShipWeaponController(ISoundManager soundManager, IGameObjectsManager gameObjectsManager, GameObject owner, IInputManager inputManager) :
             base(soundManager, gameObjectsManager, owner)
         {
             this.inputManager = inputManager;

@@ -8,21 +8,22 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class PlayerShipsManager : IManager, IUnloadableManager
+    public class PlayerShipsManager : IPlayerShipsManager
     {
         #region Fields
 
-        public Action OnPlayerKilled;
-        public Action<int> OnPlayerHealthValueChanged;
+        public Action OnPlayerKilled { get; set; }
+        public Action<int> OnPlayerHealthValueChanged { get; set; }
         
         private Coroutine respawnCoroutine;
 
         private int currentPlayerHealth;
 
-        private SoundManager soundManager;
-        private GameObjectsManager gameObjectsManager;
-        private AsteroidsManager asteroidsManager;
+        private ISoundManager soundManager;
+        private IGameObjectsManager gameObjectsManager;
+        private IAsteroidsManager asteroidsManager;
         private FieldSegmentsController fieldSegmentsController;
+        private Ship player;
 
         #endregion
 
@@ -30,7 +31,7 @@ namespace Asteroids.Managers
 
         #region Properties
 
-        public Ship Player { get; private set; }
+        
 
         #endregion
 
@@ -40,9 +41,9 @@ namespace Asteroids.Managers
 
         public void Initialize(IManagersHub hub)
         {
-            soundManager = hub.GetManager<SoundManager>();
-            gameObjectsManager = hub.GetManager<GameObjectsManager>();
-            asteroidsManager = hub.GetManager<AsteroidsManager>();
+            soundManager = hub.GetManager<ISoundManager>();
+            gameObjectsManager = hub.GetManager<IGameObjectsManager>();
+            asteroidsManager = hub.GetManager<IAsteroidsManager>();
 
             fieldSegmentsController = new FieldSegmentsController();
         }
@@ -50,9 +51,9 @@ namespace Asteroids.Managers
        
         public void Unload()
         {
-            if (Player)
+            if (player)
             {
-                Player.OnPlayerDamaged -= Player_OnPlayerDamaged;
+                player.OnPlayerDamaged -= Player_OnPlayerDamaged;
             }
 
             if (respawnCoroutine != null)
@@ -64,8 +65,8 @@ namespace Asteroids.Managers
 
         public void SpawnPlayer()
         {
-            Player = gameObjectsManager.CreatePlayerShip().GetComponent<Ship>();
-            Player.OnPlayerDamaged += Player_OnPlayerDamaged;
+            player = gameObjectsManager.CreatePlayerShip().GetComponent<Ship>();
+            player.OnPlayerDamaged += Player_OnPlayerDamaged;
 
             currentPlayerHealth = DataContainer.GamePreset.PlayerLivesQuantity;
         }
@@ -95,8 +96,8 @@ namespace Asteroids.Managers
             Vector2Int intCoordinates = segment?.GetRandomCoordinate() ?? Vector2Int.zero;
             Vector3 newCoordinates = new Vector3(intCoordinates.x, intCoordinates.y);
             
-            Player.transform.localPosition = newCoordinates;
-            Player.gameObject.SetActive(true);
+            player.transform.localPosition = newCoordinates;
+            player.gameObject.SetActive(true);
         }
 
 
@@ -107,12 +108,15 @@ namespace Asteroids.Managers
                 CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
             }
 
-            if (Player)
+            if (player)
             {
-                Player.OnPlayerDamaged -= Player_OnPlayerDamaged;
-                UnityEngine.Object.Destroy(Player.gameObject);
+                player.OnPlayerDamaged -= Player_OnPlayerDamaged;
+                UnityEngine.Object.Destroy(player.gameObject);
             }
         }
+
+
+        public Ship GetPlayer() => player;
 
         #endregion
 
@@ -122,22 +126,22 @@ namespace Asteroids.Managers
 
         private IEnumerator RespawnCoroutine(float preDelay, float respawnDelay, float iFramesDelay)
         {
-            Player.EnableIFrames(false);
-            Player.SetWeaponActivity(false);
+            player.EnableIFrames(false);
+            player.SetWeaponActivity(false);
 
             yield return new WaitForSeconds(preDelay);
             
-            Player.gameObject.SetActive(false);
+            player.gameObject.SetActive(false);
 
             yield return new WaitForSeconds(respawnDelay);
             
             RespawnPlayer();
-            Player.EnableIFrames(true);
-            Player.SetWeaponActivity(true);
+            player.EnableIFrames(true);
+            player.SetWeaponActivity(true);
 
             yield return new WaitForSeconds(iFramesDelay);
             
-            Player.DisableIFrames();
+            player.DisableIFrames();
         }
                      
         #endregion

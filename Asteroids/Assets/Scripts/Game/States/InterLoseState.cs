@@ -9,9 +9,8 @@ namespace Asteroids.Game
         #region Fields
 
         private readonly GameStateMachine gameStateMachine;
-        private readonly UIManager uiManager;
-        private readonly GameManager gameManager;
-        private readonly PlayerProgressManager progressManager;
+        private readonly IUiManager uiManager;
+        private readonly IGameManager gameManager;
 
         private InterLoseScreen screen;
         private GameType gameType;
@@ -22,7 +21,7 @@ namespace Asteroids.Game
         
         #region Class lifecycle
 
-        public InterLoseState(GameStateMachine gameStateMachine, UIManager uiManager, GameManager gameManager)
+        public InterLoseState(GameStateMachine gameStateMachine, IUiManager uiManager, IGameManager gameManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.uiManager = uiManager;
@@ -77,11 +76,8 @@ namespace Asteroids.Game
         }
 
 
-        private void ReturnToMainMenu()
-        {
-            gameStateMachine.EnterState<MainMenuState, GameType>(GameType.None);
-        }
-        
+        private void ReturnToMainMenu() => gameStateMachine.EnterState<MainMenuState, GameType>(GameType.None);
+
         #endregion
 
 

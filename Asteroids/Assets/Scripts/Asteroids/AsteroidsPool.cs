@@ -12,7 +12,7 @@ namespace Asteroids.Asteroids
         #region Fields
 
         private readonly System.Random random;
-        private readonly GameObjectsManager gameObjectsManager;
+        private readonly IGameObjectsManager gameObjectsManager;
         
         private Vector2Int screenHalfDimensions;
         private Dictionary<AsteroidType, List<GameObject>> asteroidsPool 
@@ -24,7 +24,7 @@ namespace Asteroids.Asteroids
 
         #region Class lifecycle
 
-        public AsteroidsPool(GameObjectsManager gameObjectsManager)
+        public AsteroidsPool(IGameObjectsManager gameObjectsManager)
         {
             this.gameObjectsManager = gameObjectsManager;
 

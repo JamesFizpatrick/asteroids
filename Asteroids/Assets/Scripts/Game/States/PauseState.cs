@@ -9,8 +9,8 @@ namespace Asteroids.Game
         #region Fields
 
         private readonly GameStateMachine gameStateMachine;
-        private readonly GameManager gameManager;
-        private readonly UIManager uiManager;
+        private readonly IGameManager gameManager;
+        private readonly IUiManager uiManager;
         
         private PauseScreen pauseScreen;
         
@@ -22,7 +22,7 @@ namespace Asteroids.Game
         
         #region Class lifecycle
 
-        public PauseState(GameStateMachine gameStateMachine, GameManager gameManager, UIManager uiManager)
+        public PauseState(GameStateMachine gameStateMachine, IGameManager gameManager, IUiManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;

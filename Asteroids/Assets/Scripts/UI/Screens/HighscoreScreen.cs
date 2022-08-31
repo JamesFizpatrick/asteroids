@@ -14,7 +14,7 @@ namespace Asteroids.UI
         [SerializeField] private Transform highscoresRoot;
         [SerializeField] private Button mainMenuButton;
         
-        private PlayerProgressManager progressManager;
+        private IPlayerProgressManager progressManager;
         
         #endregion
 
@@ -35,7 +35,7 @@ namespace Asteroids.UI
 
         protected override void Init()
         {
-            progressManager = Managers.ManagersHub.Instance.GetManager<PlayerProgressManager>();
+            progressManager = Managers.ManagersHub.Instance.GetManager<IPlayerProgressManager>();
             InitElements();
         }
 

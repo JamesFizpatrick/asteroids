@@ -14,7 +14,7 @@ namespace Asteroids.Game
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private Button saveButton;
 
-        private PlayerProgressManager progressManager;
+        private IPlayerProgressManager progressManager;
         
         #endregion
 
@@ -35,7 +35,7 @@ namespace Asteroids.Game
 
         protected override void Init()
         {
-            progressManager = (PlayerProgressManager)Parameter;
+            progressManager = (IPlayerProgressManager)Parameter;
         }
 
         #endregion

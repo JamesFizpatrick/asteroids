@@ -9,23 +9,21 @@ using Random = System.Random;
 
 namespace Asteroids.Managers
 {
-    public class EnemiesManager : IManager, IUnloadableManager
+    public class EnemiesManager : IEnemiesManager
     {
         #region Fields
 
-        public Action OnEnemyKilled;
+        public Action OnEnemyKilled { get; set; }
         
         private float currentSpawnDelay;
 
-        private GameObjectsManager gameObjectsManager;
-        private PlayerShipsManager playerShipsManager;
-        private SoundManager soundManager;
-        private VFXManager vfxManager;
+        private IGameObjectsManager gameObjectsManager;
+        private IPlayerShipsManager playerShipsManager;
+        private ISoundManager soundManager;
+        private IVfxManager vfxManager;
         
         private Random random;
         private Coroutine spawnCoroutine;
-        
-        private IManagersHub hub;
         private UFO.UFO enemy;
         
         #endregion
@@ -61,12 +59,10 @@ namespace Asteroids.Managers
         
         public void Initialize(IManagersHub hub)
         {
-            this.hub = hub;
-            
-            gameObjectsManager = hub.GetManager<GameObjectsManager>();
-            playerShipsManager = hub.GetManager<PlayerShipsManager>();
-            soundManager = hub.GetManager<SoundManager>();
-            vfxManager = hub.GetManager<VFXManager>();
+            gameObjectsManager = hub.GetManager<IGameObjectsManager>();
+            playerShipsManager = hub.GetManager<IPlayerShipsManager>();
+            soundManager = hub.GetManager<ISoundManager>();
+            vfxManager = hub.GetManager<IVfxManager>();
             
             random = new Random();
         }
@@ -92,7 +88,7 @@ namespace Asteroids.Managers
                 Screen.height / 2);
 
             enemy = ufo.GetComponent<UFO.UFO>();
-            enemy.Initialize(playerShipsManager.Player);
+            enemy.Initialize(playerShipsManager.GetPlayer());
             enemy.Killed += Enemy_Killed;
         }
         

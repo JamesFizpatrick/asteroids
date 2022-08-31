@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class GameManager : IManager, IUnloadableManager
+    public class GameManager : IGameManager
     {
         #region Fields
 
-        public Action OnPlayerWin;
-        public Action OnPlayerLose;
+        public Action OnPlayerWin { get; set; }
+        public Action OnPlayerLose { get; set; }
         
         private BaseGameplayController gameplayController;
         private IManagersHub hub;
@@ -36,12 +36,7 @@ namespace Asteroids.Managers
 
         public BaseGameplayController GetCurrentGameplayController() => gameplayController;
         
-        #endregion
-
-
-
-        #region Public methods
-
+        
         public void SetGameplayType(GameType gameType)
         {
             gameplayController = GameplayControllerFactory.CreateGameplayController(gameType, hub);

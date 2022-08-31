@@ -51,8 +51,8 @@ namespace Asteroids.UFO
             moveController = new UFOMoveController(gameObject, player, speed);
             
             weaponController = new UFOWeaponController(
-                ManagersHub.Instance.GetManager<SoundManager>(),
-                ManagersHub.Instance.GetManager<GameObjectsManager>(),
+                ManagersHub.Instance.GetManager<ISoundManager>(),
+                ManagersHub.Instance.GetManager<IGameObjectsManager>(),
                 gameObject, 
                 player);
         }

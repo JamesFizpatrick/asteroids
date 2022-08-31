@@ -14,7 +14,7 @@ namespace Asteroids.UI
 
         private List<GameObject> pool = new List<GameObject>();
 
-        private PlayerShipsManager playerShipsManager;
+        private IPlayerShipsManager playerShipsManager;
 
         #endregion
 
@@ -33,7 +33,7 @@ namespace Asteroids.UI
 
         #region Public methods
 
-        public void Init(PlayerShipsManager playerShipsManager)
+        public void Init(IPlayerShipsManager playerShipsManager)
         {
             this.playerShipsManager = playerShipsManager;
 

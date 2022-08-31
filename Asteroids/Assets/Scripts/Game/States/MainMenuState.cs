@@ -10,7 +10,7 @@ namespace Asteroids.Game
         #region Fields
 
         private readonly GameStateMachine gameStateMachine;
-        private readonly UIManager uiManager;
+        private readonly IUiManager uiManager;
         
         private MenuScreen menuScreen;
         private BaseScreen auxScreen;
@@ -23,7 +23,7 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public MainMenuState(GameStateMachine gameStateMachine, UIManager uiManager)
+        public MainMenuState(GameStateMachine gameStateMachine, IUiManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.uiManager = uiManager;

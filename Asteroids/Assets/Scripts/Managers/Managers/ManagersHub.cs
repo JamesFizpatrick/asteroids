@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 
 namespace Asteroids.Managers
@@ -83,9 +84,9 @@ namespace Asteroids.Managers
 
         private void Initialize()
         {
-            IEnumerable<Type> managerEntites = GetAllManagerEntities();
+            IEnumerable<Type> managerEntities = GetAllManagerEntities();
 
-            foreach (Type managerType in managerEntites)
+            foreach (Type managerType in managerEntities)
             {
                 AddManager(managerType);
             }
@@ -101,7 +102,14 @@ namespace Asteroids.Managers
         {
             object newManager = Activator.CreateInstance(managerType);
 
-            managers.Add(managerType, newManager as IManager);
+            Type managerInterface = managerType.GetInterfaces().FirstOrDefault(x => x.GetInterface(nameof(IManager)) != null);
+
+            if (managerInterface == null)
+            {
+                throw new TypeLoadException("The type " + managerType + " does not inherit from IManager type!");
+            }
+            
+            managers.Add(managerInterface, newManager as IManager);
 
             if (newManager is IUpdatableManager updatableManager)
             {

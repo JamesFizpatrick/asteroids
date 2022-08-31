@@ -113,17 +113,17 @@ namespace Asteroids.Game
             shipVisualAppearanceController = GetComponent<ShipVisualAppearanceController>();
 
             shipMovementController = new ShipMovementController(
-                ManagersHub.Instance.GetManager<InputManager>(),
+                ManagersHub.Instance.GetManager<IInputManager>(),
                 gameObject,
                 moveSpeed,
                 maxInertia,
                 rotationSpeed);
 
             shipWeaponController = new ShipWeaponController(
-                ManagersHub.Instance.GetManager<SoundManager>(),
-                ManagersHub.Instance.GetManager<GameObjectsManager>(),
+                ManagersHub.Instance.GetManager<ISoundManager>(),
+                ManagersHub.Instance.GetManager<IGameObjectsManager>(),
                 gameObject,
-                ManagersHub.Instance.GetManager<InputManager>());
+                ManagersHub.Instance.GetManager<IInputManager>());
         }
         
         #endregion

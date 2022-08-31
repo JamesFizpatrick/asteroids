@@ -7,8 +7,8 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private GameStateMachine gameStateMachine;
-        private GameManager gameManager;
+        private readonly GameStateMachine gameStateMachine;
+        private readonly IGameManager gameManager;
 
         #endregion
 
@@ -16,7 +16,7 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public StartGameState(GameStateMachine gameStateMachine, GameManager gameManager)
+        public StartGameState(GameStateMachine gameStateMachine, IGameManager gameManager)
         {            
             this.gameStateMachine = gameStateMachine;
             this.gameManager = gameManager;

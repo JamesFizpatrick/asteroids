@@ -1,4 +1,4 @@
-using Asteroids.Managers;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +9,8 @@ namespace Asteroids.UI
     {
         #region Fields
 
+        public Action OnStartButtonClick;
+        
         [SerializeField] private Button startButton;
 
         #endregion
@@ -30,9 +32,7 @@ namespace Asteroids.UI
 
         private void StartButton_OnClick()
         {
-            GameManager gameManager = Managers.ManagersHub.Instance.GetManager<GameManager>();
-            gameManager.Reset();
-
+            OnStartButtonClick?.Invoke();
             CloseScreen();
         }
 

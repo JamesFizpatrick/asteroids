@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class BoundsManager : IManager, IUnloadableManager
+    public class BoundsManager : IBoundsManager
     {
         #region Fields
 

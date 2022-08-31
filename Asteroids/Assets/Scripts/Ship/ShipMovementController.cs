@@ -13,7 +13,7 @@ namespace Asteroids.Game
 
         public Action<Vector3> OnPositionChanged;
 
-        private readonly InputManager inputManager;
+        private readonly IInputManager inputManager;
         private readonly GameObject owner;
         private readonly float moveSpeed;
         private readonly float maxInertia;
@@ -36,7 +36,7 @@ namespace Asteroids.Game
         
         #region Class lifecycle
 
-        public ShipMovementController(InputManager inputManager, GameObject owner, float moveSpeed, float maxInertia,
+        public ShipMovementController(IInputManager inputManager, GameObject owner, float moveSpeed, float maxInertia,
             float rotationSpeed)
         {
             this.inputManager = inputManager;

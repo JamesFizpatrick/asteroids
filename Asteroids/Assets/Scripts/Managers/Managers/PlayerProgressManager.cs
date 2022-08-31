@@ -6,16 +6,14 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class PlayerProgressManager : IManager, IUnloadableManager
+    public class PlayerProgressManager : IPlayerProgressManager
     {
         #region Fields
 
         private const string ProgressKey = "Progress";
         
         private PlayerProgress playerProgress;
-        private bool hasPreviousProgress = true;
-
-        private ulong currentHighscore = 0;
+        private ulong currentHighscore;
         
         #endregion
 
@@ -37,11 +35,7 @@ namespace Asteroids.Managers
         public void Unload() => SaveProgress();
         
         
-        public void SetLevelIndex(int index)
-        {
-            playerProgress.LevelIndex = index;
-            hasPreviousProgress = true;
-        }
+        public void SetLevelIndex(int index) => playerProgress.LevelIndex = index;
 
 
         public int GetLevelIndex() => playerProgress.LevelIndex;
@@ -62,7 +56,6 @@ namespace Asteroids.Managers
             }
 
             playerProgress.SurvivalHighscores = highscores;
-            hasPreviousProgress = true;
         }
 
         
@@ -90,13 +83,9 @@ namespace Asteroids.Managers
         }
         
         
-        private PlayerProgress NewPlayerProgress()
-        {
-            hasPreviousProgress = false;
-            return new PlayerProgress();
-        }
-        
-        
+        private PlayerProgress NewPlayerProgress() => new PlayerProgress();
+
+
         private PlayerProgress LoadProgress()
         {
             string json = PlayerPrefs.GetString(ProgressKey);

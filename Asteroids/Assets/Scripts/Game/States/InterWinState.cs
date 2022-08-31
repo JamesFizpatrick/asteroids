@@ -8,7 +8,7 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private readonly UIManager uiManager;
+        private readonly IUiManager uiManager;
         private readonly GameStateMachine gameStateMachine;
 
         private BaseScreen interScreen;
@@ -19,7 +19,7 @@ namespace Asteroids.Game
         
         #region Class lifecycle
 
-        public InterWinState(GameStateMachine gameStateMachine, UIManager uiManager)
+        public InterWinState(GameStateMachine gameStateMachine, IUiManager uiManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.uiManager = uiManager;

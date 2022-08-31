@@ -14,10 +14,10 @@ namespace Asteroids.Game
 
         public Action<ulong> OnScoreChanged;
         
-        private readonly PlayerShipsManager playerShipsManager;
-        private readonly EnemiesManager enemiesManager;
-        private readonly AsteroidsManager asteroidsManager;
-        private readonly PlayerProgressManager progressManager;
+        private readonly IPlayerShipsManager playerShipsManager;
+        private readonly IEnemiesManager enemiesManager;
+        private readonly IAsteroidsManager asteroidsManager;
+        private readonly IPlayerProgressManager progressManager;
 
         private LevelsPreset.LevelPreset currentLevelPreset;
         private ScorePreset scorePreset;
@@ -30,8 +30,8 @@ namespace Asteroids.Game
 
         #region Class lifecycle
 
-        public SurvivalGameplayController(PlayerShipsManager playerShipsManager, EnemiesManager enemiesManager,
-            AsteroidsManager asteroidsManager, PlayerProgressManager progressManager)
+        public SurvivalGameplayController(IPlayerShipsManager playerShipsManager, IEnemiesManager enemiesManager,
+            IAsteroidsManager asteroidsManager, IPlayerProgressManager progressManager)
         {
             this.playerShipsManager = playerShipsManager;
             this.enemiesManager = enemiesManager;
@@ -82,7 +82,7 @@ namespace Asteroids.Game
             enemiesManager.StartSpawnCoroutine(currentLevelPreset.EnemiesDelay);
             
             asteroidsManager.SpawnAsteroids(currentLevelPreset.AsteroidsCount,
-                Vector3Int.FloorToInt(playerShipsManager.Player.transform.localPosition),
+                Vector3Int.FloorToInt(playerShipsManager.GetPlayer().transform.localPosition),
                 PlayerConstants.InitialPlayerSafeRadius);
         }
 

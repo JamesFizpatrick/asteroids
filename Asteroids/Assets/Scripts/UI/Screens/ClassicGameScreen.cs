@@ -30,7 +30,7 @@ namespace Asteroids.UI
 
         protected override void Init()
         {
-            healthBar.Init(ManagersHub.GetManager<PlayerShipsManager>());
+            healthBar.Init(ManagersHub.GetManager<IPlayerShipsManager>());
             
             gameplayController = (ClassicGameplayController)Parameter;
             gameplayController.OnLevelIndexChanged += GameplayController_OnLevelIndexChanged;

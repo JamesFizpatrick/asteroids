@@ -30,7 +30,7 @@ namespace Asteroids.Game
 
         protected override void Init()
         {
-            healthBar.Init(ManagersHub.GetManager<PlayerShipsManager>());
+            healthBar.Init(ManagersHub.GetManager<IPlayerShipsManager>());
             
             gameplayController = (SurvivalGameplayController)Parameter;
             

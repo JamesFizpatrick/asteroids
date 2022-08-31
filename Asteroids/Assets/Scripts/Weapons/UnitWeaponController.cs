@@ -16,8 +16,8 @@ namespace Asteroids.Game
         protected float FireCooldown;
         protected WeaponType CurrentWeaponType { get; private set; }
                 
-        private SoundManager soundManager;
-        private GameObjectsManager gameObjectsManager;
+        private readonly ISoundManager soundManager;
+        private readonly IGameObjectsManager gameObjectsManager;
         
         private Coroutine attackCoroutine;
 
@@ -34,7 +34,7 @@ namespace Asteroids.Game
         
         #region Class lifecycle
 
-        public UnitWeaponController(SoundManager soundManager, GameObjectsManager gameObjectsManager, GameObject owner)
+        public UnitWeaponController(ISoundManager soundManager, IGameObjectsManager gameObjectsManager, GameObject owner)
         {
             this.soundManager = soundManager;
             this.gameObjectsManager = gameObjectsManager;

@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace Asteroids.Managers
 {
-    public class InputManager : IManager, IUpdatableManager
+    public class InputManager : IInputManager
     {
         #region Fields
 
-        public Action<InputRotationType> OnStartRotating;
-        public Action<InputRotationType> OnStopRotating;
+        public Action<InputRotationType> OnStartRotating { get; set; }
+        public Action<InputRotationType> OnStopRotating { get; set; }
         
-        public Action OnStartMoving;
-        public Action OnStopMoving;
+        public Action OnStartMoving { get; set; }
+        public Action OnStopMoving { get; set; }
         
-        public Action OnStartFiring;
-        public Action OnStopFiring;
-        public Action OnSwitchWeapon;
+        public Action OnStartFiring { get; set; }
+        public Action OnStopFiring { get; set; }
+        public Action OnSwitchWeapon { get; set; }
         
         #endregion
 

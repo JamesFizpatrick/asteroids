@@ -7,9 +7,9 @@ namespace Asteroids.Game
     {
         #region Fields
 
-        private readonly UIManager uiManager;
+        private readonly IUiManager uiManager;
         private readonly GameStateMachine gameStateMachine;
-        private readonly PlayerProgressManager progressManager;
+        private readonly IPlayerProgressManager progressManager;
 
         private SurvivalWinScreen survivalWinScreen;
 
@@ -19,8 +19,8 @@ namespace Asteroids.Game
 
         #region Class lyfecycle
 
-        public SurvivalWinState(GameStateMachine gameStateMachine, UIManager uiManager,
-            PlayerProgressManager progressManager)
+        public SurvivalWinState(GameStateMachine gameStateMachine, IUiManager uiManager,
+            IPlayerProgressManager progressManager)
         {
             this.gameStateMachine = gameStateMachine;
             this.uiManager = uiManager;

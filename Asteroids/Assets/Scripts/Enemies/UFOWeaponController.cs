@@ -22,7 +22,7 @@ namespace Asteroids.UFO
 
         #region Class lifecycle
 
-        public UFOWeaponController(SoundManager soundManager, GameObjectsManager gameObjectsManager, GameObject owner, Ship player) :
+        public UFOWeaponController(ISoundManager soundManager, IGameObjectsManager gameObjectsManager, GameObject owner, Ship player) :
             base(soundManager, gameObjectsManager, owner)
         {
             SetCurrentWeaponType(WeaponType.Enemy);
