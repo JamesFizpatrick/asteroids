@@ -12,9 +12,9 @@ namespace Asteroids.Managers
     {                             
         #region Fields
 
-        public Action OnFracturesDestroyed { get; set; }
-        public Action OnAllAsteroidsDestroyed { get; set; }
-        public Action<Asteroid> OnAsteroidDestroyed { get; set; }
+        public event Action OnFracturesDestroyed;
+        public event Action OnAllAsteroidsDestroyed;
+        public event Action<Asteroid> OnAsteroidDestroyed;
         
         private const int FracturesPerAsteroid = 4;
         

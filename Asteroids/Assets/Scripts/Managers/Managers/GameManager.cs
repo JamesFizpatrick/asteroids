@@ -9,8 +9,8 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action OnPlayerWin { get; set; }
-        public Action OnPlayerLose { get; set; }
+        public event Action OnPlayerWin;
+        public event Action OnPlayerLose;
         
         private BaseGameplayController gameplayController;
         private IManagersHub hub;

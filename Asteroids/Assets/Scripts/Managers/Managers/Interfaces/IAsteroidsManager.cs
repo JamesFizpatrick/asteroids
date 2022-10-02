@@ -8,9 +8,9 @@ namespace Asteroids.Managers
 {
     public interface IAsteroidsManager : IManager
     {
-        Action OnFracturesDestroyed { get; set; }
-        Action OnAllAsteroidsDestroyed  { get; set; }
-        Action<Asteroid> OnAsteroidDestroyed  { get; set; }
+        event Action OnFracturesDestroyed;
+        event Action OnAllAsteroidsDestroyed;
+        event Action<Asteroid> OnAsteroidDestroyed;
         
         void SpawnAsteroids(int quantity, Vector3Int playerPosition, int safeRadius);
         void SpawnNewAsteroidOutOfFOV();

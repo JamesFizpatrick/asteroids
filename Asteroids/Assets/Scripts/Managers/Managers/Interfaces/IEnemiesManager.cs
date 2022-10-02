@@ -5,7 +5,7 @@ namespace Asteroids.Managers
 {
     public interface IEnemiesManager : IManager, IUnloadableManager
     {
-        Action OnEnemyKilled { get; set; }
+        event Action OnEnemyKilled;
         
         void StartSpawnCoroutine(float delay);
         bool HasActiveEnemy();

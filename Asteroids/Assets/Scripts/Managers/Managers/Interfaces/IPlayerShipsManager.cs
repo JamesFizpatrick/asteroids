@@ -6,8 +6,8 @@ namespace Asteroids.Managers
 {
     public interface IPlayerShipsManager : IManager, IUnloadableManager
     {
-        Action OnPlayerKilled { get; set; }
-        Action<int> OnPlayerHealthValueChanged { get; set; }
+        event Action OnPlayerKilled;
+        event Action<int> OnPlayerHealthValueChanged;
         
         void SpawnPlayer();
         void RespawnPlayer(float preDelay, float respawnDelay, float iFramesDelay);

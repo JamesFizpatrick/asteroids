@@ -5,13 +5,13 @@ namespace Asteroids.Managers
 {
     public interface IInputManager : IManager, IUpdatableManager
     {
-        Action<InputRotationType> OnStartRotating { get; set; }
-        Action<InputRotationType> OnStopRotating { get; set; }
-        Action OnStartMoving { get; set; }
-        Action OnStopMoving { get; set; }
-        Action OnStartFiring { get; set; }
-        Action OnStopFiring { get; set; }
-        Action OnSwitchWeapon { get; set; }
+        event Action<InputRotationType> OnStartRotating;
+        event Action<InputRotationType> OnStopRotating;
+        event Action OnStartMoving;
+        event Action OnStopMoving;
+        event Action OnStartFiring;
+        event Action OnStopFiring;
+        event Action OnSwitchWeapon;
 
         void Update();
     }

@@ -13,8 +13,8 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action OnPlayerKilled { get; set; }
-        public Action<int> OnPlayerHealthValueChanged { get; set; }
+        public event Action OnPlayerKilled;
+        public event Action<int> OnPlayerHealthValueChanged;
         
         private Coroutine respawnCoroutine;
 

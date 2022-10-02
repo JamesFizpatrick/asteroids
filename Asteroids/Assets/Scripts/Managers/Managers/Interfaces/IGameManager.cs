@@ -6,8 +6,8 @@ namespace Asteroids.Managers
 {
     public interface IGameManager : IManager, IUnloadableManager
     {
-        Action OnPlayerWin { get; set; }
-        Action OnPlayerLose { get; set; }
+        event Action OnPlayerWin;
+        event Action OnPlayerLose;
 
         BaseGameplayController GetCurrentGameplayController();
         void SetGameplayType(GameType gameType);

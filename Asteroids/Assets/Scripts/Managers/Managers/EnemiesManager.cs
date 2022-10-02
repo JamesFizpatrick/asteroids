@@ -14,7 +14,7 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action OnEnemyKilled { get; set; }
+        public event Action OnEnemyKilled;
         
         private float currentSpawnDelay;
 

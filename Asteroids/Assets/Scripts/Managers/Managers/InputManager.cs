@@ -8,15 +8,15 @@ namespace Asteroids.Managers
     {
         #region Fields
 
-        public Action<InputRotationType> OnStartRotating { get; set; }
-        public Action<InputRotationType> OnStopRotating { get; set; }
+        public event Action<InputRotationType> OnStartRotating;
+        public event Action<InputRotationType> OnStopRotating;
         
-        public Action OnStartMoving { get; set; }
-        public Action OnStopMoving { get; set; }
+        public event Action OnStartMoving;
+        public event Action OnStopMoving;
         
-        public Action OnStartFiring { get; set; }
-        public Action OnStopFiring { get; set; }
-        public Action OnSwitchWeapon { get; set; }
+        public event Action OnStartFiring;
+        public event Action OnStopFiring;
+        public event Action OnSwitchWeapon;
         
         #endregion
 
