@@ -74,7 +74,7 @@ namespace Asteroids.Game
 
 
         
-        #region MyRegion
+        #region Private methods
 
         private BaseGameScreen CreateScreen<TGameScreen>()
             where TGameScreen : BaseGameScreen

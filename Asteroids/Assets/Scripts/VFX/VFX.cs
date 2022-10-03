@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Asteroids.Handlers;
 using UnityEngine;
 
 
@@ -21,14 +22,15 @@ namespace Asteroids.VFX
         
         #region Unity lifecycle
 
-        private void Awake() => destroyCoroutine = StartCoroutine(DestroyWithDelay(lifetime));
+        private void Awake() =>
+            destroyCoroutine = CoroutinesHandler.Instance.StartCoroutine(DestroyWithDelay(lifetime));
 
 
         private void OnDestroy()
         {
             if (destroyCoroutine != null)
             {
-                StopCoroutine(destroyCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(destroyCoroutine);
             }
             
             Destroyed?.Invoke(this);

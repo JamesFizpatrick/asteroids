@@ -29,8 +29,7 @@ namespace Asteroids.Managers
             }
 
             BaseScreen screenGO = DataContainer.UiPreset.GetScreen<TScreenType>();
-            currentScreen = GameObject.Instantiate(screenGO,
-                GameSceneReferences.MainCanvas.transform);
+            currentScreen = GameObject.Instantiate(screenGO, GameSceneReferences.MainCanvas.transform);
 
             currentScreen.Init(parameter);
 

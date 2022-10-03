@@ -8,10 +8,10 @@ namespace Asteroids
     public class Loader : MonoBehaviour
     {
         private GameStateMachine stateMachine;
-
-
+        
         private void Start()
         {
+            DontDestroyOnLoad(this);
             stateMachine = new GameStateMachine(ManagersHub.Instance);
             stateMachine.EnterState<BootState>();
         }

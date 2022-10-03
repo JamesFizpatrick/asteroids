@@ -30,7 +30,7 @@ namespace Asteroids.Data
         
         public PlayerProgress()
         {
-            LevelIndex = 0;
+            LevelIndex = -1;
             SurvivalHighscores = new Highscore[PlayerConstants.MaxHigscoreRecords];
 
             for (int i = 0; i < PlayerConstants.MaxHigscoreRecords; i++)

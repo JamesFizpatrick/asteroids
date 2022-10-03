@@ -22,7 +22,7 @@ namespace Asteroids.Ships
         public void StartToBlink()
         {
             StopToBlink();
-            blinkingCoroutine = StartCoroutine(BlinkCoroutine());
+            blinkingCoroutine = CoroutinesHandler.Instance.StartCoroutine(BlinkCoroutine());
         }
 
 
@@ -30,7 +30,7 @@ namespace Asteroids.Ships
         {
             if (blinkingCoroutine != null)
             {
-                StopCoroutine(blinkingCoroutine);
+                CoroutinesHandler.Instance.StopCoroutine(blinkingCoroutine);
             }
         }
 

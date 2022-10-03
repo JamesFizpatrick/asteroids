@@ -27,17 +27,9 @@ namespace Asteroids.Managers
         private Ship player;
 
         #endregion
-
-
-
-        #region Properties
-
         
-
-        #endregion
-
-
-
+        
+        
         #region Public methods
 
         public void Initialize(IManagersHub hub)
@@ -75,7 +67,7 @@ namespace Asteroids.Managers
 
         public void RespawnPlayer(float preDelay, float respawnDelay, float iFramesDelay)
         {
-            // Respawn player and give them a coupe of invincibility frames
+            // Respawn player and give them a couple of invincibility frames
             if (respawnCoroutine != null)
             {
                 CoroutinesHandler.Instance.StopCoroutine(respawnCoroutine);
