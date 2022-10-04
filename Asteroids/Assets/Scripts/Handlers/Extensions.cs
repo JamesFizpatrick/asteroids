@@ -39,7 +39,7 @@ namespace Asteroids.Handlers
         
         
         /// <summary>
-        /// Get random int between two values excluding a range
+        /// Get random int between two values excluding a range using LINQ
         /// </summary>
         /// <param name="min">Min value</param>
         /// <param name="max">Max value</param>

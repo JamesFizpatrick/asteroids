@@ -16,7 +16,8 @@ namespace Asteroids.Weapons
 
         #region Class lifecycle
 
-        public ShipWeaponController(ISoundManager soundManager, IGameObjectsManager gameObjectsManager, GameObject owner, IInputManager inputManager) :
+        public ShipWeaponController(ISoundManager soundManager, IGameObjectsManager gameObjectsManager,
+            GameObject owner, IInputManager inputManager) :
             base(soundManager, gameObjectsManager, owner)
         {
             this.inputManager = inputManager;

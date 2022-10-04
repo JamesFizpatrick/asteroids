@@ -35,7 +35,6 @@ namespace Asteroids.Game
             this.enemiesManager = enemiesManager;
             this.asteroidsManager = asteroidsManager;
             this.progressManager = progressManager;
-
         }
 
         #endregion

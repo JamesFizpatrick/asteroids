@@ -34,7 +34,6 @@ namespace Asteroids.Managers
 
                 return instance;
             }
-            
         }
 
         #endregion

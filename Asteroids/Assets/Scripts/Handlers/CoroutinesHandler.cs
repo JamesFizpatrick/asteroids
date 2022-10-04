@@ -22,11 +22,16 @@ namespace Asteroids.Handlers
             }
         }
 
+        
         private void Awake() => DontDestroyOnLoad(this);
 
+        
         private void OnDestroy()
         {
-            instance.StopAllCoroutines();
+            if (instance)
+            {
+                instance.StopAllCoroutines();
+            }
         }
     }
 }

@@ -32,7 +32,6 @@ namespace Asteroids.Game
         {
             GameObject.Instantiate(DataContainer.UiPreset.StarryBackground, GameSceneReferences.MainCanvas.transform);
             gameStateMachine.EnterState<MainMenuState, GameType>(GameType.None);
-            
         }
 
         public void Exit() { }
